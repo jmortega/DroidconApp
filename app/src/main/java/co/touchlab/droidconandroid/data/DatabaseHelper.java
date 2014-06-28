@@ -98,6 +98,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
             }
         }
 
+        try
+        {
+            CommandPersistenceProvider.dropTables(new ClearSQLiteDatabase(sqLiteDatabase));
+        }
+        catch (StorageException e)
+        {
+            throw new RuntimeException(e);
+        }
+
         onCreate(sqLiteDatabase, connectionSource);
 
     }
