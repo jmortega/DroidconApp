@@ -26,6 +26,8 @@ android {
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "int", "CONVENTION_ID", "700"
     }
     buildTypes {
         release {
