@@ -6,17 +6,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MyActivity">
+    tools:context="co.touchlab.droidconandroid.DebugEnterUuidActivity">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/uuidEntry"/>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/showSchedule"
-        android:text="Show Schedule"/>
+        android:id="@+id/go"
+        android:text="Go!"/>
 
 </RelativeLayout>

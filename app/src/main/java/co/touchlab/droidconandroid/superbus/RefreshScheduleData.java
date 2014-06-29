@@ -28,4 +28,10 @@ public class RefreshScheduleData extends Command
     {
         DataHelper.scheduleData(context);
     }
+
+    @Override
+    public void onPermanentError(Context context, PermanentException exception)
+    {
+        throw new RuntimeException(exception);
+    }
 }

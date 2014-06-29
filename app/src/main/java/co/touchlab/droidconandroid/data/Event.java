@@ -20,7 +20,7 @@ public class Event
     @DatabaseField
     public String description;
 
-    @DatabaseField(foreign = true, canBeNull = false)
+    @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
     public Venue venue;
 
     @DatabaseField
@@ -34,5 +34,11 @@ public class Event
 
     @DatabaseField
     public Integer rsvpLimit;
+
+    @DatabaseField
+    public Integer rsvpCount;
+
+    @DatabaseField
+    public String rsvpUuid;
 
 }

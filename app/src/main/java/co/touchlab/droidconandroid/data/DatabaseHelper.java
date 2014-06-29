@@ -9,6 +9,7 @@ import co.touchlab.android.superbus.storage.sqlite.ClearSQLiteDatabase;
 import co.touchlab.droidconandroid.data.staff.EventAttendee;
 import co.touchlab.droidconandroid.data.staff.UserAccount;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -109,6 +110,30 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
 
         onCreate(sqLiteDatabase, connectionSource);
 
+    }
+
+    public Dao<Venue, Long> getVenueDao()
+    {
+        try
+        {
+            return (Dao<Venue, Long>)getDao(Venue.class);
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Dao<Event, Long> getEventDao()
+    {
+        try
+        {
+            return (Dao<Event, Long>)getDao(Event.class);
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public TransactionManager createTransactionManager()

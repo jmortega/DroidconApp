@@ -4,30 +4,21 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import co.touchlab.droidconandroid.R;
 
-
-public class MyActivity extends Activity {
+public class DebugEnterUuidActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
-        findViewById(R.id.showSchedule).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                DebugScheduleDisplayActivity.callMe(MyActivity.this);
-            }
-        });
+        setContentView(R.layout.activity_debug_enter_uuid);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
+        getMenuInflater().inflate(R.menu.debug_enter_uuid, menu);
         return true;
     }
 
