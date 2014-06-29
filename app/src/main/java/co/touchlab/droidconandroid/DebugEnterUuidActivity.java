@@ -1,10 +1,15 @@
 package co.touchlab.droidconandroid;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import co.touchlab.droidconandroid.R;
+import co.touchlab.droidconandroid.data.AppPrefs;
 
 public class DebugEnterUuidActivity extends Activity {
 
@@ -12,6 +17,16 @@ public class DebugEnterUuidActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug_enter_uuid);
+        findViewById(R.id.go).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                EditText uuidEntry = (EditText) findViewById(R.id.uuidEntry);
+                AppPrefs.getInstance(DebugEnterUuidActivity.this).setUserUuid(uuidEntry.getText().toString());
+                finish();
+            }
+        });
     }
 
 
@@ -32,5 +47,11 @@ public class DebugEnterUuidActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void callMe(Context c)
+    {
+        Intent i = new Intent(c, DebugEnterUuidActivity.class);
+        c.startActivity(i);
     }
 }

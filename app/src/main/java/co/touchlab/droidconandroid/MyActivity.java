@@ -13,6 +13,14 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+        findViewById(R.id.enterUserUuid).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                DebugEnterUuidActivity.callMe(MyActivity.this);
+            }
+        });
         findViewById(R.id.showSchedule).setOnClickListener(new View.OnClickListener()
         {
             @Override
