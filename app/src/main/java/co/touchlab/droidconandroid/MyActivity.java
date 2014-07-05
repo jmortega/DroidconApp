@@ -29,6 +29,15 @@ public class MyActivity extends Activity {
                 DebugScheduleDisplayActivity.callMe(MyActivity.this);
             }
         });
+        findViewById(R.id.goFindUser).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                FindUser.callMe(MyActivity.this);
+            }
+        });
+
     }
 
 
