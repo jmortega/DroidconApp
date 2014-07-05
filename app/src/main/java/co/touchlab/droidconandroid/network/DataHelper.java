@@ -171,6 +171,7 @@ public class DataHelper
                 void jsonReply(JSONObject json) throws JSONException
                 {
                     String uuid = json.getString("uuid");
+                    AppPrefs.getInstance(context).setUserUuid(uuid);
                     Intent intent = new Intent(GoogleLoginOp.GOOGLE_LOGIN_COMPLETE);
                     intent.putExtra(GoogleLoginOp.GOOGLE_LOGIN_UUID, uuid);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);

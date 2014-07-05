@@ -1,7 +1,10 @@
 package co.touchlab.droidconandroid.dataops;
 
 import android.content.Context;
+import android.text.TextUtils;
+import co.touchlab.android.superbus.appsupport.CommandBusHelper;
 import co.touchlab.droidconandroid.network.DataHelper;
+import co.touchlab.droidconandroid.superbus.UploadAvatarCommand;
 import com.google.android.gms.auth.GoogleAuthUtil;
 
 /**
@@ -16,12 +19,14 @@ public class GoogleLoginOp implements DataProcessor.RunnableEx
     private Context context;
     private String email;
     private String name;
+    private String imageURL;
 
-    public GoogleLoginOp(Context context, String email, String name)
+    public GoogleLoginOp(Context context, String email, String name, String imageURL)
     {
         this.context = context;
         this.email = email;
         this.name = name;
+        this.imageURL = imageURL;
     }
 
     @Override
@@ -29,6 +34,8 @@ public class GoogleLoginOp implements DataProcessor.RunnableEx
     {
         String token = GoogleAuthUtil.getToken(context, email, SCOPE);
         DataHelper.loginGoogle(context, token, name);
+        if(!TextUtils.isEmpty(imageURL))
+            CommandBusHelper.submitCommandSync(context, new UploadAvatarCommand(imageURL));
     }
 
     @Override

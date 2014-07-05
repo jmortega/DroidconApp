@@ -9,20 +9,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import co.touchlab.droidconandroid.R;
 import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.dataops.DataProcessor;
 import co.touchlab.droidconandroid.dataops.GoogleLoginOp;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-
-import java.io.IOException;
-import java.util.Random;
 
 public class DebugEnterUuidActivity extends Activity
 {
@@ -122,8 +116,18 @@ public class DebugEnterUuidActivity extends Activity
         {
             String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
             Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+            String imageURL = null;
+            if (person.hasImage())
+            {
+                Person.Image image = person.getImage();
 
-            DataProcessor.runProcess(new GoogleLoginOp(DebugEnterUuidActivity.this, accountName, person.getDisplayName()));
+                if (image.hasUrl())
+                {
+                    imageURL = image.getUrl();
+                }
+            }
+
+            DataProcessor.runProcess(new GoogleLoginOp(DebugEnterUuidActivity.this, accountName, person.getDisplayName(), imageURL));
         }
 
         @Override
