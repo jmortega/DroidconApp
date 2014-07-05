@@ -2,11 +2,8 @@ package co.touchlab.droidconandroid.network;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
-import android.util.Log;
 import co.touchlab.android.superbus.errorcontrol.PermanentException;
 import co.touchlab.android.superbus.errorcontrol.TransientException;
 import co.touchlab.android.superbus.http.BusHttpClient;
@@ -16,12 +13,10 @@ import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.data.DatabaseHelper;
 import co.touchlab.droidconandroid.data.Event;
 import co.touchlab.droidconandroid.data.Venue;
-import co.touchlab.droidconandroid.dataops.GoogleLoginOp;
+import co.touchlab.droidconandroid.tasks.GoogleLoginOpTask;
 import com.j256.ormlite.dao.Dao;
 import com.turbomanage.httpclient.HttpResponse;
 import com.turbomanage.httpclient.ParameterMap;
-import de.greenrobot.event.EventBus;
-import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -172,8 +167,8 @@ public class DataHelper
                 {
                     String uuid = json.getString("uuid");
                     AppPrefs.getInstance(context).setUserUuid(uuid);
-                    Intent intent = new Intent(GoogleLoginOp.GOOGLE_LOGIN_COMPLETE);
-                    intent.putExtra(GoogleLoginOp.GOOGLE_LOGIN_UUID, uuid);
+                    Intent intent = new Intent(GoogleLoginOpTask.GOOGLE_LOGIN_COMPLETE);
+                    intent.putExtra(GoogleLoginOpTask.GOOGLE_LOGIN_UUID, uuid);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }
             });

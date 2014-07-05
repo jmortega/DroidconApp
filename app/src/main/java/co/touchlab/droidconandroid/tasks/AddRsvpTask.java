@@ -1,4 +1,4 @@
-package co.touchlab.droidconandroid.dataops;
+package co.touchlab.droidconandroid.tasks;
 
 import android.content.Context;
 import co.touchlab.android.superbus.appsupport.CommandBusHelper;
@@ -6,7 +6,6 @@ import co.touchlab.droidconandroid.data.DatabaseHelper;
 import co.touchlab.droidconandroid.data.Event;
 import co.touchlab.droidconandroid.superbus.AddRsvpCommand;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.field.DatabaseField;
 
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -14,11 +13,11 @@ import java.util.concurrent.Callable;
 /**
  * Created by kgalligan on 6/28/14.
  */
-public class AddRsvp extends DatabaseOp
+public class AddRsvpTask extends DatabaseTask
 {
     private Long eventId;
 
-    public AddRsvp(Context context, Long eventId)
+    public AddRsvpTask(Context context, Long eventId)
     {
         super(context);
         this.eventId = eventId;

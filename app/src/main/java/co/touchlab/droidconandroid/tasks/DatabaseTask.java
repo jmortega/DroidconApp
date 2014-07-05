@@ -1,16 +1,17 @@
-package co.touchlab.droidconandroid.dataops;
+package co.touchlab.droidconandroid.tasks;
 
 import android.content.Context;
+import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.DatabaseHelper;
 
 /**
  * Created by kgalligan on 6/28/14.
  */
-public abstract class DatabaseOp implements DataProcessor.RunnableEx
+public abstract class DatabaseTask implements TaskQueue.Task
 {
     private Context context;
 
-    protected DatabaseOp(Context context)
+    protected DatabaseTask(Context context)
     {
         this.context = context;
     }

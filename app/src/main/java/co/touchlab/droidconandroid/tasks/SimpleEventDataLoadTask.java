@@ -1,4 +1,4 @@
-package co.touchlab.droidconandroid.dataops;
+package co.touchlab.droidconandroid.tasks;
 
 import android.content.Context;
 import co.touchlab.droidconandroid.data.Event;
@@ -12,11 +12,11 @@ import java.util.List;
 /**
  * Created by kgalligan on 6/28/14.
  */
-public class SimpleEventDataLoad extends DatabaseOp
+public class SimpleEventDataLoadTask extends DatabaseTask
 {
     public List<Event> events;
 
-    public SimpleEventDataLoad(Context context)
+    public SimpleEventDataLoadTask(Context context)
     {
         super(context);
     }

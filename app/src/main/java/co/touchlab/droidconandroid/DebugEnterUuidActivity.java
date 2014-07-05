@@ -9,9 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.AppPrefs;
-import co.touchlab.droidconandroid.dataops.DataProcessor;
-import co.touchlab.droidconandroid.dataops.GoogleLoginOp;
+import co.touchlab.droidconandroid.tasks.GoogleLoginOpTask;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,7 +29,7 @@ public class DebugEnterUuidActivity extends Activity
         @Override
         public void onReceive(Context context, Intent intent)
         {
-            uuidEntry.setText(intent.getStringExtra(GoogleLoginOp.GOOGLE_LOGIN_UUID));
+            uuidEntry.setText(intent.getStringExtra(GoogleLoginOpTask.GOOGLE_LOGIN_UUID));
         }
     };
 
@@ -67,7 +67,7 @@ public class DebugEnterUuidActivity extends Activity
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(uuidReceiver, new IntentFilter(GoogleLoginOp.GOOGLE_LOGIN_COMPLETE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(uuidReceiver, new IntentFilter(GoogleLoginOpTask.GOOGLE_LOGIN_COMPLETE));
     }
 
     @Override
@@ -127,7 +127,7 @@ public class DebugEnterUuidActivity extends Activity
                 }
             }
 
-            DataProcessor.runProcess(new GoogleLoginOp(DebugEnterUuidActivity.this, accountName, person.getDisplayName(), imageURL));
+            TaskQueue.runProcess(new GoogleLoginOpTask(DebugEnterUuidActivity.this, accountName, person.getDisplayName(), imageURL));
         }
 
         @Override

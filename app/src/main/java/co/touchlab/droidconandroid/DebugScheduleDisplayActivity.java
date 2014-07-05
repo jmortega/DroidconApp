@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
-import co.touchlab.droidconandroid.R;
+import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.Event;
-import co.touchlab.droidconandroid.dataops.AddRsvp;
-import co.touchlab.droidconandroid.dataops.DataProcessor;
-import co.touchlab.droidconandroid.dataops.SimpleEventDataLoad;
+import co.touchlab.droidconandroid.tasks.AddRsvpTask;
+import co.touchlab.droidconandroid.tasks.SimpleEventDataLoadTask;
 import de.greenrobot.event.EventBus;
 
 import java.util.List;
@@ -31,11 +30,11 @@ public class DebugScheduleDisplayActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 Event event = adapter.getItem(position);
-                DataProcessor.runProcess(new AddRsvp(DebugScheduleDisplayActivity.this, event.id));
+                TaskQueue.runProcess(new AddRsvpTask(DebugScheduleDisplayActivity.this, event.id));
             }
         });
         EventBus.getDefault().register(this);
-        DataProcessor.runProcess(new SimpleEventDataLoad(this));
+        TaskQueue.runProcess(new SimpleEventDataLoadTask(this));
     }
 
     @Override
@@ -45,7 +44,7 @@ public class DebugScheduleDisplayActivity extends Activity {
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEventMainThread(SimpleEventDataLoad eventDataLoad)
+    public void onEventMainThread(SimpleEventDataLoadTask eventDataLoad)
     {
         adapter = new EventAdapter(this, eventDataLoad.events);
         eventList.setAdapter(adapter);
