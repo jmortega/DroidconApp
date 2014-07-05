@@ -8,4 +8,5 @@
     <string name="title_activity_debug_enter_uuid">DebugEnterUuid</string>
     <string name="title_activity_debug_schedule_display">DebugScheduleDisplayActivity</string>
 
+    <string name="google_error">Cannot login with Google. Please contact support.</string>
 </resources>

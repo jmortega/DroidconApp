@@ -1,8 +1,10 @@
 package co.touchlab.droidconandroid.network;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import co.touchlab.android.superbus.errorcontrol.PermanentException;
@@ -14,6 +16,7 @@ import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.data.DatabaseHelper;
 import co.touchlab.droidconandroid.data.Event;
 import co.touchlab.droidconandroid.data.Venue;
+import co.touchlab.droidconandroid.dataops.GoogleLoginOp;
 import com.j256.ormlite.dao.Dao;
 import com.turbomanage.httpclient.HttpResponse;
 import com.turbomanage.httpclient.ParameterMap;
@@ -145,6 +148,35 @@ public class DataHelper
             }
         });
     }
+
+    public static void loginGoogle(final Context context, final String token, final String name) throws TransientException, PermanentException
+        {
+            runRemoteCall(context, new RunOp()
+            {
+                @Override
+                String path()
+                {
+                    return "deviceAuth/loginUser";
+                }
+
+                @Override
+                HttpResponse buildAndExecuteResponse(BusHttpClient httpClient, ParameterMap params)
+                {
+                    params.put("googleToken", token);
+                    params.put("name", name);
+                    return httpClient.post(path(), params);
+                }
+
+                @Override
+                void jsonReply(JSONObject json) throws JSONException
+                {
+                    String uuid = json.getString("uuid");
+                    Intent intent = new Intent(GoogleLoginOp.GOOGLE_LOGIN_COMPLETE);
+                    intent.putExtra(GoogleLoginOp.GOOGLE_LOGIN_UUID, uuid);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                }
+            });
+        }
 
     private static void runRemoteCall(Context context, RunOp op) throws PermanentException, TransientException
     {
