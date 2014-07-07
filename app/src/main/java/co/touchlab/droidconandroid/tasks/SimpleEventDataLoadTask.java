@@ -22,7 +22,7 @@ public class SimpleEventDataLoadTask extends DatabaseTask
     }
 
     @Override
-    public void run() throws Exception
+    public void run(Context context) throws Exception
     {
         Dao<Event, Long> dao = getDatabase().getDao(Event.class);
         List<Event> events = dao.queryForAll();

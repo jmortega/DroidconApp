@@ -127,7 +127,7 @@ public class DebugEnterUuidActivity extends Activity
                 }
             }
 
-            TaskQueue.runProcess(new GoogleLoginOpTask(DebugEnterUuidActivity.this, accountName, person.getDisplayName(), imageURL));
+            TaskQueue.execute(DebugEnterUuidActivity.this, new GoogleLoginOpTask(accountName, person.getDisplayName(), imageURL));
         }
 
         @Override

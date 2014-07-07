@@ -17,21 +17,19 @@ public class GoogleLoginOpTask implements TaskQueue.Task
     public static final String GOOGLE_LOGIN_UUID = "GOOGLE_LOGIN_UUID";
     private final static String SCOPE = "audience:server:client_id:654878069390-0rs83f4a457ggmlln2jnmedv1b808bkv.apps.googleusercontent.com";
 
-    private Context context;
     private String email;
     private String name;
     private String imageURL;
 
-    public GoogleLoginOpTask(Context context, String email, String name, String imageURL)
+    public GoogleLoginOpTask(String email, String name, String imageURL)
     {
-        this.context = context;
         this.email = email;
         this.name = name;
         this.imageURL = imageURL;
     }
 
     @Override
-    public void run() throws Exception
+    public void run(Context context) throws Exception
     {
         String token = GoogleAuthUtil.getToken(context, email, SCOPE);
         DataHelper.loginGoogle(context, token, name);

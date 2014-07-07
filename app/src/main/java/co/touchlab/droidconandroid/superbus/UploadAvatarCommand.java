@@ -7,7 +7,6 @@ import co.touchlab.android.superbus.errorcontrol.TransientException;
 import co.touchlab.android.superbus.http.BusHttpClient;
 import co.touchlab.droidconandroid.R;
 import co.touchlab.droidconandroid.data.AppPrefs;
-import com.turbomanage.httpclient.BasicHttpClient;
 import com.turbomanage.httpclient.HttpResponse;
 
 /**

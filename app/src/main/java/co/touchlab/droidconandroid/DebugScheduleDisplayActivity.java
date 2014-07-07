@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.Event;
 import co.touchlab.droidconandroid.tasks.AddRsvpTask;
@@ -30,11 +33,11 @@ public class DebugScheduleDisplayActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 Event event = adapter.getItem(position);
-                TaskQueue.runProcess(new AddRsvpTask(DebugScheduleDisplayActivity.this, event.id));
+                TaskQueue.execute(DebugScheduleDisplayActivity.this, new AddRsvpTask(DebugScheduleDisplayActivity.this, event.id));
             }
         });
         EventBus.getDefault().register(this);
-        TaskQueue.runProcess(new SimpleEventDataLoadTask(this));
+        TaskQueue.execute(DebugScheduleDisplayActivity.this, new SimpleEventDataLoadTask(this));
     }
 
     @Override

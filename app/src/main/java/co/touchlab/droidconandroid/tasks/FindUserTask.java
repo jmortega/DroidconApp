@@ -1,31 +1,30 @@
 package co.touchlab.droidconandroid.tasks;
 
+import android.app.Activity;
 import android.content.Context;
-import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.droidconandroid.FindUser;
 import co.touchlab.droidconandroid.R;
 import com.turbomanage.httpclient.BasicHttpClient;
 import com.turbomanage.httpclient.HttpResponse;
-import de.greenrobot.event.EventBus;
 import org.json.JSONObject;
 
 /**
  * Created by kgalligan on 7/5/14.
  */
-public class FindUserTask extends LiveNetworkTask
+public class FindUserTask extends LiveNetworkBsyncTask
 {
-    private Context context;
     private String code;
     public UserData userData;
 
-    public FindUserTask(Context context, String code)
+    public FindUserTask(String code)
     {
-        this.context = context;
         this.code = code;
     }
 
     @Override
-    public void run() throws Exception
+    protected void doInBackground(Context context) throws Exception
     {
+        Thread.sleep(5000);
         BasicHttpClient client = new BasicHttpClient(context.getString(R.string.base_url));
         HttpResponse httpResponse = client.get("dataTest/findUserByCode/" + code, null);
         if(httpResponse.getStatus() == 404)
@@ -42,8 +41,12 @@ public class FindUserTask extends LiveNetworkTask
             userData.userCode = json.getString("userCode");
             this.userData = userData;
         }
+    }
 
-        EventBus.getDefault().post(this);
+    @Override
+    protected void onPostExecute(Activity a)
+    {
+        ((FindUser)a).showResult(this);
     }
 
     @Override

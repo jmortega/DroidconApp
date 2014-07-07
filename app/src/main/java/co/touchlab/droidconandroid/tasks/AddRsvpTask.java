@@ -24,7 +24,7 @@ public class AddRsvpTask extends DatabaseTask
     }
 
     @Override
-    public void run() throws Exception
+    public void run(final Context context) throws Exception
     {
         getDatabase().performTransactionOrThrowRuntime(new Callable<Void>()
         {
@@ -38,7 +38,7 @@ public class AddRsvpTask extends DatabaseTask
                 {
                     event.rsvpUuid = UUID.randomUUID().toString();
                     dao.update(event);
-                    CommandBusHelper.submitCommandSync(getContext(), new AddRsvpCommand(eventId, event.rsvpUuid));
+                    CommandBusHelper.submitCommandSync(context, new AddRsvpCommand(eventId, event.rsvpUuid));
                 }
 
                 return null;

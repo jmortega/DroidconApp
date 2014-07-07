@@ -1,6 +1,5 @@
 package co.touchlab.droidconandroid;
 
-import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import co.touchlab.android.superbus.SuperbusConfig;
 import co.touchlab.android.superbus.appsupport.AbstractCommandPersistedApplication;

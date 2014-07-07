@@ -3,8 +3,6 @@ package co.touchlab.droidconandroid.data;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.Date;
-
 /**
  * Created by kgalligan on 6/28/14.
  */

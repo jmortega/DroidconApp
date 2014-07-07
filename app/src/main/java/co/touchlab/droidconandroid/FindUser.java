@@ -10,11 +10,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.BsyncTaskManager;
 import co.touchlab.droidconandroid.tasks.FindUserTask;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.squareup.picasso.Picasso;
-import de.greenrobot.event.EventBus;
 
 public class FindUser extends Activity {
 
@@ -22,6 +21,7 @@ public class FindUser extends Activity {
     private EditText userCode;
     private ImageView userAvatar;
     private TextView userName;
+    private BsyncTaskManager bsyncTaskManager;
 
     public static void callMe(Context c)
     {
@@ -32,6 +32,10 @@ public class FindUser extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bsyncTaskManager = new BsyncTaskManager(savedInstanceState);
+        bsyncTaskManager.register(this);
+
         setContentView(R.layout.activity_find_user);
         userCode = (EditText) findViewById(R.id.userCode);
         userAvatar = (ImageView) findViewById(R.id.userAvatar);
@@ -42,21 +46,27 @@ public class FindUser extends Activity {
             public void onClick(View v)
             {
                 String userCodeVal = userCode.getText().toString();
-                TaskQueue.runProcess(new FindUserTask(FindUser.this, userCodeVal));
+                bsyncTaskManager.post(FindUser.this, new FindUserTask(userCodeVal));
             }
         });
 
-        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        bsyncTaskManager.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        bsyncTaskManager.unregister();
     }
 
-    public void onEventMainThread(FindUserTask findUserTask)
+    public void showResult(FindUserTask findUserTask)
     {
         if(findUserTask.isError())
         {

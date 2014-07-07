@@ -9,20 +9,15 @@ import co.touchlab.droidconandroid.data.DatabaseHelper;
  */
 public abstract class DatabaseTask implements TaskQueue.Task
 {
-    private Context context;
+    private final DatabaseHelper databaseHelper;
 
     protected DatabaseTask(Context context)
     {
-        this.context = context;
+        databaseHelper = DatabaseHelper.getInstance(context);
     }
 
     protected DatabaseHelper getDatabase()
     {
-        return DatabaseHelper.getInstance(context);
-    }
-
-    public Context getContext()
-    {
-        return context;
+        return databaseHelper;
     }
 }
