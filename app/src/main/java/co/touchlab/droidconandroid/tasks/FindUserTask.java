@@ -24,7 +24,6 @@ public class FindUserTask extends LiveNetworkBsyncTask
     @Override
     protected void doInBackground(Context context) throws Exception
     {
-        Thread.sleep(5000);
         BasicHttpClient client = new BasicHttpClient(context.getString(R.string.base_url));
         HttpResponse httpResponse = client.get("dataTest/findUserByCode/" + code, null);
         if(httpResponse.getStatus() == 404)

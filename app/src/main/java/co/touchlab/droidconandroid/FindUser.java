@@ -9,10 +9,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import co.touchlab.android.threading.tasks.BsyncTaskManager;
 import co.touchlab.droidconandroid.tasks.FindUserTask;
-import com.github.johnpersano.supertoasts.SuperToast;
+import co.touchlab.droidconandroid.utils.Toaster;
 import com.squareup.picasso.Picasso;
 
 public class FindUser extends Activity {
@@ -70,7 +69,7 @@ public class FindUser extends Activity {
     {
         if(findUserTask.isError())
         {
-            SuperToast.create(this, getString(findUserTask.errorStringCode), Toast.LENGTH_LONG).show();
+            Toaster.showMessage(this, findUserTask.errorStringCode);
         }
         else
         {

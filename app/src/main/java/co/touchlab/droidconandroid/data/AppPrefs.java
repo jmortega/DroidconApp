@@ -2,6 +2,7 @@ package co.touchlab.droidconandroid.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -22,6 +23,11 @@ public class AppPrefs
         }
 
         return instance;
+    }
+
+    public boolean isLoggedIn()
+    {
+        return StringUtils.isNoneEmpty(getUserUuid());
     }
 
     public String getUserUuid()

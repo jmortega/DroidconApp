@@ -1,10 +1,13 @@
 package co.touchlab.droidconandroid;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import co.touchlab.droidconandroid.data.AppPrefs;
 
 
 public class MyActivity extends Activity {
@@ -12,15 +15,15 @@ public class MyActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
-        findViewById(R.id.enterUserUuid).setOnClickListener(new View.OnClickListener()
+
+        if(!AppPrefs.getInstance(this).isLoggedIn())
         {
-            @Override
-            public void onClick(View v)
-            {
-                DebugEnterUuidActivity.callMe(MyActivity.this);
-            }
-        });
+            DebugEnterUuidActivity.callMe(MyActivity.this);
+            finish();
+        }
+
+        setContentView(R.layout.activity_my);
+
         findViewById(R.id.showSchedule).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -58,5 +61,11 @@ public class MyActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void callMe(Context c)
+    {
+        Intent i = new Intent(c, MyActivity.class);
+        c.startActivity(i);
     }
 }

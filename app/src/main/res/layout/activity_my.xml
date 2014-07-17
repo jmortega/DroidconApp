@@ -17,13 +17,6 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/enterUserUuid"
-        android:layout_marginBottom="30dp"
-        android:text="Enter UUID"/>
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/showSchedule"
         android:text="Show Schedule"/>
 

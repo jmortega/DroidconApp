@@ -8,11 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.tasks.GoogleLoginOpTask;
-import com.github.johnpersano.supertoasts.SuperToast;
+import co.touchlab.droidconandroid.utils.Toaster;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
@@ -47,6 +46,7 @@ public class DebugEnterUuidActivity extends Activity
             public void onClick(View v)
             {
                 AppPrefs.getInstance(DebugEnterUuidActivity.this).setUserUuid(uuidEntry.getText().toString());
+                MyActivity.callMe(DebugEnterUuidActivity.this);
                 finish();
             }
         });
@@ -155,7 +155,7 @@ public class DebugEnterUuidActivity extends Activity
             }
             else
             {
-                SuperToast.create(DebugEnterUuidActivity.this, getString(R.string.google_error), Toast.LENGTH_LONG).show();
+                Toaster.showMessage(DebugEnterUuidActivity.this, R.string.google_error);
             }
         }
     }
