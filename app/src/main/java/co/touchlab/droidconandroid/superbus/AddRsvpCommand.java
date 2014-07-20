@@ -27,7 +27,7 @@ public class AddRsvpCommand extends CheckedCommand
     {
         @FormUrlEncoded
         @POST("/dataTest/rsvpEvent/{eventId}")
-        BasicIdResult addRsvp(@Path("eventId") Long eventId, @Field("uuid") String uuid, @Field("rsvpUuid") String rsvpUuid);
+        BasicIdResult addRsvp(@Path("eventId") Long eventId, @Field("uuid") String uuid, @Field("rsvpUuid") String rsvpUuid)throws TransientException, PermanentException;
     }
 
     public AddRsvpCommand()

@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.Event;
-import co.touchlab.droidconandroid.tasks.AddRsvpTask;
+import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot;
 import co.touchlab.droidconandroid.tasks.SimpleEventDataLoadTask;
 import de.greenrobot.event.EventBus;
 
@@ -33,7 +33,7 @@ public class DebugScheduleDisplayActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 Event event = adapter.getItem(position);
-                TaskQueue.execute(DebugScheduleDisplayActivity.this, new AddRsvpTask(DebugScheduleDisplayActivity.this, event.id));
+                TaskQueue.execute(DebugScheduleDisplayActivity.this, new AddRsvpTaskKot(DebugScheduleDisplayActivity.this, event.id));
             }
         });
         EventBus.getDefault().register(this);

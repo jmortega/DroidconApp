@@ -11,26 +11,21 @@ import co.touchlab.android.superbus.http.RetrofitBusErrorHandler;
 import co.touchlab.droidconandroid.BuildConfig;
 import co.touchlab.droidconandroid.R;
 import co.touchlab.droidconandroid.data.AppPrefs;
-import co.touchlab.droidconandroid.data.DatabaseHelper;
-import co.touchlab.droidconandroid.data.Event;
-import co.touchlab.droidconandroid.data.Venue;
-import co.touchlab.droidconandroid.tasks.GoogleLoginOpTask;
-import com.j256.ormlite.dao.Dao;
+import co.touchlab.droidconandroid.tasks.GoogleLoginTask;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.turbomanage.httpclient.HttpResponse;
 import com.turbomanage.httpclient.ParameterMap;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.android.AndroidLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -62,8 +57,8 @@ public class DataHelper
                 {
                     String uuid = json.getString("uuid");
                     AppPrefs.getInstance(context).setUserUuid(uuid);
-                    Intent intent = new Intent(GoogleLoginOpTask.GOOGLE_LOGIN_COMPLETE);
-                    intent.putExtra(GoogleLoginOpTask.GOOGLE_LOGIN_UUID, uuid);
+                    Intent intent = new Intent(GoogleLoginTask.GOOGLE_LOGIN_COMPLETE);
+                    intent.putExtra(GoogleLoginTask.GOOGLE_LOGIN_UUID, uuid);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }
             });
@@ -185,9 +180,14 @@ public class DataHelper
                 request.addHeader("Accept", "application/json");
             }
         };
+        Gson gson = new GsonBuilder().create();
+        GsonConverter gsonConverter = new GsonConverter(gson);
+
         return new RestAdapter.Builder()
                 .setErrorHandler(new RetrofitBusErrorHandler())
                 .setRequestInterceptor(requestInterceptor)
+                .setConverter(gsonConverter)
+                .setLogLevel(RestAdapter.LogLevel.FULL).setLog(new AndroidLog("DroidconApp"))
                 .setEndpoint(context.getString(R.string.base_url));
     }
 }

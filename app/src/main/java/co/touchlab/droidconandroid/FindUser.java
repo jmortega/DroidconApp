@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import co.touchlab.android.threading.tasks.BsyncTaskManager;
-import co.touchlab.droidconandroid.tasks.FindUserTask;
+import co.touchlab.droidconandroid.tasks.FindUserTaskKot;
 import co.touchlab.droidconandroid.utils.Toaster;
 import com.squareup.picasso.Picasso;
 
@@ -45,7 +45,7 @@ public class FindUser extends Activity {
             public void onClick(View v)
             {
                 String userCodeVal = userCode.getText().toString();
-                bsyncTaskManager.post(FindUser.this, new FindUserTask(userCodeVal));
+                bsyncTaskManager.post(FindUser.this, new FindUserTaskKot(userCodeVal));
             }
         });
 
@@ -65,7 +65,7 @@ public class FindUser extends Activity {
         bsyncTaskManager.unregister();
     }
 
-    public void showResult(FindUserTask findUserTask)
+    public void showResult(FindUserTaskKot findUserTask)
     {
         if(findUserTask.isError())
         {
@@ -73,9 +73,9 @@ public class FindUser extends Activity {
         }
         else
         {
-            if(findUserTask.userData.avatarKey != null)
-                Picasso.with(this).load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + findUserTask.userData.avatarKey).into(userAvatar);
-            userName.setText(findUserTask.userData.name);
+            if(findUserTask.getUserData().getAvatarKey() != null)
+                Picasso.with(this).load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + findUserTask.getUserData().getAvatarKey()).into(userAvatar);
+            userName.setText(findUserTask.getUserData().getName());
         }
     }
 
