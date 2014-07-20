@@ -22,10 +22,10 @@ public class Event
     public Venue venue;
 
     @DatabaseField
-    public Long startDate;
+    public Long startDateLong;
 
     @DatabaseField
-    public Long endDate;
+    public Long endDateLong;
 
     @DatabaseField
     public boolean publicEvent;

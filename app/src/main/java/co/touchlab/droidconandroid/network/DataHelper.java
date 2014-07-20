@@ -7,6 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import co.touchlab.android.superbus.errorcontrol.PermanentException;
 import co.touchlab.android.superbus.errorcontrol.TransientException;
 import co.touchlab.android.superbus.http.BusHttpClient;
+import co.touchlab.android.superbus.http.RetrofitBusErrorHandler;
 import co.touchlab.droidconandroid.BuildConfig;
 import co.touchlab.droidconandroid.R;
 import co.touchlab.droidconandroid.data.AppPrefs;
@@ -21,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import retrofit.RequestInterceptor;
+import retrofit.RestAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,114 +38,6 @@ import java.text.SimpleDateFormat;
 public class DataHelper
 {
     public static final String CT_APPLICATION_JSON = "application/json";
-
-    public static void scheduleData(final Context context) throws PermanentException, TransientException
-    {
-        runRemoteCall(context, new RunOp()
-        {
-            @Override
-            public String path()
-            {
-                return "dataTest/scheduleData/" + BuildConfig.CONVENTION_ID;
-            }
-
-            @Override
-            public void fillParams(ParameterMap parameterMap)
-            {
-
-            }
-
-            @Override
-            public HttpResponse buildAndExecuteResponse(BusHttpClient httpClient, ParameterMap params)
-            {
-                return httpClient.get(path(), params);
-            }
-
-            @Override
-            void jsonReply(JSONObject json) throws JSONException
-            {
-                DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
-                Dao<Event, Long> eventDao = databaseHelper.getEventDao();
-                Dao<Venue, Long> venueDao = databaseHelper.getVenueDao();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mma");
-
-                try
-                {
-                    JSONArray venuesArray = json.getJSONArray("venues");
-                    for(int i=0; i<venuesArray.length(); i++)
-                    {
-                        JSONObject venueNode = venuesArray.getJSONObject(i);
-                        long venueId = venueNode.getLong("id");
-                        Venue venue = venueDao.queryForId(venueId);
-                        if(venue == null)
-                        {
-                            venue = new Venue();
-                            venue.id = venueId;
-                        }
-
-                        venue.name = venueNode.getString("name");
-                        venue.description = venueNode.getString("description");
-                        venue.mapImageUrl = venueNode.getString("mapImageUrl");
-                        venueDao.createOrUpdate(venue);
-
-                        JSONArray eventsArray = venueNode.getJSONArray("events");
-
-                        for(int j=0; j<eventsArray.length(); j++)
-                        {
-                            JSONObject eventNode = eventsArray.getJSONObject(j);
-                            long eventId = eventNode.getLong("id");
-                            Event event = eventDao.queryForId(eventId);
-                            if(event == null)
-                            {
-                                event = new Event();
-                                event.id = eventId;
-                            }
-
-                            event.name = eventNode.getString("name");
-                            event.description = eventNode.getString("description");
-                            event.publicEvent = eventNode.getBoolean("publicEvent");
-                            event.rsvpLimit = eventNode.getInt("rsvpLimit");
-                            event.rsvpCount = eventNode.getInt("rsvpCount");
-                            event.startDate = dateFormat.parse(eventNode.getString("startDate")).getTime();
-                            event.endDate = dateFormat.parse(eventNode.getString("endDate")).getTime();
-                            event.venue = venue;
-
-                            eventDao.createOrUpdate(event);
-                        }
-                    }
-                }
-                catch (SQLException e)
-                {
-                    throw new RuntimeException(e);
-                }
-                catch (ParseException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
-    }
-
-    public static void addRsvp(final Context context, final Long eventId, final String rsvpUuid) throws TransientException, PermanentException
-    {
-        runRemoteCall(context, new RunOp()
-        {
-            @Override
-            String path()
-            {
-                return "dataTest/rsvpEvent/"+ eventId;
-            }
-
-            @Override
-            HttpResponse buildAndExecuteResponse(BusHttpClient httpClient, ParameterMap params)
-            {
-                params.put("uuid", AppPrefs.getInstance(context).getUserUuid());
-                params.put("rsvpUuid", rsvpUuid);
-                return httpClient.post(path(), params);
-            }
-        });
-    }
 
     public static void loginGoogle(final Context context, final String token, final String name) throws TransientException, PermanentException
         {
@@ -271,5 +166,28 @@ public class DataHelper
         outStream.close();
 
         return debugFile;
+    }
+
+    public static RestAdapter makeRequestAdapter(Context context)
+    {
+        RestAdapter.Builder builder = makeRequestAdapterBuilder(context);
+        return builder
+                .build();
+    }
+
+    public static RestAdapter.Builder makeRequestAdapterBuilder(Context context)
+    {
+        RequestInterceptor requestInterceptor = new RequestInterceptor()
+        {
+            @Override
+            public void intercept(RequestFacade request)
+            {
+                request.addHeader("Accept", "application/json");
+            }
+        };
+        return new RestAdapter.Builder()
+                .setErrorHandler(new RetrofitBusErrorHandler())
+                .setRequestInterceptor(requestInterceptor)
+                .setEndpoint(context.getString(R.string.base_url));
     }
 }

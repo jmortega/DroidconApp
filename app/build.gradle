@@ -1,19 +1,24 @@
 buildscript {
+    ext.kotlin_version = '0.8.11'
     repositories {
         maven { url 'http://download.crashlytics.com/maven' }
+        mavenCentral()
     }
 
     dependencies {
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 apply plugin: 'android'
+apply plugin: 'kotlin-android'
 //apply plugin: 'crashlytics'
 repositories {
     maven { url 'http://download.crashlytics.com/maven' }
     flatDir {
         dirs 'libs'
     }
+    mavenCentral()
 }
 
 android {
@@ -40,11 +45,15 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 dependencies {
     compile 'com.android.support:support-v4:19.1.0'
     compile 'com.squareup.picasso:picasso:2.1.1'
+    compile 'com.squareup.retrofit:retrofit:1.6.1'
 //    compile 'com.crashlytics.android:crashlytics:1.+'
     compile 'de.greenrobot:eventbus:2.2.1'
 
@@ -52,5 +61,6 @@ dependencies {
     compile 'com.github.johnpersano:supertoasts:1.3.4.1@aar'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.google.android.gms:play-services:4.4.52'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }

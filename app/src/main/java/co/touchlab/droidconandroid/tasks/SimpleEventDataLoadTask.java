@@ -34,7 +34,7 @@ public class SimpleEventDataLoadTask extends DatabaseTask
                 if(lhs.venue.id != rhs.venue.id)
                     return lhs.venue.name.compareTo(rhs.venue.name);
 
-                return lhs.startDate.compareTo(rhs.startDate);
+                return lhs.startDateLong.compareTo(rhs.startDateLong);
             }
         });
 
