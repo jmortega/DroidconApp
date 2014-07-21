@@ -13,6 +13,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.Event;
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot;
 import co.touchlab.droidconandroid.tasks.EventDatLoadTask;
+import co.touchlab.droidconandroid.tasks.EventDataLoadTask;
 import de.greenrobot.event.EventBus;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class DebugScheduleDisplayActivity extends Activity {
             }
         });
         EventBus.getDefault().register(this);
-        TaskQueue.execute(DebugScheduleDisplayActivity.this, new EventDatLoadTask(this));
+        TaskQueue.execute(DebugScheduleDisplayActivity.this, new EventDataLoadTask(this));
     }
 
     @Override
@@ -47,7 +48,7 @@ public class DebugScheduleDisplayActivity extends Activity {
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEventMainThread(EventDatLoadTask eventDataLoad)
+    public void onEventMainThread(EventDataLoadTask eventDataLoad)
     {
         adapter = new EventAdapter(this, eventDataLoad.getEvents());
         eventList.setAdapter(adapter);

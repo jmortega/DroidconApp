@@ -10,13 +10,13 @@ import java.util.ArrayList
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class EventDataLoadTask(c: Context) : DatabaseTask(c)
+open class EventDataLoadTask(c: Context) : DatabaseTaskKot(c)
 {
     var events: List<Event> = ArrayList()
 
     override fun run(context: Context?)
     {
-        val dao = getDatabase().getEventDao()
+        val dao = databaseHelper.getEventDao()
         val events = dao.queryForAll()!!
 
         Collections.sort(events, object : Comparator<Event>

@@ -12,16 +12,16 @@ import co.touchlab.droidconandroid.superbus.AddRsvpCommandKot
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTask(c)
+open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
 {
     override fun run(context: Context?)
     {
-        getDatabase().performTransactionOrThrowRuntime(object : Callable<Void>
+        databaseHelper.performTransactionOrThrowRuntime(object : Callable<Void>
         {
             throws(javaClass<Exception>())
             override fun call(): Void?
             {
-                val dao = getDatabase().getEventDao()
+                val dao = databaseHelper.getEventDao()
                 val event = dao.queryForId(eventId)
                 if (event != null && event.rsvpUuid == null)
                 {

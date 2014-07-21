@@ -69,7 +69,7 @@ public class FindUser extends Activity {
     {
         if(findUserTask.isError())
         {
-            Toaster.showMessage(this, findUserTask.errorStringCode);
+            Toaster.showMessage(this, findUserTask.getErrorStringCode());
         }
         else
         {

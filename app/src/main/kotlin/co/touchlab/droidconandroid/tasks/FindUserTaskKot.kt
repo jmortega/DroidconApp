@@ -10,7 +10,7 @@ import co.touchlab.droidconandroid.FindUser
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class FindUserTaskKot(val code : String) : LiveNetworkBsyncTask()
+open class FindUserTaskKot(val code : String) : LiveNetworkBsyncTaskKot()
 {
     public var userData: UserData? = null
 
