@@ -15,25 +15,11 @@ import co.touchlab.droidconandroid.data.AppPrefs
 import android.util.Log
 import co.touchlab.droidconandroid.network.AddRsvpRequest
 
-
-fun AddRsvpCommandKot(eventId: Long, rsvpUuid: String) : AddRsvpCommandKot
-{
-    val command = AddRsvpCommandKot()
-
-    command.eventId = eventId
-    command.rsvpUuid = rsvpUuid
-
-    return command
-}
-
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class AddRsvpCommandKot() : CheckedCommand()
+open class AddRsvpCommandKot(var eventId : Long? = null, var rsvpUuid : String? = null) : CheckedCommand()
 {
-    var eventId: Long? = null
-    var rsvpUuid: String? = null
-
     override fun logSummary(): String
     {
         return "AddRsvp - " + eventId

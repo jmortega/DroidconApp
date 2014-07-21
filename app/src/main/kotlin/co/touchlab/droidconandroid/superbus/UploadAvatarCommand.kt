@@ -8,19 +8,12 @@ import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.R
 import co.touchlab.android.superbus.errorcontrol.PermanentException
 
-fun UploadAvatarCommand(imageURL : String): UploadAvatarCommand
-{
-    val command = UploadAvatarCommand()
-    command.imageURL = imageURL
-    return command
-}
-
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class UploadAvatarCommand : CheckedCommand()
+open class UploadAvatarCommand(var imageURL : String? = null) : CheckedCommand()
 {
-    var imageURL: String? = null
+//    var imageURL: String? = null
 
     override fun logSummary(): String
     {
