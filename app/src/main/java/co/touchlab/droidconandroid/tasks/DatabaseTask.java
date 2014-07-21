@@ -3,8 +3,8 @@ package co.touchlab.droidconandroid.tasks;
 import android.content.Context;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.DatabaseHelper;
+import org.jetbrains.annotations.NotNull;
 
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by kgalligan on 6/28/14.

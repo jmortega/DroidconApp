@@ -3,6 +3,7 @@ package co.touchlab.droidconandroid.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -14,6 +15,7 @@ public class AppPrefs
 
     private SharedPreferences prefs;
 
+    @NotNull
     public static synchronized AppPrefs getInstance(Context context)
     {
         if(instance == null)

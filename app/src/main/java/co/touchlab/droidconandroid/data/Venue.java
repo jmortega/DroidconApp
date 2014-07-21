@@ -2,6 +2,7 @@ package co.touchlab.droidconandroid.data;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -12,7 +13,7 @@ public class Venue
     @DatabaseField(id = true)
     public long id;
 
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     public String name;
 
     @DatabaseField

@@ -13,6 +13,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
@@ -32,6 +33,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
         super(context, DATABASE_FILE_NAME, null, VERSION);
     }
 
+    @NotNull
     public static synchronized DatabaseHelper getInstance(Context context)
     {
         if(instance == null)
@@ -112,6 +114,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
 
     }
 
+    @NotNull
     public Dao<Venue, Long> getVenueDao()
     {
         try
@@ -124,6 +127,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
         }
     }
 
+    @NotNull
     public Dao<Event, Long> getEventDao()
     {
         try

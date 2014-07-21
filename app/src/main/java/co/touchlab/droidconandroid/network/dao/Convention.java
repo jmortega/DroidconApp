@@ -1,6 +1,7 @@
 package co.touchlab.droidconandroid.network.dao;
 
 import com.j256.ormlite.field.DatabaseField;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,5 +21,6 @@ public class Convention
     @DatabaseField
     public String endDate;
 
+    @NotNull
     public List<Venue> venues = new ArrayList<Venue>();
 }
