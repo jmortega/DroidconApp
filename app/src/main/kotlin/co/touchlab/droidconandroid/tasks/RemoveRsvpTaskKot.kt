@@ -9,11 +9,12 @@ import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import java.util.concurrent.Callable
 import co.touchlab.droidconandroid.superbus.AddRsvpCommandKot
 import co.touchlab.android.threading.tasks.TaskQueue
+import co.touchlab.droidconandroid.superbus.RemoveRsvpCommandKot
 
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
+class RemoveRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
 {
     class object
     {
@@ -31,12 +32,11 @@ open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
             {
                 val dao = databaseHelper.getEventDao()
                 val event = dao.queryForId(eventId)
-                if (event != null && event.rsvpUuid == null)
+                if (event != null)
                 {
-                    val uuid = UUID.randomUUID().toString()
-                    event.rsvpUuid = uuid
+                    event.rsvpUuid = null
                     dao.update(event)
-                    CommandBusHelper.submitCommandSync(context, AddRsvpCommandKot(eventId, uuid))
+                    CommandBusHelper.submitCommandSync(context, RemoveRsvpCommandKot(eventId))
                 }
 
                 return null
