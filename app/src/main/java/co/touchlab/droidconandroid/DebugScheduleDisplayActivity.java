@@ -12,7 +12,6 @@ import android.widget.TextView;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.Event;
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot;
-import co.touchlab.droidconandroid.tasks.EventDatLoadTask;
 import co.touchlab.droidconandroid.tasks.EventDataLoadTask;
 import de.greenrobot.event.EventBus;
 

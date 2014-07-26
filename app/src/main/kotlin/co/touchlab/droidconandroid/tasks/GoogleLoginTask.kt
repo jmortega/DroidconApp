@@ -11,7 +11,7 @@ import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class GoogleLoginTask(val email:String, val name: String, val imageURL: String) : TaskQueue.Task
+open class GoogleLoginTask(val email:String, val name: String?, val imageURL: String?) : TaskQueue.Task
 {
     class object
     {

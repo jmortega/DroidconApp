@@ -46,7 +46,7 @@ public class DebugEnterUuidActivity extends Activity
             public void onClick(View v)
             {
                 AppPrefs.getInstance(DebugEnterUuidActivity.this).setUserUuid(uuidEntry.getText().toString());
-                MyActivity.callMe(DebugEnterUuidActivity.this);
+                MyActivity.startMe(DebugEnterUuidActivity.this);
                 finish();
             }
         });
