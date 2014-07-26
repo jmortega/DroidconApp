@@ -24,7 +24,7 @@ public class MyActivity : Activity()
 
         if (!AppPrefs.getInstance(this).isLoggedIn())
         {
-            DebugEnterUuidActivity.callMe(this@MyActivity)
+            EnterUuidActivity.startMe(this@MyActivity)
             finish()
         }
 

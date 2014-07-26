@@ -31,6 +31,11 @@ class EnterUuidActivity : Activity()
     class object
     {
         val REQUEST_CODE_RESOLVE_ERR = 9000
+        public fun startMe(c : Context)
+        {
+            val i = Intent(c, javaClass<EnterUuidActivity>())
+            c.startActivity(i)
+        }
     }
 
     val uuidReceiver = object : BroadcastReceiver()

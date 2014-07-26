@@ -35,7 +35,7 @@
         </receiver>
 
         <activity
-            android:name=".DebugEnterUuidActivity"
+            android:name=".EnterUuidActivity"
             android:label="@string/title_activity_debug_enter_uuid" >
         </activity>
         <activity
