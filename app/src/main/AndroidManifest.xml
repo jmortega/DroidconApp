@@ -48,7 +48,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".FindUser"
+            android:name=".FindUserKot"
             android:label="@string/title_activity_find_user" >
         </activity>
     </application>

@@ -41,7 +41,7 @@ public class MyActivity : Activity()
         {
             override fun onClick(v: View)
             {
-                FindUser.callMe(this@MyActivity)
+                FindUserKot.startMe(this@MyActivity)
             }
         })
 

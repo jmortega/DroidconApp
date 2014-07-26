@@ -5,7 +5,7 @@ import android.app.Activity
 import co.touchlab.droidconandroid.R
 import com.turbomanage.httpclient.BasicHttpClient
 import org.json.JSONObject
-import co.touchlab.droidconandroid.FindUser
+import co.touchlab.droidconandroid.FindUserKot
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -36,7 +36,7 @@ open class FindUserTaskKot(val code : String) : LiveNetworkBsyncTaskKot()
 
     override fun onPostExecute(host: Activity?)
     {
-        val findUser = host as FindUser
+        val findUser = host as FindUserKot
         findUser.showResult(this)
     }
 
@@ -49,7 +49,7 @@ open class FindUserTaskKot(val code : String) : LiveNetworkBsyncTaskKot()
     {
         public var id: Long = 0
         public var name: String = ""
-        public var avatarKey: String = ""
+        public var avatarKey: String? = null
         public var userCode: String = ""
     }
 }
