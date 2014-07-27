@@ -13,6 +13,7 @@ import co.touchlab.droidconandroid.tasks.FindUserTaskKot
 import co.touchlab.droidconandroid.utils.Toaster
 import com.squareup.picasso.Picasso
 import android.view.MenuItem
+import android.text.TextUtils
 
 /**
  * Created by kgalligan on 7/26/14.
@@ -32,6 +33,12 @@ public class FindUserKot : Activity()
     private var userCode: EditText? = null
     private var userAvatar: ImageView? = null
     private var userName: TextView? = null
+    private var profile: TextView? = null
+    private var userCodeVal: TextView? = null
+    private var company: TextView? = null
+    private var twitter: TextView? = null
+    private var linkedIn: TextView? = null
+    private var website: TextView? = null
     private var bsyncTaskManager: BsyncTaskManager<Activity>? = null
 
     public fun callMe(c: Context)
@@ -51,6 +58,13 @@ public class FindUserKot : Activity()
         userCode = findViewById(R.id.userCode) as EditText
         userAvatar = findViewById(R.id.userAvatar) as ImageView
         userName = findViewById(R.id.userName) as TextView
+        profile = findViewById(R.id.profile) as TextView
+        userCodeVal = findViewById(R.id.userCodeVal) as TextView
+        company = findViewById(R.id.company) as TextView
+        twitter = findViewById(R.id.twitter) as TextView
+        linkedIn = findViewById(R.id.linkedIn) as TextView
+        website = findViewById(R.id.website) as TextView
+
         findView(R.id.findUser).setOnClickListener(object : View.OnClickListener
         {
             override fun onClick(v: View)
@@ -82,11 +96,17 @@ public class FindUserKot : Activity()
         }
         else
         {
-            val userAccount = findUserTask.userInfoResponse?.user
-            val avatarKey = userAccount?.avatarKey
-            if (avatarKey != null)
+            val userAccount = findUserTask.userInfoResponse?.user!!
+            val avatarKey = userAccount.avatarKey
+            if (!TextUtils.isEmpty(avatarKey))
                 Picasso.with(this)!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
-            userName!!.setText(userAccount!!.name)
+            userName!!.setText(userAccount.name)
+            profile!!.setText(userAccount.profile)
+            userCodeVal!!.setText(userAccount.userCode)
+            company!!.setText(userAccount.company)
+            twitter!!.setText(userAccount.twitter)
+            linkedIn!!.setText(userAccount.linkedIn)
+            website!!.setText(userAccount.website)
         }
     }
 
