@@ -14,6 +14,9 @@ import co.touchlab.droidconandroid.utils.Toaster
 import com.squareup.picasso.Picasso
 import android.view.MenuItem
 import android.text.TextUtils
+import co.touchlab.droidconandroid.utils.TextHelper
+import android.text.Html
+import android.text.method.LinkMovementMethod
 
 /**
  * Created by kgalligan on 7/26/14.
@@ -101,7 +104,9 @@ public class FindUserKot : Activity()
             if (!TextUtils.isEmpty(avatarKey))
                 Picasso.with(this)!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
             userName!!.setText(userAccount.name)
-            profile!!.setText(userAccount.profile)
+            val profileString = Html.fromHtml(TextHelper.findTagLinks(userAccount.profile))
+            profile!!.setMovementMethod(LinkMovementMethod.getInstance())
+            profile!!.setText(profileString)
             userCodeVal!!.setText(userAccount.userCode)
             company!!.setText(userAccount.company)
             twitter!!.setText(userAccount.twitter)
