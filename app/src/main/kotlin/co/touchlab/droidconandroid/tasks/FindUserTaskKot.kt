@@ -80,7 +80,6 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot()
         try
         {
             this.userInfoResponse = loadRequest()
-            Thread.sleep(5000)
             saveInCache(context)
         }
         catch(e: PermanentException)

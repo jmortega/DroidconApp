@@ -45,6 +45,7 @@ public class FindUserKot : Activity(), UserInfoUpdate
     private var linkedIn: TextView? = null
     private var website: TextView? = null
     private var bsyncTaskManager: BsyncTaskManager<Activity>? = null
+    private var openedUserDetail = true
 
     public fun callMe(c: Context)
     {
@@ -75,6 +76,7 @@ public class FindUserKot : Activity(), UserInfoUpdate
             override fun onClick(v: View)
             {
                 val userCodeVal = userCode!!.getText().toString()
+                openedUserDetail = false
                 bsyncTaskManager!!.post(this@FindUserKot, FindUserTaskKot(userCodeVal))
             }
         })
@@ -102,20 +104,11 @@ public class FindUserKot : Activity(), UserInfoUpdate
         }
         else
         {
-            /*val userAccount = findUserTask.userInfoResponse?.user!!
-            val avatarKey = userAccount.avatarKey
-            if (!TextUtils.isEmpty(avatarKey))
-                Picasso.with(this)!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
-            userName!!.setText(userAccount.name)
-            val profileString = Html.fromHtml(TextHelper.findTagLinks(userAccount.profile))
-            profile!!.setMovementMethod(LinkMovementMethod.getInstance())
-            profile!!.setText(profileString)
-            userCodeVal!!.setText(userAccount.userCode)
-            company!!.setText(userAccount.company)
-            twitter!!.setText(userAccount.twitter)
-            linkedIn!!.setText(userAccount.linkedIn)
-            website!!.setText(userAccount.website)*/
-            UserDetailActivity.callMe(this, userId)
+            if(!openedUserDetail)
+            {
+                openedUserDetail = true
+                UserDetailActivity.callMe(this, userId)
+            }
         }
     }
 
