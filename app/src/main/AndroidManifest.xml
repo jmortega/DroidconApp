@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="co.touchlab.droidconandroid" >
+    package="co.touchlab.droidconandroid">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,10 +13,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MyActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,7 @@
             android:name="co.touchlab.android.superbus.SuperbusService"
             android:exported="false" />
 
-        <receiver android:name="co.touchlab.android.superbus.network.ConnectionChangeReceiver" >
+        <receiver android:name="co.touchlab.android.superbus.network.ConnectionChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
@@ -36,12 +36,10 @@
 
         <activity
             android:name=".EnterUuidActivity"
-            android:label="@string/title_activity_debug_enter_uuid" >
-        </activity>
+            android:label="@string/title_activity_debug_enter_uuid"></activity>
         <activity
             android:name=".DebugScheduleDisplayActivity"
-            android:label="@string/title_activity_debug_schedule_display" >
-        </activity>
+            android:label="@string/title_activity_debug_schedule_display"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -49,8 +47,10 @@
 
         <activity
             android:name=".FindUserKot"
-            android:label="@string/title_activity_find_user" >
-        </activity>
+            android:label="@string/title_activity_find_user"></activity>
+        <activity
+            android:name=".UserDetailActivity"
+            android:label="User Detail"></activity>
     </application>
 
 </manifest>

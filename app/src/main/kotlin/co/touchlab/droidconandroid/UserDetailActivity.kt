@@ -13,15 +13,26 @@ import com.squareup.picasso.Picasso
 import android.text.Html
 import co.touchlab.droidconandroid.utils.TextHelper
 import android.text.method.LinkMovementMethod
+import co.touchlab.droidconandroid.tasks.UserInfoUpdate
+import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
+import android.content.Intent
+import co.touchlab.droidconandroid.tasks.FindUserByIdTask
 
 /**
  * Created by kgalligan on 7/27/14.
  */
-class UserDetailActivity : FractivityAdapterActivity()
+class UserDetailActivity : FractivityAdapterActivity(), UserInfoUpdate
 {
     class object
     {
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
+        val USER_ID = "USER_ID"
+        fun callMe(a: Activity, id: Long)
+        {
+            val i = Intent(a, javaClass<UserDetailActivity>())
+            i.putExtra(USER_ID, id)
+            a.startActivity(i)
+        }
     }
 
     override fun createAdapter(savedInstanceState: Bundle?): FractivityAdapter
@@ -29,9 +40,13 @@ class UserDetailActivity : FractivityAdapterActivity()
         return UserDetailAdapter(this, savedInstanceState)
     }
 
+    override fun showResult(findUserTask: AbstractFindUserTask)
+    {
+        (adapter as UserDetailAdapter).showResult(findUserTask)
+    }
+
     class UserDetailAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAdapter(c, savedInstanceState)
     {
-        private var userCode: EditText
         private var userAvatar: ImageView
         private var userName: TextView
         private var profile: TextView
@@ -46,8 +61,9 @@ class UserDetailActivity : FractivityAdapterActivity()
             bsyncTaskManager = BsyncTaskManager(savedInstanceState)
             bsyncTaskManager.register(c)
 
-            c.setContentView(R.layout.activity_find_user)
-            userCode = c.findView(R.id.userCode) as EditText
+            bsyncTaskManager.post(c, FindUserByIdTask(c.getIntent()!!.getLongExtra(USER_ID, 0)))
+
+            c.setContentView(R.layout.activity_user_detail)
             userAvatar = c.findView(R.id.userAvatar) as ImageView
             userName = c.findView(R.id.userName) as TextView
             profile = c.findView(R.id.profile) as TextView
@@ -69,8 +85,8 @@ class UserDetailActivity : FractivityAdapterActivity()
             super.onDestroy()
             bsyncTaskManager.unregister()
         }
-        
-        public fun showResult(findUserTask: FindUserTaskKot)
+
+        public fun showResult(findUserTask: AbstractFindUserTask)
         {
             if (findUserTask.isError())
             {

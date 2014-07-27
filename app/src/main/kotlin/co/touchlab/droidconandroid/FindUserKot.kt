@@ -95,13 +95,14 @@ public class FindUserKot : Activity(), UserInfoUpdate
 
     override fun showResult(findUserTask: AbstractFindUserTask)
     {
-        if (findUserTask.isError())
+        val userId = findUserTask.userInfoResponse?.user?.id
+        if (findUserTask.isError() || userId == null)
         {
             Toaster.showMessage(this, findUserTask.errorStringCode!!)
         }
         else
         {
-            val userAccount = findUserTask.userInfoResponse?.user!!
+            /*val userAccount = findUserTask.userInfoResponse?.user!!
             val avatarKey = userAccount.avatarKey
             if (!TextUtils.isEmpty(avatarKey))
                 Picasso.with(this)!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
@@ -113,7 +114,8 @@ public class FindUserKot : Activity(), UserInfoUpdate
             company!!.setText(userAccount.company)
             twitter!!.setText(userAccount.twitter)
             linkedIn!!.setText(userAccount.linkedIn)
-            website!!.setText(userAccount.website)
+            website!!.setText(userAccount.website)*/
+            UserDetailActivity.callMe(this, userId)
         }
     }
 
