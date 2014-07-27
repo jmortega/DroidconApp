@@ -18,4 +18,24 @@ public class UserAccount
     @DatabaseField
     public String name;
 
+    @DatabaseField
+    public String profile;
+
+    @DatabaseField
+    public String avatarKey;
+
+    @DatabaseField
+    public String userCode;
+
+    @DatabaseField
+    public String company;
+
+    @DatabaseField
+    public String twitter;
+
+    @DatabaseField
+    public String linkedIn;
+
+    @DatabaseField
+    public String website;
 }

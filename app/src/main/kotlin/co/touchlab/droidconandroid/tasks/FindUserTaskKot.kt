@@ -6,31 +6,31 @@ import co.touchlab.droidconandroid.R
 import com.turbomanage.httpclient.BasicHttpClient
 import org.json.JSONObject
 import co.touchlab.droidconandroid.FindUserKot
+import co.touchlab.droidconandroid.network.dao.UserInfoResponse
+import co.touchlab.droidconandroid.network.DataHelper
+import co.touchlab.droidconandroid.network.AddRsvpRequest
+import co.touchlab.droidconandroid.network.FindUserRequest
+import co.touchlab.android.superbus.errorcontrol.PermanentException
 
 /**
  * Created by kgalligan on 7/20/14.
  */
 open class FindUserTaskKot(val code : String) : LiveNetworkBsyncTaskKot()
 {
-    public var userData: UserData? = null
+    public var userInfoResponse: UserInfoResponse? = null
 
     override fun doInBackground(context: Context?)
     {
-        val client = BasicHttpClient(context?.getString(R.string.base_url))
-        val httpResponse = client.get("dataTest/findUserByCode/" + code, null)
-        if (httpResponse?.getStatus() == 404)
+        val restAdapter = DataHelper.makeRequestAdapter(context)
+        val findUserRequest = restAdapter!!.create(javaClass<FindUserRequest>())!!
+
+        try
+        {
+            this.userInfoResponse = findUserRequest.getUserInfo(code)
+        }
+        catch(e: PermanentException)
         {
             errorStringCode = R.string.error_user_not_found
-        }
-        else
-        {
-            val json = JSONObject(httpResponse?.getBodyAsString())
-            val userData = UserData()
-            userData.id = json.getLong("id")
-            userData.name = json.getString("name")
-            userData.avatarKey = json.getString("avatarKey")
-            userData.userCode = json.getString("userCode")
-            this.userData = userData
         }
     }
 
@@ -43,13 +43,5 @@ open class FindUserTaskKot(val code : String) : LiveNetworkBsyncTaskKot()
     override fun handleError(e: Exception?): Boolean
     {
         return false
-    }
-
-    class UserData
-    {
-        public var id: Long = 0
-        public var name: String = ""
-        public var avatarKey: String? = null
-        public var userCode: String = ""
     }
 }

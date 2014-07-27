@@ -82,9 +82,11 @@ public class FindUserKot : Activity()
         }
         else
         {
-            if (findUserTask.userData!!.avatarKey != null)
-                Picasso.with(this)!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + findUserTask.userData!!.avatarKey)!!.into(userAvatar)
-            userName!!.setText(findUserTask.userData!!.name)
+            val userAccount = findUserTask.userInfoResponse?.user
+            val avatarKey = userAccount?.avatarKey
+            if (avatarKey != null)
+                Picasso.with(this)!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
+            userName!!.setText(userAccount!!.name)
         }
     }
 
