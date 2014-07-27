@@ -12,5 +12,5 @@ import retrofit.http.Path;
 public interface SingleUserInfoRequest
 {
     @GET("/dataTest/findUserById/{userId}")
-    UserInfoResponse getUserInfo(@Path("userId")Integer userId)throws TransientException, PermanentException;
+    UserInfoResponse getUserInfo(@Path("userId")Long userId)throws TransientException, PermanentException;
 }

@@ -16,19 +16,60 @@ import com.google.gson.Gson
 import co.touchlab.android.threading.tasks.TaskQueue
 import de.greenrobot.event.EventBus
 import android.text.TextUtils
+import co.touchlab.droidconandroid.network.SingleUserInfoRequest
 
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class FindUserTaskKot(val code : String) : LiveNetworkBsyncTaskKot()
+class FindUserTaskKot(val code: String) : AbstractFindUserTask()
+{
+    override fun doInBackground(context: Context?)
+    {
+        handleData(context!!, code, {(): UserInfoResponse? ->
+            val restAdapter = DataHelper.makeRequestAdapter(context)
+            val findUserRequest = restAdapter!!.create(javaClass<FindUserRequest>())!!
+            findUserRequest.getUserInfo(code)
+        })
+    }
+}
+
+class FindUserByIdTask(val id: Long) : AbstractFindUserTask()
+{
+    override fun doInBackground(context: Context?)
+    {
+        handleData(context!!, makeIdFileName(id)!!, {(): UserInfoResponse? ->
+            val restAdapter = DataHelper.makeRequestAdapter(context)
+            val findUserRequest = restAdapter!!.create(javaClass<SingleUserInfoRequest>())!!
+            findUserRequest.getUserInfo(id)
+        })
+    }
+}
+
+trait UserInfoUpdate
+{
+    fun showResult(findUserTask: AbstractFindUserTask)
+}
+
+abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot()
 {
     public var userInfoResponse: UserInfoResponse? = null
 
-    override fun doInBackground(context: Context?)
+    override fun onPostExecute(host: Activity?)
     {
-        val cacheUserData = CacheHelper.findFile(context!!, code)
+        val userInfoUpdate = host as UserInfoUpdate
+        userInfoUpdate.showResult(this)
+    }
 
-        if(!TextUtils.isEmpty(cacheUserData))
+    override fun handleError(e: Exception?): Boolean
+    {
+        return false
+    }
+
+    fun handleData(context: Context, fileName: String, loadRequest: () -> UserInfoResponse?)
+    {
+        val cacheUserData = CacheHelper.findFile(context, fileName)
+
+        if (!TextUtils.isEmpty(cacheUserData))
         {
             val gson = Gson()
             userInfoResponse = gson.fromJson(cacheUserData, javaClass<UserInfoResponse>())
@@ -36,14 +77,11 @@ open class FindUserTaskKot(val code : String) : LiveNetworkBsyncTaskKot()
             EventBus.getDefault()!!.post(this)
         }
 
-        val restAdapter = DataHelper.makeRequestAdapter(context)
-        val findUserRequest = restAdapter!!.create(javaClass<FindUserRequest>())!!
-
         try
         {
-            this.userInfoResponse = findUserRequest.getUserInfo(code)
+            this.userInfoResponse = loadRequest()
             Thread.sleep(5000)
-            CacheHelper.saveFile(context, code, Gson().toJson(userInfoResponse)!!)
+            saveInCache(context)
         }
         catch(e: PermanentException)
         {
@@ -51,14 +89,21 @@ open class FindUserTaskKot(val code : String) : LiveNetworkBsyncTaskKot()
         }
     }
 
-    override fun onPostExecute(host: Activity?)
+    fun saveInCache(context: Context)
     {
-        val findUser = host as FindUserKot
-        findUser.showResult(this)
+        val userJson = Gson().toJson(userInfoResponse)
+
+        val userCode = userInfoResponse?.user?.userCode
+        if (userCode != null)
+            CacheHelper.saveFile(context, userCode, userJson!!)
+
+        val userFileName = makeIdFileName(userInfoResponse?.user?.id)
+        if (userFileName != null)
+            CacheHelper.saveFile(context, userFileName, userJson!!)
     }
 
-    override fun handleError(e: Exception?): Boolean
+    fun makeIdFileName(id: Long?): String?
     {
-        return false
+        return if (id != null) "user_" + id else null
     }
 }

@@ -17,6 +17,11 @@ open class FractivityAdapter(val c : Activity, savedInstanceState: Bundle?)
     {
 
     }
+
+    open fun onSaveInstanceState(outState: Bundle)
+    {
+
+    }
 }
 
 abstract class FractivityAdapterActivity() : Activity()
@@ -41,5 +46,12 @@ abstract class FractivityAdapterActivity() : Activity()
     {
         super.onStop()
         adapter!!.onStop()
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle)
+    {
+        super<Activity>.onSaveInstanceState(outState)
+        adapter!!.onSaveInstanceState(outState)
     }
 }

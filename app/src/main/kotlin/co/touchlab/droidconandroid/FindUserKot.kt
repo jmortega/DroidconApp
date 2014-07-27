@@ -17,11 +17,13 @@ import android.text.TextUtils
 import co.touchlab.droidconandroid.utils.TextHelper
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import co.touchlab.droidconandroid.tasks.UserInfoUpdate
+import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 
 /**
  * Created by kgalligan on 7/26/14.
  */
-public class FindUserKot : Activity()
+public class FindUserKot : Activity(), UserInfoUpdate
 {
     class object
     {
@@ -52,7 +54,7 @@ public class FindUserKot : Activity()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
-        super.onCreate(savedInstanceState)
+        super<Activity>.onCreate(savedInstanceState)
 
         bsyncTaskManager = BsyncTaskManager(savedInstanceState)
         bsyncTaskManager!!.register(this)
@@ -81,17 +83,17 @@ public class FindUserKot : Activity()
 
     override fun onSaveInstanceState(outState: Bundle)
     {
-        super.onSaveInstanceState(outState)
+        super<Activity>.onSaveInstanceState(outState)
         bsyncTaskManager!!.onSaveInstanceState(outState)
     }
 
     override fun onDestroy()
     {
-        super.onDestroy()
+        super<Activity>.onDestroy()
         bsyncTaskManager!!.unregister()
     }
 
-    public fun showResult(findUserTask: FindUserTaskKot)
+    override fun showResult(findUserTask: AbstractFindUserTask)
     {
         if (findUserTask.isError())
         {
@@ -125,6 +127,6 @@ public class FindUserKot : Activity()
         {
             return true
         }
-        return super.onOptionsItemSelected(item)
+        return super<Activity>.onOptionsItemSelected(item)
     }
 }
