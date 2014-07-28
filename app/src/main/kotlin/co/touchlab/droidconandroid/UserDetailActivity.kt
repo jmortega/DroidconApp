@@ -17,15 +17,15 @@ import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import android.content.Intent
 import co.touchlab.droidconandroid.tasks.FindUserByIdTask
+import android.support.v4.app.FragmentActivity
 
 /**
  * Created by kgalligan on 7/27/14.
  */
-class UserDetailActivity : FractivityAdapterActivity(), UserInfoUpdate
+class UserDetailActivity : FragmentActivity()
 {
     class object
     {
-        val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
         val USER_ID = "USER_ID"
         fun callMe(a: Activity, id: Long)
         {
@@ -35,79 +35,10 @@ class UserDetailActivity : FractivityAdapterActivity(), UserInfoUpdate
         }
     }
 
-    override fun createAdapter(savedInstanceState: Bundle?): FractivityAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?)
     {
-        return UserDetailAdapter(this, savedInstanceState)
-    }
-
-    override fun showResult(findUserTask: AbstractFindUserTask)
-    {
-        (adapter as UserDetailAdapter).showResult(findUserTask)
-    }
-
-    class UserDetailAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAdapter(c, savedInstanceState)
-    {
-        private val userAvatar: ImageView
-        private val userName: TextView
-        private val profile: TextView
-        private val userCodeVal: TextView
-        private val company: TextView
-        private val twitter: TextView
-        private val linkedIn: TextView
-        private val website: TextView
-        private val bsyncTaskManager: BsyncTaskManager<Activity>
-
-        {
-            bsyncTaskManager = BsyncTaskManager(savedInstanceState)
-            bsyncTaskManager.register(c)
-
-            bsyncTaskManager.post(c, FindUserByIdTask(c.getIntent()!!.getLongExtra(USER_ID, 0)))
-
-            c.setContentView(R.layout.activity_user_detail)
-            userAvatar = c.findView(R.id.userAvatar) as ImageView
-            userName = c.findView(R.id.userName) as TextView
-            profile = c.findView(R.id.profile) as TextView
-            userCodeVal = c.findView(R.id.userCodeVal) as TextView
-            company = c.findView(R.id.company) as TextView
-            twitter = c.findView(R.id.twitter) as TextView
-            linkedIn = c.findView(R.id.linkedIn) as TextView
-            website = c.findView(R.id.website) as TextView
-        }
-
-        override fun onSaveInstanceState(outState: Bundle)
-        {
-            super.onSaveInstanceState(outState)
-            bsyncTaskManager.onSaveInstanceState(outState)
-        }
-
-        override fun onDestroy()
-        {
-            super.onDestroy()
-            bsyncTaskManager.unregister()
-        }
-
-        public fun showResult(findUserTask: AbstractFindUserTask)
-        {
-            if (findUserTask.isError())
-            {
-                Toaster.showMessage(c, findUserTask.errorStringCode!!)
-            }
-            else
-            {
-                val userAccount = findUserTask.userInfoResponse?.user!!
-                val avatarKey = userAccount.avatarKey
-                if (!TextUtils.isEmpty(avatarKey))
-                    Picasso.with(c)!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
-                userName.setText(userAccount.name)
-                val profileString = Html.fromHtml(TextHelper.findTagLinks(userAccount.profile))
-                profile.setMovementMethod(LinkMovementMethod.getInstance())
-                profile.setText(profileString)
-                userCodeVal.setText(userAccount.userCode)
-                company.setText(userAccount.company)
-                twitter.setText(userAccount.twitter)
-                linkedIn.setText(userAccount.linkedIn)
-                website.setText(userAccount.website)
-            }
-        }
+        super<FragmentActivity>.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_detail)
     }
 }

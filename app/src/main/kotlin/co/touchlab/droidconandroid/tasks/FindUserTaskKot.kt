@@ -50,11 +50,11 @@ trait UserInfoUpdate
     fun showResult(findUserTask: AbstractFindUserTask)
 }
 
-abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot()
+abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>()
 {
     public var userInfoResponse: UserInfoResponse? = null
 
-    override fun onPostExecute(host: Activity?)
+    override fun onPostExecute(host: UserInfoUpdate?)
     {
         val userInfoUpdate = host as UserInfoUpdate
         userInfoUpdate.showResult(this)

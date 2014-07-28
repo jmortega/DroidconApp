@@ -6,7 +6,7 @@ import android.app.Activity
 /**
  * Created by kgalligan on 7/21/14.
  */
-abstract class LiveNetworkBsyncTaskKot : BsyncTask<Activity>()
+abstract class LiveNetworkBsyncTaskKot<D> : BsyncTask<D>()
 {
     var errorStringCode : Int? = null
 
