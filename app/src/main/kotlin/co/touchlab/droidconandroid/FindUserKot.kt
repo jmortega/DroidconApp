@@ -82,7 +82,7 @@ public class FindUserKot : FragmentActivity(), UserInfoUpdate
 
     override fun showResult(findUserTask: AbstractFindUserTask)
     {
-        val userId = findUserTask.userInfoResponse?.user?.id
+        val userId = findUserTask.user?.id
         if (findUserTask.isError() || userId == null)
         {
             Toaster.showMessage(this, findUserTask.errorStringCode!!)

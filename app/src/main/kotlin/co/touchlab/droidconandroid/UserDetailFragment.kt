@@ -22,6 +22,7 @@ import android.widget.Button
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.droidconandroid.tasks.FollowToggleTask
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -103,12 +104,12 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         }
         else
         {
-            val userAccount = findUserTask.userInfoResponse?.user!!
+            val userAccount = findUserTask.user!!
             val avatarKey = userAccount.avatarKey
             if (!TextUtils.isEmpty(avatarKey))
                 Picasso.with(getActivity())!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
             userName!!.setText(userAccount.name)
-            val profileString = Html.fromHtml(TextHelper.findTagLinks(userAccount.profile))
+            val profileString = Html.fromHtml(TextHelper.findTagLinks(StringUtils.trimToEmpty(userAccount.profile)!!))
             profile!!.setMovementMethod(LinkMovementMethod.getInstance())
             profile!!.setText(profileString)
             userCodeVal!!.setText(userAccount.userCode)
@@ -127,7 +128,7 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
                 followToggle!!.setVisibility(View.VISIBLE)
                 followToggle!!.setText(R.string.follow)
                 followToggle!!.setOnClickListener { v ->
-                    FollowToggleTask.createTask(getActivity()!!, userAccount.id)
+                    FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
                 }
             }
         }

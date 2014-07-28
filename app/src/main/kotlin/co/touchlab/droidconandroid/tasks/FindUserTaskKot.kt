@@ -11,12 +11,14 @@ import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.AddRsvpRequest
 import co.touchlab.droidconandroid.network.FindUserRequest
 import co.touchlab.android.superbus.errorcontrol.PermanentException
-import co.touchlab.droidconandroid.utils.CacheHelper
 import com.google.gson.Gson
 import co.touchlab.android.threading.tasks.TaskQueue
 import de.greenrobot.event.EventBus
 import android.text.TextUtils
 import co.touchlab.droidconandroid.network.SingleUserInfoRequest
+import co.touchlab.droidconandroid.data.DatabaseHelper
+import co.touchlab.droidconandroid.data.UserAccount
+import co.touchlab.droidconandroid.network.dao.userAccountToDb
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -25,7 +27,11 @@ class FindUserTaskKot(val code: String) : AbstractFindUserTask()
 {
     override fun doInBackground(context: Context?)
     {
-        handleData(context!!, code, {(): UserInfoResponse? ->
+
+        handleData(context!!, { (): UserAccount? ->
+            val databaseHelper = DatabaseHelper.getInstance(context)
+            UserAccount.findByCode(databaseHelper, code)
+        }, {(): UserInfoResponse? ->
             val restAdapter = DataHelper.makeRequestAdapter(context)
             val findUserRequest = restAdapter!!.create(javaClass<FindUserRequest>())!!
             findUserRequest.getUserInfo(code)
@@ -33,11 +39,15 @@ class FindUserTaskKot(val code: String) : AbstractFindUserTask()
     }
 }
 
+data class FindUserResponse(val user: UserAccount)
+
 class FindUserByIdTask(val id: Long) : AbstractFindUserTask()
 {
     override fun doInBackground(context: Context?)
     {
-        handleData(context!!, makeIdFileName(id)!!, {(): UserInfoResponse? ->
+        handleData(context!!, {(): UserAccount? ->
+            DatabaseHelper.getInstance(context).getUserAccountDao().queryForId(id)
+        }, {(): UserInfoResponse? ->
             val restAdapter = DataHelper.makeRequestAdapter(context)
             val findUserRequest = restAdapter!!.create(javaClass<SingleUserInfoRequest>())!!
             findUserRequest.getUserInfo(id)
@@ -52,7 +62,7 @@ trait UserInfoUpdate
 
 abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>()
 {
-    public var userInfoResponse: UserInfoResponse? = null
+    public var user: UserAccount? = null
 
     override fun onPostExecute(host: UserInfoUpdate?)
     {
@@ -65,29 +75,30 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
         return false
     }
 
-    fun handleData(context: Context, fileName: String, loadRequest: () -> UserInfoResponse?)
+    fun handleData(context: Context, loadFromDb: () -> UserAccount?, loadRequest: () -> UserInfoResponse?)
     {
-        val cacheUserData = CacheHelper.findFile(context, fileName)
+        user = loadFromDb()
 
-        if (!TextUtils.isEmpty(cacheUserData))
+        if (user != null)
         {
-            val gson = Gson()
-            userInfoResponse = gson.fromJson(cacheUserData, javaClass<UserInfoResponse>())
-
             EventBus.getDefault()!!.post(this)
         }
 
         try
         {
             val response = loadRequest()
-            if(userInfoResponse != null && response.equals(userInfoResponse))
+            val newDbUser = UserAccount()
+            userAccountToDb(response!!.user, newDbUser)
+
+            if(user != null && user.equals(newDbUser))
             {
                 cancelPost()
             }
             else
             {
-                this.userInfoResponse = response
-                saveInCache(context)
+                this.user = newDbUser
+                val databaseHelper = DatabaseHelper.getInstance(context)
+                databaseHelper.getUserAccountDao().createOrUpdate(user)
             }
         }
         catch(e: PermanentException)
@@ -96,21 +107,4 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
         }
     }
 
-    fun saveInCache(context: Context)
-    {
-        val userJson = Gson().toJson(userInfoResponse)
-
-        val userCode = userInfoResponse?.user?.userCode
-        if (userCode != null)
-            CacheHelper.saveFile(context, userCode, userJson!!)
-
-        val userFileName = makeIdFileName(userInfoResponse?.user?.id)
-        if (userFileName != null)
-            CacheHelper.saveFile(context, userFileName, userJson!!)
-    }
-
-    fun makeIdFileName(id: Long?): String?
-    {
-        return if (id != null) "user_" + id else null
-    }
 }

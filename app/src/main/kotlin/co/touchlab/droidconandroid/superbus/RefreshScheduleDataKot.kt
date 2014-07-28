@@ -15,6 +15,7 @@ import java.text.ParseException
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.data.EventSpeaker
 import java.util.concurrent.Callable
+import co.touchlab.droidconandroid.network.dao.userAccountToDb
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -85,16 +86,7 @@ open class RefreshScheduleDataKot : CheckedCommand()
                                         userAccount = UserAccount()
                                     }
 
-                                    userAccount!!.id = ua.id
-                                    userAccount!!.uuid = ua.uuid
-                                    userAccount!!.name = ua.name
-                                    userAccount!!.profile = ua.profile
-                                    userAccount!!.avatarKey = ua.avatarKey
-                                    userAccount!!.userCode = ua.userCode
-                                    userAccount!!.company = ua.company
-                                    userAccount!!.twitter = ua.twitter
-                                    userAccount!!.linkedIn = ua.linkedIn
-                                    userAccount!!.website = ua.website
+                                    userAccountToDb(ua, userAccount!!)
 
                                     userAccountDao.createOrUpdate(userAccount)
 
