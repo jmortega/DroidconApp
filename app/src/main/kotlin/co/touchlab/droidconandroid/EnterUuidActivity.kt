@@ -88,6 +88,8 @@ class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAda
             }
         })
 
+        c.findView(R.id.emailLogin).setOnClickListener {v -> EmailLoginActivity.startMe(c)}
+
         LocalBroadcastManager.getInstance(c)!!.registerReceiver(uuidReceiver, IntentFilter(GoogleLoginTask.GOOGLE_LOGIN_COMPLETE))
     }
 

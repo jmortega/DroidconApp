@@ -6,6 +6,7 @@ import co.touchlab.android.superbus.appsupport.AbstractCommandPersistedApplicati
 import co.touchlab.android.superbus.appsupport.CommandBusHelper;
 import co.touchlab.android.superbus.errorcontrol.ConfigException;
 import co.touchlab.android.superbus.network.ConnectionChangeBusEventListener;
+import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.data.DatabaseHelper;
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot;
 
@@ -19,7 +20,8 @@ public class DroidconApplication extends AbstractCommandPersistedApplication
     {
         super.onCreate();
         DatabaseHelper.getInstance(this);
-        CommandBusHelper.submitCommandAsync(this, new RefreshScheduleDataKot());
+        if(AppPrefs.getInstance(this).isLoggedIn())
+            CommandBusHelper.submitCommandAsync(this, new RefreshScheduleDataKot());
     }
 
     @Override

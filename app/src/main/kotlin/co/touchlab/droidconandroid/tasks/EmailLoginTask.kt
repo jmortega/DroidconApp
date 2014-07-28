@@ -8,27 +8,27 @@ import android.text.TextUtils
 import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import de.greenrobot.event.EventBus
+import co.touchlab.droidconandroid.network.FindUserRequest
+import co.touchlab.droidconandroid.network.EmailLoginRequest
+import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class GoogleLoginTask(val email:String, val name: String?, val imageURL: String?) : TaskQueue.Task
+open class EmailLoginTask(val email: String, val name: String?, val password: String?) : TaskQueue.Task
 {
-    class object
-    {
-        val SCOPE: String = "audience:server:client_id:654878069390-0rs83f4a457ggmlln2jnmedv1b808bkv.apps.googleusercontent.com"
-        val GOOGLE_LOGIN_COMPLETE: String = "GOOGLE_LOGIN_COMPLETE";
-        val GOOGLE_LOGIN_UUID: String = "GOOGLE_LOGIN_UUID";
-    }
-
     override fun run(context: Context?)
     {
-        val token = GoogleAuthUtil.getToken(context, email, SCOPE)
-        DataHelper.loginGoogle(context, token, name)
-        CommandBusHelper.submitCommandSync(context, RefreshScheduleDataKot())
-        if (!TextUtils.isEmpty(imageURL))
-            CommandBusHelper.submitCommandSync(context, UploadAvatarCommand(imageURL))
+        val restAdapter = DataHelper.makeRequestAdapter(context)
+        val emailLoginRequest = restAdapter!!.create(javaClass<EmailLoginRequest>())!!
+        val loginResult = emailLoginRequest.emailLogin(email, password, name)
+
+        if(loginResult?.uuid != null)
+        {
+            AppPrefs.getInstance(context).setUserUuid(loginResult?.uuid)
+            CommandBusHelper.submitCommandSync(context, RefreshScheduleDataKot())
+        }
 
         EventBus.getDefault()!!.post(this);
     }

@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+
+
     <application
         android:name=".DroidconApplication"
         android:allowBackup="true"
@@ -34,6 +38,9 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".EmailLoginActivity"
+            android:label="Email Login"></activity>
         <activity
             android:name=".EnterUuidActivity"
             android:label="@string/title_activity_debug_enter_uuid"></activity>
