@@ -47,15 +47,15 @@ class UserDetailActivity : FractivityAdapterActivity(), UserInfoUpdate
 
     class UserDetailAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAdapter(c, savedInstanceState)
     {
-        private var userAvatar: ImageView
-        private var userName: TextView
-        private var profile: TextView
-        private var userCodeVal: TextView
-        private var company: TextView
-        private var twitter: TextView
-        private var linkedIn: TextView
-        private var website: TextView
-        private var bsyncTaskManager: BsyncTaskManager<Activity>
+        private val userAvatar: ImageView
+        private val userName: TextView
+        private val profile: TextView
+        private val userCodeVal: TextView
+        private val company: TextView
+        private val twitter: TextView
+        private val linkedIn: TextView
+        private val website: TextView
+        private val bsyncTaskManager: BsyncTaskManager<Activity>
 
         {
             bsyncTaskManager = BsyncTaskManager(savedInstanceState)

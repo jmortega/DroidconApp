@@ -10,3 +10,8 @@ fun Activity.findView(id : Int) : View
 {
     return this.findViewById(id)!!
 }
+
+fun View.findView(id: Int): View
+{
+    return this.findViewById(id)!!
+}
