@@ -58,6 +58,9 @@
         <activity
             android:name=".UserDetailActivity"
             android:label="User Detail"></activity>
+        <activity
+            android:name=".EventDetailActivity"
+            android:label="Event Detail"></activity>
     </application>
 
 </manifest>

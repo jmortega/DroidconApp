@@ -41,4 +41,8 @@ public class Event
     @DatabaseField
     public String rsvpUuid;
 
+    public boolean isRsvped()
+    {
+        return rsvpUuid != null;
+    }
 }

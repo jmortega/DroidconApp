@@ -36,10 +36,9 @@ public class DebugScheduleDisplayActivity extends Activity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 Event event = adapter.getItem(position);
-                if (event.rsvpUuid == null)
-                    TaskQueue.execute(DebugScheduleDisplayActivity.this, new AddRsvpTaskKot(DebugScheduleDisplayActivity.this, event.id));
-                else
-                    TaskQueue.execute(DebugScheduleDisplayActivity.this, new RemoveRsvpTaskKot(DebugScheduleDisplayActivity.this, event.id));
+                Intent intent = new Intent(DebugScheduleDisplayActivity.this, EventDetailActivity.class);
+                intent.putExtra("EVENT_ID", event.id);
+                startActivity(intent);
             }
         });
         EventBus.getDefault().register(this);

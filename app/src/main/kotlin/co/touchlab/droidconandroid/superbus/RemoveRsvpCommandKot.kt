@@ -40,8 +40,7 @@ open class RemoveRsvpCommandKot(var eventId : Long? = null) : CheckedCommand()
         val userUuid = AppPrefs.getInstance(context).getUserUuid()
         if(eventId != null && userUuid != null)
         {
-            val basicIdResult = removeRsvpRequest!!.removeRsvp(eventId!!, userUuid)
-            Log.w("asdf", "Result id: " + basicIdResult!!.id)
+            removeRsvpRequest!!.removeRsvp(eventId!!, userUuid)
         }
         else
         {

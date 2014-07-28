@@ -12,4 +12,6 @@
     <string name="title_activity_find_user">FindUser</string>
 
     <string name="follow">Follow</string>
+    <string name="register">Register</string>
+    <string name="unregister">Unregister</string>
 </resources>
