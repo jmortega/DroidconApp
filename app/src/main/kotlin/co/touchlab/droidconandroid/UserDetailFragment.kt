@@ -18,6 +18,10 @@ import com.squareup.picasso.Picasso
 import android.text.Html
 import co.touchlab.droidconandroid.utils.TextHelper
 import android.text.method.LinkMovementMethod
+import android.widget.Button
+import co.touchlab.droidconandroid.data.AppPrefs
+import co.touchlab.android.threading.tasks.TaskQueue
+import co.touchlab.droidconandroid.tasks.FollowToggleTask
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -32,6 +36,7 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
     private var twitter: TextView? = null
     private var linkedIn: TextView? = null
     private var website: TextView? = null
+    private var followToggle: Button? = null
     private var bsyncTaskManager: BsyncTaskManager<Fragment>? = null
 
     class object
@@ -85,6 +90,7 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         twitter = view.findView(R.id.twitter) as TextView
         linkedIn = view.findView(R.id.linkedIn) as TextView
         website = view.findView(R.id.website) as TextView
+        followToggle = view.findView(R.id.followToggle) as Button
 
         return view
     }
@@ -110,6 +116,20 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
             twitter!!.setText(userAccount.twitter)
             linkedIn!!.setText(userAccount.linkedIn)
             website!!.setText(userAccount.website)
+
+            val appPrefs = AppPrefs.getInstance(getActivity())
+            if(userAccount.id.equals(appPrefs.getUserId()))
+            {
+                followToggle!!.setVisibility(View.GONE)
+            }
+            else
+            {
+                followToggle!!.setVisibility(View.VISIBLE)
+                followToggle!!.setText(R.string.follow)
+                followToggle!!.setOnClickListener { v ->
+                    FollowToggleTask.createTask(getActivity()!!, userAccount.id)
+                }
+            }
         }
     }
 

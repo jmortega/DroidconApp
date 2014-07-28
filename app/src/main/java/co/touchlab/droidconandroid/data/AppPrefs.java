@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class AppPrefs
 {
     public static final String USER_UUID = "USER_UUID";
+    public static final String USER_ID = "USER_ID";
     private static AppPrefs instance;
 
     private SharedPreferences prefs;
@@ -18,7 +19,7 @@ public class AppPrefs
     @NotNull
     public static synchronized AppPrefs getInstance(Context context)
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = new AppPrefs();
             instance.prefs = context.getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
@@ -40,5 +41,16 @@ public class AppPrefs
     public void setUserUuid(String uuid)
     {
         prefs.edit().putString(USER_UUID, uuid).apply();
+    }
+
+    public Long getUserId()
+    {
+        long id = prefs.getLong(USER_ID, -1);
+        return id == -1 ? null : id;
+    }
+
+    public void setUserId(Long id)
+    {
+        prefs.edit().putLong(USER_ID, id).apply();
     }
 }

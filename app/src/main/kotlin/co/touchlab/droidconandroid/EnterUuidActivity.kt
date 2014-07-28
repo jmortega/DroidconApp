@@ -57,28 +57,18 @@ class EnterUuidActivity : FractivityAdapterActivity()
 class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAdapter(c, savedInstanceState)
 {
     val mGoogleApiClient: GoogleApiClient
-    val uuidEntry: EditText
     val uuidReceiver = object : BroadcastReceiver()
     {
         override fun onReceive(context: Context, intent: Intent)
         {
-            uuidEntry.setText(intent.getStringExtra(GoogleLoginTask.GOOGLE_LOGIN_UUID))
+            c.finish()
+            MyActivity.startMe(c)
         }
     }
 
     {
         c.setContentView(R.layout.activity_debug_enter_uuid)
-        uuidEntry = c.findView(R.id.uuidEntry) as EditText
         mGoogleApiClient = GoogleApiClient.Builder(c).addConnectionCallbacks(ConnectionCallbacksImpl())!!.addOnConnectionFailedListener(OnConnectionFailedListenerImpl())!!.addApi(Plus.API)!!.addScope(Plus.SCOPE_PLUS_LOGIN)!!.build()!!
-        c.findView(R.id.go).setOnClickListener(object : View.OnClickListener
-        {
-            override fun onClick(v: View)
-            {
-                AppPrefs.getInstance(c).setUserUuid(uuidEntry!!.getText().toString())
-                MyActivity.startMe(c)
-                c.finish()
-            }
-        })
 
         c.findView(R.id.callGoogle).setOnClickListener(object : View.OnClickListener
         {

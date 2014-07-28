@@ -8,17 +8,6 @@
     android:orientation="vertical"
     >
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/uuidEntry"/>
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/go"
-        android:text="Go!"/>
-
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

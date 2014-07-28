@@ -26,7 +26,9 @@ open class EmailLoginTask(val email: String, val name: String?, val password: St
 
         if(loginResult?.uuid != null)
         {
-            AppPrefs.getInstance(context).setUserUuid(loginResult?.uuid)
+            val appPrefs = AppPrefs.getInstance(context)
+            appPrefs.setUserUuid(loginResult?.uuid)
+            appPrefs.setUserId(loginResult?.userId)
             CommandBusHelper.submitCommandSync(context, RefreshScheduleDataKot())
         }
 

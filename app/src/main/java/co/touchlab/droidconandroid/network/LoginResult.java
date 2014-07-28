@@ -8,4 +8,5 @@ import org.jetbrains.annotations.NotNull;
 public class LoginResult
 {
     public String uuid;
+    public Long userId;
 }
