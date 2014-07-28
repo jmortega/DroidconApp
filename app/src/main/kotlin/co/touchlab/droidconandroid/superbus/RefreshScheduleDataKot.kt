@@ -12,6 +12,9 @@ import java.text.SimpleDateFormat
 import co.touchlab.droidconandroid.BuildConfig
 import android.database.SQLException
 import java.text.ParseException
+import co.touchlab.droidconandroid.data.UserAccount
+import co.touchlab.droidconandroid.data.EventSpeaker
+import java.util.concurrent.Callable
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -32,44 +35,101 @@ open class RefreshScheduleDataKot : CheckedCommand()
     {
         val restAdapter = DataHelper.makeRequestAdapter(context)!!
         val request = restAdapter.create(javaClass<RefreshScheduleDataRequest>())!!
-        val databaseHelper = DatabaseHelper.getInstance(context)
-        val eventDao = databaseHelper.getEventDao()
-        val venueDao = databaseHelper.getVenueDao()
-        val dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mma")
 
         val convention = request.getScheduleData(BuildConfig.CONVENTION_ID)
-        if(convention == null)
+        if (convention == null)
             throw PermanentException("No convention results")
 
-        val venues = convention.venues
-
-        try
+        val databaseHelper = DatabaseHelper.getInstance(context)
+        databaseHelper.performTransactionOrThrowRuntime (object : Callable<Void>
         {
-            for (venue in venues)
+            throws(javaClass<Exception>())
+            override fun call(): Void?
             {
-                venueDao.createOrUpdate(venue)
-                for (event in venue.events.iterator())
+                val eventDao = databaseHelper.getEventDao()
+                val venueDao = databaseHelper.getVenueDao()
+                val userAccountDao = databaseHelper.getUserAccountDao()
+                val eventSpeakerDao = databaseHelper.getEventSpeakerDao()
+                val dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mma")
+
+                val venues = convention.venues
+
+                try
                 {
-                    val dbEvent = eventDao.queryForId(event.id)
-                    event.venue = venue
-                    event.startDateLong = dateFormat.parse(event.startDate)!!.getTime()
-                    event.endDateLong = dateFormat.parse(event.endDate)!!.getTime()
+                    for (venue in venues)
+                    {
+                        venueDao.createOrUpdate(venue)
+                        for (event in venue.events.iterator())
+                        {
+                            val dbEvent = eventDao.queryForId(event.id)
+                            event.venue = venue
+                            event.startDateLong = dateFormat.parse(event.startDate)!!.getTime()
+                            event.endDateLong = dateFormat.parse(event.endDate)!!.getTime()
 
-                    if (dbEvent != null)
-                        event.rsvpUuid = dbEvent.rsvpUuid
+                            if (dbEvent != null)
+                                event.rsvpUuid = dbEvent.rsvpUuid
 
-                    eventDao.createOrUpdate(event)
+                            eventDao.createOrUpdate(event)
+
+                            val iterator = event.speakers?.iterator()
+                            if (iterator != null)
+                            {
+                                var speakerCount = 0
+
+                                for (ua in iterator)
+                                {
+                                    var userAccount = userAccountDao.queryForId(ua.id)
+
+                                    if (userAccount == null)
+                                    {
+                                        userAccount = UserAccount()
+                                    }
+
+                                    userAccount!!.id = ua.id
+                                    userAccount!!.uuid = ua.uuid
+                                    userAccount!!.name = ua.name
+                                    userAccount!!.profile = ua.profile
+                                    userAccount!!.avatarKey = ua.avatarKey
+                                    userAccount!!.userCode = ua.userCode
+                                    userAccount!!.company = ua.company
+                                    userAccount!!.twitter = ua.twitter
+                                    userAccount!!.linkedIn = ua.linkedIn
+                                    userAccount!!.website = ua.website
+
+                                    userAccountDao.createOrUpdate(userAccount)
+
+                                    val resultList = eventSpeakerDao.queryBuilder()!!
+                                            .where()!!
+                                            .eq("event_id", event.id)!!
+                                            .and()!!
+                                            .eq("userAccount_id", userAccount!!.id)!!
+                                            .query()!!
+
+                                    var eventSpeaker = if (resultList.size == 0) EventSpeaker() else resultList[0]
+
+                                    eventSpeaker.event = event
+                                    eventSpeaker.userAccount = userAccount
+                                    eventSpeaker.displayOrder = speakerCount++
+
+                                    eventSpeakerDao.createOrUpdate(eventSpeaker)
+                                }
+                            }
+                        }
+                    }
                 }
+                catch (e: SQLException)
+                {
+                    throw PermanentException(e)
+                }
+                catch (e: ParseException)
+                {
+                    throw PermanentException(e)
+                }
+
+                return null
             }
-        }
-        catch (e: SQLException)
-        {
-            throw PermanentException(e)
-        }
-        catch (e: ParseException)
-        {
-            throw PermanentException(e)
-        }
+        })
+
 
     }
 

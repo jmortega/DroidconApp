@@ -31,6 +31,10 @@ import java.util.Date
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
 import co.touchlab.droidconandroid.network.RemoveRsvpRequest
 import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot
+import co.touchlab.droidconandroid.data.UserAccount
+import android.widget.ArrayAdapter
+import android.content.Context
+import android.widget.ListView
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -43,6 +47,7 @@ class EventDetailFragment() : Fragment()
     private var date: TextView? = null
     private var startTime: TextView? = null
     private var endTime: TextView? = null
+    private var speakerList: ListView? = null
     private var rsvpButton: Button? = null
 
     class object
@@ -98,6 +103,7 @@ class EventDetailFragment() : Fragment()
         date = view.findView(R.id.date) as TextView
         startTime = view.findView(R.id.startTime) as TextView
         endTime = view.findView(R.id.endTime) as TextView
+        speakerList = view.findView(R.id.speakerList) as ListView
         rsvpButton = view.findView(R.id.rsvpButton) as Button
 
         startDetailRefresh()
@@ -148,6 +154,14 @@ class EventDetailFragment() : Fragment()
                 TaskQueue.execute(getActivity(), AddRsvpTaskKot(getActivity()!!, event.id))
             }
         }
+
+        speakerList!!.setAdapter(EventSpeakersAdapter(getActivity()!!, eventDetailTask.speakers!!))
+
+
+        speakerList!!.setOnItemClickListener { (adapterView, view, position, id) ->
+            val userAccount = speakerList!!.getAdapter()!!.getItem(position) as UserAccount
+            UserDetailActivity.callMe(getActivity()!!, userAccount.id!!)
+        }
     }
 
     public fun onEventMainThread(task: AddRsvpTaskKot)
@@ -158,5 +172,30 @@ class EventDetailFragment() : Fragment()
     public fun onEventMainThread(task: RemoveRsvpTaskKot)
     {
         startDetailRefresh()
+    }
+
+    inner class EventSpeakersAdapter(c: Context, speakers: List<UserAccount>) : ArrayAdapter<UserAccount>(c, android.R.layout.simple_list_item_1, speakers)
+    {
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View?
+        {
+            var view = if (convertView == null)LayoutInflater.from(getActivity()!!).inflate(R.layout.list_user_summary, null) else convertView
+            val avatarView = view!!.findView(R.id.userAvatar) as ImageView
+            val userName = view!!.findView(R.id.userName) as TextView
+
+            val userAccount = getItem(position)!!
+            if (!TextUtils.isEmpty(userAccount.avatarKey))
+            {
+                Picasso.with(getActivity())!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + userAccount.avatarKey)!!.into(avatarView)
+                avatarView.setVisibility(View.VISIBLE)
+            }
+            else
+            {
+                avatarView.setVisibility(View.GONE)
+            }
+
+            userName.setText(userAccount.name)
+
+            return view
+        }
     }
 }

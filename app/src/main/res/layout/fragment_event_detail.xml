@@ -36,21 +36,28 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/startTime" />
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" - " />
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/endTime" />
 
     </LinearLayout>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/speakerList"
+        />
 
     <Button
         android:layout_width="fill_parent"

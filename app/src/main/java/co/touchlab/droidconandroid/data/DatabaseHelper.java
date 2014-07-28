@@ -7,7 +7,6 @@ import co.touchlab.android.superbus.errorcontrol.StorageException;
 import co.touchlab.android.superbus.storage.CommandPersistenceProvider;
 import co.touchlab.android.superbus.storage.sqlite.ClearSQLiteDatabase;
 import co.touchlab.droidconandroid.data.staff.EventAttendee;
-import co.touchlab.droidconandroid.data.staff.UserAccount;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
@@ -36,7 +35,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     @NotNull
     public static synchronized DatabaseHelper getInstance(Context context)
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = new DatabaseHelper(context);
         }
@@ -59,11 +58,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
             , Invite.class
             , UserAccount.class
             , EventAttendee.class
+            , EventSpeaker.class
     };
 
     //todo blow this up
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
+    public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource)
+    {
         try
         {
             for (Class mTableClass : tableClasses)
@@ -77,7 +78,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
         catch (StorageException e)
         {
             throw new RuntimeException(e);
-        } catch (SQLException e)
+        }
+        catch (SQLException e)
         {
             throw new RuntimeException(e);
         }
@@ -88,7 +90,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     public void onUpgrade(final SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion, int newVersion)
     {
 
-        for(int i=tableClasses.length - 1; i >= 0; i--)
+        for (int i = tableClasses.length - 1; i >= 0; i--)
         {
             Class tableClass = tableClasses[i];
             try
@@ -119,7 +121,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     {
         try
         {
-            return (Dao<Venue, Long>)getDao(Venue.class);
+            return (Dao<Venue, Long>) getDao(Venue.class);
         }
         catch (SQLException e)
         {
@@ -132,7 +134,33 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     {
         try
         {
-            return (Dao<Event, Long>)getDao(Event.class);
+            return (Dao<Event, Long>) getDao(Event.class);
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @NotNull
+    public Dao<UserAccount, Long> getUserAccountDao()
+    {
+        try
+        {
+            return (Dao<UserAccount, Long>) getDao(UserAccount.class);
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @NotNull
+    public Dao<EventSpeaker, Long> getEventSpeakerDao()
+    {
+        try
+        {
+            return (Dao<EventSpeaker, Long>) getDao(EventSpeaker.class);
         }
         catch (SQLException e)
         {
@@ -149,11 +177,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
      * @param transaction .
      * @throws RuntimeException on {@link SQLException}
      */
-    public void performTransactionOrThrowRuntime(Callable<Void> transaction) {
-        try {
+    public void performTransactionOrThrowRuntime(Callable<Void> transaction)
+    {
+        try
+        {
             TransactionManager transactionManager = createTransactionManager();
             transactionManager.callInTransaction(transaction);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             Log.e(DatabaseHelper.class.getName(), e.getMessage());
             throw new RuntimeException(e);
         }
