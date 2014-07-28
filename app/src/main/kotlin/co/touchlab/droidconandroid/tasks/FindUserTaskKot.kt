@@ -79,8 +79,16 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
 
         try
         {
-            this.userInfoResponse = loadRequest()
-            saveInCache(context)
+            val response = loadRequest()
+            if(userInfoResponse != null && response.equals(userInfoResponse))
+            {
+                cancelPost()
+            }
+            else
+            {
+                this.userInfoResponse = response
+                saveInCache(context)
+            }
         }
         catch(e: PermanentException)
         {

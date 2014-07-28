@@ -7,6 +7,7 @@ import co.touchlab.droidconandroid.network.DataHelper
 import android.text.TextUtils
 import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
+import de.greenrobot.event.EventBus
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -26,6 +27,8 @@ open class GoogleLoginTask(val email:String, val name: String?, val imageURL: St
         DataHelper.loginGoogle(context, token, name)
         if (!TextUtils.isEmpty(imageURL))
             CommandBusHelper.submitCommandSync(context, UploadAvatarCommand(imageURL))
+
+        EventBus.getDefault()!!.post(this);
     }
     override fun handleError(e: Exception?): Boolean
     {

@@ -9,6 +9,7 @@ import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import java.util.concurrent.Callable
 import co.touchlab.droidconandroid.superbus.AddRsvpCommandKot
 import co.touchlab.android.threading.tasks.TaskQueue
+import de.greenrobot.event.EventBus
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -42,6 +43,8 @@ open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
                 return null
             }
         })
+
+        EventBus.getDefault()!!.post(this);
     }
     override fun handleError(e: Exception?): Boolean
     {

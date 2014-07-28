@@ -19,11 +19,14 @@ import android.text.Html
 import android.text.method.LinkMovementMethod
 import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentTransaction
 
 /**
  * Created by kgalligan on 7/26/14.
  */
-public class FindUserKot : Activity(), UserInfoUpdate
+public class FindUserKot : FragmentActivity(), UserInfoUpdate
 {
     class object
     {
@@ -36,16 +39,7 @@ public class FindUserKot : Activity(), UserInfoUpdate
     }
 
     private var userCode: EditText? = null
-    private var userAvatar: ImageView? = null
-    private var userName: TextView? = null
-    private var profile: TextView? = null
-    private var userCodeVal: TextView? = null
-    private var company: TextView? = null
-    private var twitter: TextView? = null
-    private var linkedIn: TextView? = null
-    private var website: TextView? = null
     private var bsyncTaskManager: BsyncTaskManager<Activity>? = null
-    private var openedUserDetail = true
 
     public fun callMe(c: Context)
     {
@@ -55,28 +49,19 @@ public class FindUserKot : Activity(), UserInfoUpdate
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
-        super<Activity>.onCreate(savedInstanceState)
+        super<FragmentActivity>.onCreate(savedInstanceState)
 
         bsyncTaskManager = BsyncTaskManager(savedInstanceState)
         bsyncTaskManager!!.register(this)
 
         setContentView(R.layout.activity_find_user)
         userCode = findViewById(R.id.userCode) as EditText
-        userAvatar = findViewById(R.id.userAvatar) as ImageView
-        userName = findViewById(R.id.userName) as TextView
-        profile = findViewById(R.id.profile) as TextView
-        userCodeVal = findViewById(R.id.userCodeVal) as TextView
-        company = findViewById(R.id.company) as TextView
-        twitter = findViewById(R.id.twitter) as TextView
-        linkedIn = findViewById(R.id.linkedIn) as TextView
-        website = findViewById(R.id.website) as TextView
 
         findView(R.id.findUser).setOnClickListener(object : View.OnClickListener
         {
             override fun onClick(v: View)
             {
                 val userCodeVal = userCode!!.getText().toString()
-                openedUserDetail = false
                 bsyncTaskManager!!.post(this@FindUserKot, FindUserTaskKot(userCodeVal))
             }
         })
@@ -85,13 +70,13 @@ public class FindUserKot : Activity(), UserInfoUpdate
 
     override fun onSaveInstanceState(outState: Bundle)
     {
-        super<Activity>.onSaveInstanceState(outState)
+        super<FragmentActivity>.onSaveInstanceState(outState)
         bsyncTaskManager!!.onSaveInstanceState(outState)
     }
 
     override fun onDestroy()
     {
-        super<Activity>.onDestroy()
+        super<FragmentActivity>.onDestroy()
         bsyncTaskManager!!.unregister()
     }
 
@@ -104,11 +89,12 @@ public class FindUserKot : Activity(), UserInfoUpdate
         }
         else
         {
-            if(!openedUserDetail)
-            {
-                openedUserDetail = true
-                UserDetailActivity.callMe(this, userId)
-            }
+            val fragmentManager = getSupportFragmentManager()
+            val ft = fragmentManager!!.beginTransaction()!!
+
+            ft.replace(R.id.fragmentContainer, UserDetailFragment.createFragment(userId), "USER_FRAGMENT")
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
         }
     }
 
@@ -122,6 +108,6 @@ public class FindUserKot : Activity(), UserInfoUpdate
         {
             return true
         }
-        return super<Activity>.onOptionsItemSelected(item)
+        return super<FragmentActivity>.onOptionsItemSelected(item)
     }
 }

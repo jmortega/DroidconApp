@@ -10,6 +10,7 @@ import java.util.concurrent.Callable
 import co.touchlab.droidconandroid.superbus.AddRsvpCommandKot
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.droidconandroid.superbus.RemoveRsvpCommandKot
+import de.greenrobot.event.EventBus
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -42,6 +43,8 @@ class RemoveRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
                 return null
             }
         })
+
+        EventBus.getDefault()!!.post(this);
     }
     override fun handleError(e: Exception?): Boolean
     {
