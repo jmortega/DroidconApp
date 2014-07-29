@@ -6,20 +6,24 @@ import co.touchlab.android.threading.tasks.BsyncTaskManager
 import co.touchlab.droidconandroid.tasks.FindUserByIdTask
 import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
+import android.os.Handler
+import android.os.Looper
 
 /**
  * Created by kgalligan on 7/28/14.
  */
 class UserDetailRetainedFragment : Fragment(), UserInfoUpdate
 {
-    private var bsyncTaskManager: BsyncTaskManager<Fragment>? = null
+    private val bsyncTaskManager: BsyncTaskManager<Fragment>
+    private val handler : Handler
+
     private var findUserTask: AbstractFindUserTask? = null
     private var inFlight = false
-    private var userId : Long? = null
 
     {
         bsyncTaskManager = BsyncTaskManager(null)
-        bsyncTaskManager!!.register(this)
+        bsyncTaskManager.register(this)
+        handler = Handler(Looper.getMainLooper()!!)
     }
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -36,19 +40,16 @@ class UserDetailRetainedFragment : Fragment(), UserInfoUpdate
 
     fun loadData(userId: Long)
     {
-        this.userId = userId
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?)
-    {
-        super<Fragment>.onActivityCreated(savedInstanceState)
-        if(inFlight)
-            return
-        if(findUserTask != null)
-            deliverResults()
-        else
-        {
-            callTask(userId!!)
+        handler.post {
+            if(!inFlight)
+            {
+                if (findUserTask != null)
+                    deliverResults()
+                else
+                {
+                    callTask(userId!!)
+                }
+            }
         }
     }
 

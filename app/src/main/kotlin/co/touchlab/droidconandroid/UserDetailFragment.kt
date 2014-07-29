@@ -106,8 +106,9 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
             // Tell it who it is working with.
             workFragment!!.setTargetFragment(this, 0);
             fm.beginTransaction()!!.add(workFragment, "work")!!.commit();
-            workFragment!!.loadData(findUserIdArg())
         }
+
+        workFragment!!.loadData(findUserIdArg())
     }
 
     override fun showResult(findUserTask: AbstractFindUserTask)
