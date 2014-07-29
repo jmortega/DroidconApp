@@ -36,7 +36,6 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
     private var linkedIn: TextView? = null
     private var website: TextView? = null
     private var followToggle: Button? = null
-    private var bsyncTaskManager: BsyncTaskManager<Fragment>? = null
 
     class object
     {
@@ -55,19 +54,6 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
-        super<Fragment>.onCreate(savedInstanceState)
-        bsyncTaskManager = BsyncTaskManager(savedInstanceState)
-        bsyncTaskManager!!.register(this)
-    }
-
-    override fun onDestroy()
-    {
-        super<Fragment>.onDestroy()
-        bsyncTaskManager!!.unregister()
-    }
-
     private fun findUserIdArg(): Long
     {
         var userId = getArguments()?.getLong(USER_ID, -1)
@@ -84,7 +70,7 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
 
     private fun refreshUserData()
     {
-        bsyncTaskManager!!.post(getActivity(), FindUserByIdTask(findUserIdArg()))
+//        bsyncTaskManager!!.post(getActivity(), FindUserByIdTask(findUserIdArg()))
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -104,6 +90,24 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         refreshUserData()
 
         return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?)
+    {
+        super<Fragment>.onActivityCreated(savedInstanceState)
+        val fm = getFragmentManager()!!
+
+        // Check to see if we have retained the worker fragment.
+        var workFragment = fm.findFragmentByTag("work") as UserDetailRetainedFragment?;
+
+        // If not retained (or first time running), we need to create it.
+        if (workFragment == null) {
+            workFragment = UserDetailRetainedFragment()
+            // Tell it who it is working with.
+            workFragment!!.setTargetFragment(this, 0);
+            fm.beginTransaction()!!.add(workFragment, "work")!!.commit();
+            workFragment!!.loadData(findUserIdArg())
+        }
     }
 
     override fun showResult(findUserTask: AbstractFindUserTask)
