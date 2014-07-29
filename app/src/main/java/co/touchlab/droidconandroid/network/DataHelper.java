@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import co.touchlab.android.superbus.errorcontrol.PermanentException;
 import co.touchlab.android.superbus.errorcontrol.TransientException;
 import co.touchlab.android.superbus.http.BusHttpClient;
@@ -174,12 +175,17 @@ public class DataHelper
 
     public static RestAdapter.Builder makeRequestAdapterBuilder(Context context)
     {
+        AppPrefs appPrefs = AppPrefs.getInstance(context);
+        final String userUuid = appPrefs.getUserUuid();
+
         RequestInterceptor requestInterceptor = new RequestInterceptor()
         {
             @Override
             public void intercept(RequestFacade request)
             {
                 request.addHeader("Accept", "application/json");
+                if(!TextUtils.isEmpty(userUuid))
+                    request.addHeader("uuid", userUuid);
             }
         };
         Gson gson = new GsonBuilder().create();

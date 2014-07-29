@@ -1,7 +1,5 @@
 package co.touchlab.droidconandroid.test;
 
-import co.touchlab.droidconandroid.utils.TextHelper;
-
 /**
  * Created by kgalligan on 7/27/14.
  */

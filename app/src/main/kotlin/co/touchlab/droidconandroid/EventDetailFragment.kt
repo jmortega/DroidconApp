@@ -7,34 +7,23 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import co.touchlab.android.threading.tasks.BsyncTaskManager
-import android.app.Activity
-import co.touchlab.droidconandroid.tasks.FindUserByIdTask
-import co.touchlab.droidconandroid.tasks.UserInfoUpdate
-import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
-import co.touchlab.droidconandroid.utils.Toaster
 import android.text.TextUtils
 import com.squareup.picasso.Picasso
 import android.text.Html
 import co.touchlab.droidconandroid.utils.TextHelper
-import android.text.method.LinkMovementMethod
 import android.widget.Button
-import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.android.threading.tasks.TaskQueue
-import co.touchlab.droidconandroid.tasks.FollowToggleTask
 import co.touchlab.droidconandroid.tasks.EventDetailLoadTask
-import java.awt.EventQueue
-import de.greenrobot.event.EventBus
 import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
 import java.util.Date
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
-import co.touchlab.droidconandroid.network.RemoveRsvpRequest
 import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot
 import co.touchlab.droidconandroid.data.UserAccount
 import android.widget.ArrayAdapter
 import android.content.Context
 import android.widget.ListView
+import co.touchlab.android.threading.eventbus.EventBusExt
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -70,13 +59,13 @@ class EventDetailFragment() : Fragment()
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super<Fragment>.onCreate(savedInstanceState)
-        EventBus.getDefault()!!.register(this)
+        EventBusExt.getDefault()!!.register(this)
     }
 
     override fun onDestroy()
     {
         super<Fragment>.onDestroy()
-        EventBus.getDefault()!!.unregister(this)
+        EventBusExt.getDefault()!!.unregister(this)
     }
 
     private fun findEventIdArg(): Long

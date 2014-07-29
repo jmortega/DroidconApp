@@ -6,19 +6,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import co.touchlab.droidconandroid.tasks.GoogleLoginTask
-import android.widget.EditText
 import android.os.Bundle
 import android.view.View
 import com.google.android.gms.plus.Plus
-import co.touchlab.droidconandroid.data.AppPrefs
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
 import co.touchlab.android.threading.tasks.TaskQueue
 import com.google.android.gms.common.ConnectionResult
 import android.content.IntentSender
 import co.touchlab.droidconandroid.utils.Toaster
-import android.view.MenuItem
-import android.view.Menu
 
 /**
  * Created by kgalligan on 7/21/14.

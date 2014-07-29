@@ -1,7 +1,6 @@
 package co.touchlab.droidconandroid.tasks
 
 import co.touchlab.android.threading.tasks.BsyncTask
-import android.app.Activity
 
 /**
  * Created by kgalligan on 7/21/14.

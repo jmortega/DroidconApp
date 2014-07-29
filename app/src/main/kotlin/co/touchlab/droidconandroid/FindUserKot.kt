@@ -1,9 +1,7 @@
 package co.touchlab.droidconandroid
 
 import android.app.Activity
-import android.widget.ImageView
 import android.widget.EditText
-import android.widget.TextView
 import co.touchlab.android.threading.tasks.BsyncTaskManager
 import android.content.Context
 import android.content.Intent
@@ -11,15 +9,9 @@ import android.os.Bundle
 import android.view.View
 import co.touchlab.droidconandroid.tasks.FindUserTaskKot
 import co.touchlab.droidconandroid.utils.Toaster
-import com.squareup.picasso.Picasso
 import android.view.MenuItem
-import android.text.TextUtils
-import co.touchlab.droidconandroid.utils.TextHelper
-import android.text.Html
-import android.text.method.LinkMovementMethod
 import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
-import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 

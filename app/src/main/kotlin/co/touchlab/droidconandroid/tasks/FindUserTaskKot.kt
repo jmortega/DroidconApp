@@ -1,24 +1,16 @@
 package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
-import android.app.Activity
 import co.touchlab.droidconandroid.R
-import com.turbomanage.httpclient.BasicHttpClient
-import org.json.JSONObject
-import co.touchlab.droidconandroid.FindUserKot
 import co.touchlab.droidconandroid.network.dao.UserInfoResponse
 import co.touchlab.droidconandroid.network.DataHelper
-import co.touchlab.droidconandroid.network.AddRsvpRequest
 import co.touchlab.droidconandroid.network.FindUserRequest
 import co.touchlab.android.superbus.errorcontrol.PermanentException
-import com.google.gson.Gson
-import co.touchlab.android.threading.tasks.TaskQueue
-import de.greenrobot.event.EventBus
-import android.text.TextUtils
 import co.touchlab.droidconandroid.network.SingleUserInfoRequest
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.network.dao.userAccountToDb
+import co.touchlab.android.threading.eventbus.EventBusExt
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -81,7 +73,7 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
 
         if (user != null)
         {
-            EventBus.getDefault()!!.post(this)
+            EventBusExt.getDefault()!!.post(this)
         }
 
         try

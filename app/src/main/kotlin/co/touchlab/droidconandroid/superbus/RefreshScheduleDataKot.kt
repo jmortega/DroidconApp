@@ -5,7 +5,6 @@ import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.RefreshScheduleDataRequest
 import android.content.Context
 import co.touchlab.android.superbus.errorcontrol.PermanentException
-import co.touchlab.android.superbus.errorcontrol.TransientException
 import co.touchlab.android.superbus.Command
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import java.text.SimpleDateFormat

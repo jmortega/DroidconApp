@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.widget.EditText
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.droidconandroid.tasks.EmailLoginTask
-import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
 import android.content.Context
 import android.content.Intent
 import co.touchlab.droidconandroid.tasks.LocalUserDisplayNameTask
 import android.text.TextUtils
-import de.greenrobot.event.EventBus
+import co.touchlab.android.threading.eventbus.EventBusExt
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -42,7 +41,7 @@ class EmailLoginActivity : Activity()
             TaskQueue.execute(this, EmailLoginTask(email!!.getText().toString(), name!!.getText().toString(), password!!.getText().toString()))
         }
 
-        EventBus.getDefault()!!.register(this)
+        EventBusExt.getDefault()!!.register(this)
 
         TaskQueue.execute(this, LocalUserDisplayNameTask())
     }
@@ -50,7 +49,7 @@ class EmailLoginActivity : Activity()
     override fun onDestroy()
     {
         super<Activity>.onDestroy()
-        EventBus.getDefault()!!.unregister(this)
+        EventBusExt.getDefault()!!.unregister(this)
     }
 
     public fun onEventMainThread(task: LocalUserDisplayNameTask)

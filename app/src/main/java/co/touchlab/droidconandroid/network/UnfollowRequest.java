@@ -12,6 +12,6 @@ import retrofit.http.POST;
 public interface UnfollowRequest
 {
     @FormUrlEncoded
-    @POST("/deviceAuth/unfollow")
+    @POST("/dataTest/unfollow")
     LoginResult unfollow(@Field("uuid") String uuid, @Field("otherId") Long otherId) throws TransientException, PermanentException;
 }

@@ -43,8 +43,8 @@ public class UserAccount
     @DatabaseField
     public String website;
 
-//    @DatabaseField
-//    public boolean following;
+    @DatabaseField
+    public boolean following;
 
     @Override
     public boolean equals(Object o)

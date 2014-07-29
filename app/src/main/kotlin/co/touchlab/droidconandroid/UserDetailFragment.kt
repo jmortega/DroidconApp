@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import co.touchlab.android.threading.tasks.BsyncTaskManager
-import android.app.Activity
 import co.touchlab.droidconandroid.tasks.FindUserByIdTask
 import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
@@ -20,7 +19,6 @@ import co.touchlab.droidconandroid.utils.TextHelper
 import android.text.method.LinkMovementMethod
 import android.widget.Button
 import co.touchlab.droidconandroid.data.AppPrefs
-import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.droidconandroid.tasks.FollowToggleTask
 import org.apache.commons.lang3.StringUtils
 
@@ -62,21 +60,31 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         super<Fragment>.onCreate(savedInstanceState)
         bsyncTaskManager = BsyncTaskManager(savedInstanceState)
         bsyncTaskManager!!.register(this)
-        bsyncTaskManager!!.post(getActivity(), FindUserByIdTask(findUserIdArg()))
     }
 
-    private fun findUserIdArg():Long
+    override fun onDestroy()
+    {
+        super<Fragment>.onDestroy()
+        bsyncTaskManager!!.unregister()
+    }
+
+    private fun findUserIdArg(): Long
     {
         var userId = getArguments()?.getLong(USER_ID, -1)
-        if(userId == null || userId == -1L)
+        if (userId == null || userId == -1L)
         {
             userId = getActivity()!!.getIntent()!!.getLongExtra(USER_ID, -1)
         }
 
-        if(userId == null || userId == -1L)
+        if (userId == null || userId == -1L)
             throw IllegalArgumentException("Must set user id");
 
         return userId!!
+    }
+
+    private fun refreshUserData()
+    {
+        bsyncTaskManager!!.post(getActivity(), FindUserByIdTask(findUserIdArg()))
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -92,6 +100,8 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         linkedIn = view.findView(R.id.linkedIn) as TextView
         website = view.findView(R.id.website) as TextView
         followToggle = view.findView(R.id.followToggle) as Button
+
+        refreshUserData()
 
         return view
     }
@@ -119,17 +129,31 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
             website!!.setText(userAccount.website)
 
             val appPrefs = AppPrefs.getInstance(getActivity())
-            if(userAccount.id.equals(appPrefs.getUserId()))
+            if (userAccount.id.equals(appPrefs.getUserId()))
             {
                 followToggle!!.setVisibility(View.GONE)
             }
             else
             {
                 followToggle!!.setVisibility(View.VISIBLE)
-                followToggle!!.setText(R.string.follow)
-                followToggle!!.setOnClickListener { v ->
-                    FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
+                if (userAccount.following)
+                {
+                    followToggle!!.setText(R.string.unfollow)
+                    followToggle!!.setOnClickListener { v ->
+                        FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
+                        refreshUserData()
+                    }
                 }
+                else
+                {
+                    followToggle!!.setText(R.string.follow)
+                    followToggle!!.setOnClickListener { v ->
+                        FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
+                        refreshUserData()
+                    }
+                }
+
+
             }
         }
     }

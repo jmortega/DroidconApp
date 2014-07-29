@@ -6,17 +6,16 @@ import co.touchlab.android.superbus.Command
 import android.content.Context
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.data.AppPrefs
-import android.util.Log
-import co.touchlab.droidconandroid.network.AddRsvpRequest
+import co.touchlab.droidconandroid.network.UnfollowRequest
 
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class AddRsvpCommandKot(var eventId : Long? = null, var rsvpUuid : String? = null) : CheckedCommand()
+open class UnfollowCommand(var otherId : Long? = null) : CheckedCommand()
 {
     override fun logSummary(): String
     {
-        return "AddRsvp - " + eventId
+        return "UnfollowCommand - " + otherId
     }
 
     override fun same(command: Command): Boolean
@@ -27,18 +26,12 @@ open class AddRsvpCommandKot(var eventId : Long? = null, var rsvpUuid : String? 
     override fun callCommand(context: Context)
     {
         val restAdapter = DataHelper.makeRequestAdapter(context)
-        val addRsvpRequest = restAdapter!!.create(javaClass<AddRsvpRequest>())
-
+        val unfollowRequest = restAdapter!!.create(javaClass<UnfollowRequest>())!!
 
         val userUuid = AppPrefs.getInstance(context).getUserUuid()
-        if(eventId != null && userUuid != null && rsvpUuid != null)
+        if(userUuid != null)
         {
-            val basicIdResult = addRsvpRequest!!.addRsvp(eventId!!, userUuid, rsvpUuid!!)
-            Log.w("asdf", "Result id: " + basicIdResult!!.id)
-        }
-        else
-        {
-            throw PermanentException("Some value is null: "+ eventId +"/"+ userUuid +"/"+ rsvpUuid)
+            unfollowRequest.unfollow(userUuid, otherId!!)
         }
     }
 

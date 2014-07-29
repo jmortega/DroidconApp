@@ -9,12 +9,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.Event;
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot;
 import co.touchlab.droidconandroid.tasks.EventDataLoadTask;
 import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot;
-import de.greenrobot.event.EventBus;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class DebugScheduleDisplayActivity extends Activity
                 startActivity(intent);
             }
         });
-        EventBus.getDefault().register(this);
+        EventBusExt.getDefault().register(this);
         runDataReload();
     }
 
@@ -49,7 +49,7 @@ public class DebugScheduleDisplayActivity extends Activity
     protected void onDestroy()
     {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        EventBusExt.getDefault().unregister(this);
     }
 
     @SuppressWarnings("UnusedDeclaration")

@@ -1,16 +1,12 @@
 package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
-import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.data.Event
-import com.j256.ormlite.dao.Dao
-import java.util.UUID
 import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import java.util.concurrent.Callable
-import co.touchlab.droidconandroid.superbus.AddRsvpCommandKot
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.droidconandroid.superbus.RemoveRsvpCommandKot
-import de.greenrobot.event.EventBus
+import co.touchlab.android.threading.eventbus.EventBusExt
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -44,7 +40,7 @@ class RemoveRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
             }
         })
 
-        EventBus.getDefault()!!.post(this);
+        EventBusExt.getDefault()!!.post(this);
     }
     override fun handleError(e: Exception?): Boolean
     {

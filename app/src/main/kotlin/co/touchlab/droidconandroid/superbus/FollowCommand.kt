@@ -1,22 +1,12 @@
 package co.touchlab.droidconandroid.superbus
 
 import co.touchlab.android.superbus.CheckedCommand
-import retrofit.http.FormUrlEncoded
-import retrofit.http.POST
-import co.touchlab.android.superbus.errorcontrol.TransientException
 import co.touchlab.android.superbus.errorcontrol.PermanentException
-import retrofit.http.Path
-import retrofit.http.Field
-import co.touchlab.droidconandroid.network.BasicIdResult
 import co.touchlab.android.superbus.Command
 import android.content.Context
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.data.AppPrefs
-import android.util.Log
-import co.touchlab.droidconandroid.network.AddRsvpRequest
-import co.touchlab.droidconandroid.network.RemoveRsvpRequest
 import co.touchlab.droidconandroid.network.FollowRequest
-import co.touchlab.droidconandroid.network.LoginResult
 
 /**
  * Created by kgalligan on 7/20/14.

@@ -1,12 +1,10 @@
 package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
-import de.greenrobot.event.EventBus
 import co.touchlab.droidconandroid.data.Event
-import java.util.Comparator
-import java.util.Collections
 import java.util.ArrayList
 import co.touchlab.droidconandroid.data.UserAccount
+import co.touchlab.android.threading.eventbus.EventBusExt
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -31,7 +29,7 @@ open class EventDetailLoadTask(c: Context, val eventId: Long) : DatabaseTaskKot(
             speakers!!.add(eventSpeaker.userAccount!!)
         }
 
-        EventBus.getDefault()?.post(this)
+        EventBusExt.getDefault()?.post(this)
     }
 
     override fun handleError(e: Exception?): Boolean
