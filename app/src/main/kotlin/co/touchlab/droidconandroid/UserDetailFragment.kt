@@ -21,6 +21,9 @@ import android.widget.Button
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.tasks.FollowToggleTask
 import org.apache.commons.lang3.StringUtils
+import android.support.v4.app.LoaderManager
+import co.touchlab.droidconandroid.data.UserAccount
+import android.support.v4.content.Loader
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -73,6 +76,27 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
 //        bsyncTaskManager!!.post(getActivity(), FindUserByIdTask(findUserIdArg()))
     }
 
+    class LambdaLoaderCallbacks<D>(
+            val create: (id: Int, args: Bundle?)  -> Loader<D>,
+            val finish: (loader: Loader<D>?, data: D?) -> Unit): LoaderManager.LoaderCallbacks<D>
+    {
+        override fun onCreateLoader(id: Int, args: Bundle?): Loader<D>?
+        {
+            return create(id, args)
+        }
+
+        override fun onLoadFinished(loader: Loader<D>?, data: D?)
+        {
+            finish(loader, data)
+        }
+
+        override fun onLoaderReset(loader: Loader<D>?)
+        {
+            //Ehh
+        }
+
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         val view = inflater!!.inflate(R.layout.fragment_user_detail, null)!!
@@ -87,28 +111,12 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         website = view.findView(R.id.website) as TextView
         followToggle = view.findView(R.id.followToggle) as Button
 
-        refreshUserData()
+        getLoaderManager()!!.initLoader(0, null, LambdaLoaderCallbacks<UserAccount>(
+                {id, args -> UserDetailLoader(getActivity()!!, findUserIdArg())},
+                {loader, data -> if(data != null)showUserData(data)}
+        ))
 
         return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?)
-    {
-        super<Fragment>.onActivityCreated(savedInstanceState)
-        val fm = getFragmentManager()!!
-
-        // Check to see if we have retained the worker fragment.
-        var workFragment = fm.findFragmentByTag("work") as UserDetailRetainedFragment?;
-
-        // If not retained (or first time running), we need to create it.
-        if (workFragment == null) {
-            workFragment = UserDetailRetainedFragment()
-            // Tell it who it is working with.
-            workFragment!!.setTargetFragment(this, 0);
-            fm.beginTransaction()!!.add(workFragment, "work")!!.commit();
-        }
-
-        workFragment!!.loadData(findUserIdArg())
     }
 
     override fun showResult(findUserTask: AbstractFindUserTask)
@@ -120,46 +128,51 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         else
         {
             val userAccount = findUserTask.user!!
-            val avatarKey = userAccount.avatarKey
-            if (!TextUtils.isEmpty(avatarKey))
-                Picasso.with(getActivity())!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
-            userName!!.setText(userAccount.name)
-            val profileString = Html.fromHtml(TextHelper.findTagLinks(StringUtils.trimToEmpty(userAccount.profile)!!))
-            profile!!.setMovementMethod(LinkMovementMethod.getInstance())
-            profile!!.setText(profileString)
-            userCodeVal!!.setText(userAccount.userCode)
-            company!!.setText(userAccount.company)
-            twitter!!.setText(userAccount.twitter)
-            linkedIn!!.setText(userAccount.linkedIn)
-            website!!.setText(userAccount.website)
+            showUserData(userAccount)
+        }
+    }
 
-            val appPrefs = AppPrefs.getInstance(getActivity())
-            if (userAccount.id.equals(appPrefs.getUserId()))
+    private fun showUserData(userAccount: UserAccount)
+    {
+        val avatarKey = userAccount.avatarKey
+        if (!TextUtils.isEmpty(avatarKey))
+            Picasso.with(getActivity())!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
+        userName!!.setText(userAccount.name)
+        val profileString = Html.fromHtml(TextHelper.findTagLinks(StringUtils.trimToEmpty(userAccount.profile)!!))
+        profile!!.setMovementMethod(LinkMovementMethod.getInstance())
+        profile!!.setText(profileString)
+        userCodeVal!!.setText(userAccount.userCode)
+        company!!.setText(userAccount.company)
+        twitter!!.setText(userAccount.twitter)
+        linkedIn!!.setText(userAccount.linkedIn)
+        website!!.setText(userAccount.website)
+
+        val appPrefs = AppPrefs.getInstance(getActivity())
+        if (userAccount.id.equals(appPrefs.getUserId()))
+        {
+            followToggle!!.setVisibility(View.GONE)
+        }
+        else
+        {
+            followToggle!!.setVisibility(View.VISIBLE)
+            if (userAccount.following)
             {
-                followToggle!!.setVisibility(View.GONE)
+                followToggle!!.setText(R.string.unfollow)
+                followToggle!!.setOnClickListener { v ->
+                    FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
+                    refreshUserData()
+                }
             }
             else
             {
-                followToggle!!.setVisibility(View.VISIBLE)
-                if (userAccount.following)
-                {
-                    followToggle!!.setText(R.string.unfollow)
-                    followToggle!!.setOnClickListener { v ->
-                        FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
-                        refreshUserData()
-                    }
+                followToggle!!.setText(R.string.follow)
+                followToggle!!.setOnClickListener { v ->
+                    FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
+                    refreshUserData()
                 }
-                else
-                {
-                    followToggle!!.setText(R.string.follow)
-                    followToggle!!.setOnClickListener { v ->
-                        FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
-                        refreshUserData()
-                    }
-                }
-
-
             }
+
+
         }
     }
 
