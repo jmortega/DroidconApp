@@ -24,6 +24,9 @@ import org.apache.commons.lang3.StringUtils
 import android.support.v4.app.LoaderManager
 import co.touchlab.droidconandroid.data.UserAccount
 import android.support.v4.content.Loader
+import android.support.v4.app.LoaderManager.LoaderCallbacks
+import co.touchlab.android.threading.loaders.networked.DoubleTapResult
+import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -97,6 +100,29 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
 
     }
 
+    inner class UDLoaderCallbacks() : LoaderCallbacks<DoubleTapResult<UserAccount, Int>>
+    {
+        override fun onCreateLoader(id: Int, args: Bundle?): Loader<DoubleTapResult<UserAccount, Int>>?
+        {
+            return UserDetailLoader(getActivity()!!, findUserIdArg())
+        }
+        override fun onLoadFinished(loader: Loader<DoubleTapResult<UserAccount, Int>>?, data: DoubleTapResult<UserAccount, Int>?)
+        {
+            val status = data!!.getStatus()
+            when(status)
+            {
+                Status.Data -> showUserData(data!!.getResult()!!)
+                Status.NoData -> Toaster.showMessage(getActivity(), "NoData")
+                Status.Waiting -> Toaster.showMessage(getActivity(), "Waiting")
+                Status.Error -> Toaster.showMessage(getActivity(), "Error")
+            }
+        }
+        override fun onLoaderReset(loader: Loader<DoubleTapResult<UserAccount, Int>>?)
+        {
+
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         val view = inflater!!.inflate(R.layout.fragment_user_detail, null)!!
@@ -111,10 +137,12 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         website = view.findView(R.id.website) as TextView
         followToggle = view.findView(R.id.followToggle) as Button
 
-        getLoaderManager()!!.initLoader(0, null, LambdaLoaderCallbacks<UserAccount>(
-                {id, args -> UserDetailLoader(getActivity()!!, findUserIdArg())},
-                {loader, data -> if(data != null)showUserData(data)}
-        ))
+        getLoaderManager()!!.initLoader(0, null, this.UDLoaderCallbacks())
+
+//                getLoaderManager()!!.initLoader(0, null, LambdaLoaderCallbacks<UserAccount>(
+//                {id, args -> UserDetailLoader(getActivity()!!, findUserIdArg())},
+//                {loader, data -> if(data != null)showUserData(data)}
+//        ))
 
         return view
     }

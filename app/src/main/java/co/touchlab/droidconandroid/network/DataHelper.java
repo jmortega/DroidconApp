@@ -17,9 +17,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.turbomanage.httpclient.HttpResponse;
 import com.turbomanage.httpclient.ParameterMap;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.AndroidLog;
@@ -36,36 +38,36 @@ public class DataHelper
     public static final String CT_APPLICATION_JSON = "application/json";
 
     public static void loginGoogle(final Context context, final String token, final String name) throws TransientException, PermanentException
+    {
+        runRemoteCall(context, new RunOp()
         {
-            runRemoteCall(context, new RunOp()
+            @Override
+            String path()
             {
-                @Override
-                String path()
-                {
-                    return "deviceAuth/loginUser";
-                }
+                return "deviceAuth/loginUser";
+            }
 
-                @Override
-                HttpResponse buildAndExecuteResponse(BusHttpClient httpClient, ParameterMap params)
-                {
-                    params.put("googleToken", token);
-                    params.put("name", name);
-                    return httpClient.post(path(), params);
-                }
+            @Override
+            HttpResponse buildAndExecuteResponse(BusHttpClient httpClient, ParameterMap params)
+            {
+                params.put("googleToken", token);
+                params.put("name", name);
+                return httpClient.post(path(), params);
+            }
 
-                @Override
-                void jsonReply(JSONObject json) throws JSONException
-                {
-                    String uuid = json.getString("uuid");
-                    AppPrefs instance = AppPrefs.getInstance(context);
-                    instance.setUserUuid(uuid);
-                    instance.setUserId(json.getLong("userId"));
-                    Intent intent = new Intent(GoogleLoginTask.GOOGLE_LOGIN_COMPLETE);
-                    intent.putExtra(GoogleLoginTask.GOOGLE_LOGIN_UUID, uuid);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                }
-            });
-        }
+            @Override
+            void jsonReply(JSONObject json) throws JSONException
+            {
+                String uuid = json.getString("uuid");
+                AppPrefs instance = AppPrefs.getInstance(context);
+                instance.setUserUuid(uuid);
+                instance.setUserId(json.getLong("userId"));
+                Intent intent = new Intent(GoogleLoginTask.GOOGLE_LOGIN_COMPLETE);
+                intent.putExtra(GoogleLoginTask.GOOGLE_LOGIN_UUID, uuid);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            }
+        });
+    }
 
     private static void runRemoteCall(Context context, RunOp op) throws PermanentException, TransientException
     {
@@ -175,6 +177,12 @@ public class DataHelper
 
     public static RestAdapter.Builder makeRequestAdapterBuilder(Context context)
     {
+        return makeRequestAdapterBuilder(context, new RetrofitBusErrorHandler());
+    }
+
+    @NotNull
+    public static RestAdapter.Builder makeRequestAdapterBuilder(Context context, ErrorHandler errorHandler)
+    {
         AppPrefs appPrefs = AppPrefs.getInstance(context);
         final String userUuid = appPrefs.getUserUuid();
 
@@ -184,18 +192,22 @@ public class DataHelper
             public void intercept(RequestFacade request)
             {
                 request.addHeader("Accept", "application/json");
-                if(!TextUtils.isEmpty(userUuid))
+                if (!TextUtils.isEmpty(userUuid))
                     request.addHeader("uuid", userUuid);
             }
         };
         Gson gson = new GsonBuilder().create();
         GsonConverter gsonConverter = new GsonConverter(gson);
 
-        return new RestAdapter.Builder()
-                .setErrorHandler(new RetrofitBusErrorHandler())
+        RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setRequestInterceptor(requestInterceptor)
                 .setConverter(gsonConverter)
                 .setLogLevel(RestAdapter.LogLevel.FULL).setLog(new AndroidLog("DroidconApp"))
                 .setEndpoint(context.getString(R.string.base_url));
+
+        if (errorHandler != null)
+            builder.setErrorHandler(errorHandler);
+
+        return builder;
     }
 }
