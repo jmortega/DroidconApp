@@ -18,12 +18,18 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/showSchedule"
-        android:text="Show Schedule"/>
+        android:text="Show Schedule" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/goFindUser"
-        android:text="Find User"/>
+        android:text="Find User" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/goMyProfile"
+        android:text="My Profile" />
 
 </LinearLayout>

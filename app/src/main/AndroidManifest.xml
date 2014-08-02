@@ -39,14 +39,20 @@
         </receiver>
 
         <activity
+            android:name=".MyProfileActivity"
+            android:label="My Profile"/>
+
+        <activity
             android:name=".EmailLoginActivity"
-            android:label="Email Login"></activity>
+            android:label="Email Login"/>
+
         <activity
             android:name=".EnterUuidActivity"
-            android:label="@string/title_activity_debug_enter_uuid"></activity>
+            android:label="@string/title_activity_debug_enter_uuid"/>
+
         <activity
             android:name=".ScheduleDataActivity"
-            android:label="@string/title_activity_debug_schedule_display"></activity>
+            android:label="@string/title_activity_debug_schedule_display"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -54,13 +60,14 @@
 
         <activity
             android:name=".FindUserKot"
-            android:label="@string/title_activity_find_user"></activity>
+            android:label="@string/title_activity_find_user"/>
         <activity
             android:name=".UserDetailActivity"
-            android:label="User Detail"></activity>
+            android:label="User Detail"/>
+
         <activity
             android:name=".EventDetailActivity"
-            android:label="Event Detail"></activity>
+            android:label="Event Detail"/>
     </application>
 
 </manifest>

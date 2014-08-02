@@ -14,9 +14,8 @@ import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
-import co.touchlab.droidconandroid.scanner.IntentIntegrator
-import co.touchlab.droidconandroid.scanner.IntentResult
 import org.apache.commons.lang3.StringUtils
+import com.google.zxing.integration.android.IntentIntegrator
 
 /**
  * Created by kgalligan on 7/26/14.

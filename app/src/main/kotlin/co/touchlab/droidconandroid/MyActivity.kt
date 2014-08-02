@@ -37,11 +37,20 @@ public class MyActivity : Activity()
                 ScheduleDataActivity.callMe(this@MyActivity)
             }
         })
+
         findView(R.id.goFindUser).setOnClickListener(object : View.OnClickListener
         {
             override fun onClick(v: View)
             {
                 FindUserKot.startMe(this@MyActivity)
+            }
+        })
+
+        findView(R.id.goMyProfile).setOnClickListener(object : View.OnClickListener
+        {
+            override fun onClick(v: View)
+            {
+                MyProfileActivity.callMe(this@MyActivity)
             }
         })
 
