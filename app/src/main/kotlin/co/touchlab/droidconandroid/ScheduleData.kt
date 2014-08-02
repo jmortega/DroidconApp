@@ -24,6 +24,8 @@ import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
 import co.touchlab.droidconandroid.utils.Toaster
 import java.util.ArrayList
 import org.apache.commons.lang3.StringUtils
+import java.util.Date
+import java.text.SimpleDateFormat
 
 /**
  * Created by kgalligan on 8/1/14.
@@ -100,6 +102,9 @@ class ScheduleDataFragment() : Fragment()
 
     private inner class EventAdapter(context: Context, objects: List<Event>) : ArrayAdapter<Event>(context, android.R.layout.simple_list_item_1, objects)
     {
+        val dateFormat = SimpleDateFormat("EEE")
+        val leftTimeFormat = SimpleDateFormat("hh:mm")
+        val timeFormat = SimpleDateFormat("hh:mm a")
 
         override fun getView(position: Int, v: View?, parent: view.ViewGroup): View?
         {
@@ -110,6 +115,7 @@ class ScheduleDataFragment() : Fragment()
             }
 
             val eventName = convertView!!.findViewById(R.id.eventName) as TextView
+            val eventDataTime = convertView!!.findViewById(R.id.eventDataTime) as TextView
             val eventSpeakers = convertView!!.findViewById(R.id.eventSpeakers) as TextView
             val eventDescription = convertView!!.findViewById(R.id.eventDescription) as TextView
             val rsvpStatus = convertView!!.findViewById(R.id.rsvpStatus) as TextView
@@ -124,9 +130,21 @@ class ScheduleDataFragment() : Fragment()
             }
             
             eventName.setText(event!!.name)
+
             val speakerText = StringUtils.join(speakers, ", ")
             eventSpeakers.setVisibility(if (StringUtils.isEmpty(speakerText)) View.GONE else View.VISIBLE)
             eventSpeakers.setText(speakerText)
+
+            var eventDateString = ""
+            if(event.startDateLong != null && event.endDateLong != null)
+            {
+                val startDate = Date(event.startDateLong!!)
+                val endDate = Date(event.endDateLong!!)
+                eventDateString = dateFormat.format(startDate) + " " + leftTimeFormat.format(startDate) + "-" + timeFormat.format(endDate)
+            }
+
+            eventDataTime.setText(eventDateString)
+
             eventDescription.setText(event.description)
             rsvpStatus.setText(if (event.rsvpUuid == null) "No" else "Yes")
 
