@@ -15,6 +15,7 @@ import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.data.EventSpeaker
 import java.util.concurrent.Callable
 import co.touchlab.droidconandroid.network.dao.userAccountToDb
+import co.touchlab.android.threading.eventbus.EventBusExt
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -121,7 +122,7 @@ open class RefreshScheduleDataKot : CheckedCommand()
             }
         })
 
-
+        EventBusExt.getDefault()!!.post(this)
     }
 
     override fun handlePermanentError(context: Context, exception: PermanentException): Boolean

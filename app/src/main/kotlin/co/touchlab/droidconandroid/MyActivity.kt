@@ -34,7 +34,7 @@ public class MyActivity : Activity()
         {
             override fun onClick(v: View)
             {
-                DebugScheduleDisplayActivity.callMe(this@MyActivity)
+                ScheduleDataActivity.callMe(this@MyActivity)
             }
         })
         findView(R.id.goFindUser).setOnClickListener(object : View.OnClickListener
