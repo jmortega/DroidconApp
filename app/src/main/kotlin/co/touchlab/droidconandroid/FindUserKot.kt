@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import org.apache.commons.lang3.StringUtils
 import com.google.zxing.integration.android.IntentIntegrator
+import android.graphics.Point
 
 /**
  * Created by kgalligan on 7/26/14.
@@ -66,7 +67,19 @@ public class FindUserKot : FragmentActivity(), UserInfoUpdate
 
     fun startScan()
     {
+        val display = getWindowManager()!!.getDefaultDisplay()!!
+        val size = Point();
+        display.getSize(size);
+        val width = size.x;
+        val height = size.y;
+        val minSize = Math.min(width, height)
+        val scanSize = (minSize * .8).toInt()
         val integrator = IntentIntegrator(this)
+        integrator.addExtra("SCAN_MODE", "QR_CODE_MODE")
+        integrator.addExtra("SCAN_WIDTH", scanSize)
+        integrator.addExtra("SCAN_HEIGHT", scanSize)
+        integrator.addExtra("SAVE_HISTORY", false)
+
         integrator.initiateScan()
     }
 
