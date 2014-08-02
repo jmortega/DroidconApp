@@ -14,6 +14,9 @@ import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
+import co.touchlab.droidconandroid.scanner.IntentIntegrator
+import co.touchlab.droidconandroid.scanner.IntentResult
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by kgalligan on 7/26/14.
@@ -23,7 +26,8 @@ public class FindUserKot : FragmentActivity(), UserInfoUpdate
     class object
     {
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
-        public fun startMe(c : Context)
+        val USER_PREFIX: String = "user_"
+        public fun startMe(c: Context)
         {
             val i = Intent(c, javaClass<FindUserKot>())
             c.startActivity(i)
@@ -58,6 +62,26 @@ public class FindUserKot : FragmentActivity(), UserInfoUpdate
             }
         })
 
+        findView(R.id.startScanner).setOnClickListener { (v) -> startScan() }
+    }
+
+    fun startScan()
+    {
+        val integrator = IntentIntegrator(this)
+        integrator.initiateScan()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?)
+    {
+        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null)
+        {
+            val scanResults = scanResult.getContents()
+            if(StringUtils.startsWith(scanResults, USER_PREFIX))
+            {
+                userCode!!.setText(scanResults!!.substring(USER_PREFIX.length))
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle)

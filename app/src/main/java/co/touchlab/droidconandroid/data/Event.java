@@ -22,6 +22,9 @@ public class Event
     @DatabaseField
     public String description;
 
+    @DatabaseField
+    public String category;
+
     @NotNull
     @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
     public Venue venue;
