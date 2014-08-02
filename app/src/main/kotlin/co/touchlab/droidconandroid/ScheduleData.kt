@@ -22,6 +22,8 @@ import co.touchlab.droidconandroid.data.UserAccount
 import android.support.v4.content.Loader
 import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
 import co.touchlab.droidconandroid.utils.Toaster
+import java.util.ArrayList
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by kgalligan on 8/1/14.
@@ -108,12 +110,23 @@ class ScheduleDataFragment() : Fragment()
             }
 
             val eventName = convertView!!.findViewById(R.id.eventName) as TextView
+            val eventSpeakers = convertView!!.findViewById(R.id.eventSpeakers) as TextView
             val eventDescription = convertView!!.findViewById(R.id.eventDescription) as TextView
             val rsvpStatus = convertView!!.findViewById(R.id.rsvpStatus) as TextView
 
             val event = getItem(position)
 
+            val speakers = ArrayList<String>()
+            val speakerCollection = event!!.speakerList!!.iterator()
+            for (speaker in speakerCollection)
+            {
+                speakers.add(StringUtils.trimToEmpty(speaker.userAccount?.name)!!)
+            }
+            
             eventName.setText(event!!.name)
+            val speakerText = StringUtils.join(speakers, ", ")
+            eventSpeakers.setVisibility(if (StringUtils.isEmpty(speakerText)) View.GONE else View.VISIBLE)
+            eventSpeakers.setText(speakerText)
             eventDescription.setText(event.description)
             rsvpStatus.setText(if (event.rsvpUuid == null) "No" else "Yes")
 

@@ -1,8 +1,11 @@
 package co.touchlab.droidconandroid.data;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -40,6 +43,9 @@ public class Event
 
     @DatabaseField
     public String rsvpUuid;
+
+    @ForeignCollectionField(eager = true, columnName = "eventSpeaker_id")
+    public Collection<EventSpeaker> speakerList;
 
     public boolean isRsvped()
     {
