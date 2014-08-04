@@ -34,6 +34,7 @@ import co.touchlab.profilephotoeditor.CameraUtils;
 import co.touchlab.profilephotoeditor.PhotoPickActivity;
 import co.touchlab.profilephotoeditor.PhotoScaleActivity;
 import com.squareup.picasso.Picasso;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -121,12 +122,19 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
     @Override
     public void profile(UserAccount ua)
     {
-        myName.setText(ua.name);
-        myProfile.setText(ua.profile);
-        myCompany.setText(ua.company);
-        myTwitter.setText(ua.twitter);
-        myWebsite.setText(ua.website);
-        myUserCode.setText(ua.userCode);
+        //This is a little shitty.  Assuming an empty code means we haven't
+        //done the initial data set.  Updates should only be coming from
+        //avatar uploads
+        if(StringUtils.isEmpty(myUserCode.getText()))
+        {
+            myName.setText(ua.name);
+            myProfile.setText(ua.profile);
+            myCompany.setText(ua.company);
+            myTwitter.setText(ua.twitter);
+            myWebsite.setText(ua.website);
+            myUserCode.setText(ua.userCode);
+        }
+
         if (!TextUtils.isEmpty(ua.avatarKey))
         {
             Picasso.with(this).load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + ua.avatarKey).into(myPic);
