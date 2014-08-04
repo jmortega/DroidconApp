@@ -9,11 +9,14 @@ import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.droidconandroid.network.EmailLoginRequest
+import co.touchlab.droidconandroid.network.GoogleLoginRequest
+import co.touchlab.droidconandroid.data.UserAuthHelper
 
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class GoogleLoginTask(val email:String, val name: String?, val imageURL: String?) : TaskQueue.Task
+class GoogleLoginTask(val email:String, val name: String?, val imageURL: String?) : TaskQueue.Task
 {
     class object
     {
@@ -25,7 +28,12 @@ open class GoogleLoginTask(val email:String, val name: String?, val imageURL: St
     override fun run(context: Context?)
     {
         val token = GoogleAuthUtil.getToken(context, email, SCOPE)
-        DataHelper.loginGoogle(context, token, name)
+        val restAdapter = DataHelper.makeRequestAdapter(context)
+        val loginRequest = restAdapter!!.create(javaClass<GoogleLoginRequest>())!!
+        val loginResult = loginRequest.login(token, name)
+
+        UserAuthHelper.processLoginResonse(context!!, loginResult!!)
+
         CommandBusHelper.submitCommandSync(context, RefreshScheduleDataKot())
         if (!TextUtils.isEmpty(imageURL))
             CommandBusHelper.submitCommandSync(context, UploadAvatarCommand(imageURL!!))

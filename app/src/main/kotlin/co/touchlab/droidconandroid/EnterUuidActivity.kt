@@ -15,6 +15,7 @@ import co.touchlab.android.threading.tasks.TaskQueue
 import com.google.android.gms.common.ConnectionResult
 import android.content.IntentSender
 import co.touchlab.droidconandroid.utils.Toaster
+import co.touchlab.android.threading.eventbus.EventBusExt
 
 /**
  * Created by kgalligan on 7/21/14.
@@ -53,14 +54,6 @@ class EnterUuidActivity : FractivityAdapterActivity()
 class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAdapter(c, savedInstanceState)
 {
     val mGoogleApiClient: GoogleApiClient
-    val uuidReceiver = object : BroadcastReceiver()
-    {
-        override fun onReceive(context: Context, intent: Intent)
-        {
-            c.finish()
-            MyActivity.startMe(c)
-        }
-    }
 
     {
         c.setContentView(R.layout.activity_debug_enter_uuid)
@@ -76,7 +69,7 @@ class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAda
 
         c.findView(R.id.emailLogin).setOnClickListener {v -> EmailLoginActivity.startMe(c)}
 
-        LocalBroadcastManager.getInstance(c)!!.registerReceiver(uuidReceiver, IntentFilter(GoogleLoginTask.GOOGLE_LOGIN_COMPLETE))
+        EventBusExt.getDefault()!!.register(this)
     }
 
     override fun onStop()
@@ -84,9 +77,15 @@ class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAda
         googleDisconnectIfConnected()
     }
 
+    public fun onEventMainThread(t: GoogleLoginTask)
+    {
+        c.finish()
+        MyActivity.startMe(c)
+    }
+
     override fun onDestroy()
     {
-        LocalBroadcastManager.getInstance(c)!!.unregisterReceiver(uuidReceiver)
+        EventBusExt.getDefault()!!.unregister(this)
     }
 
     fun googleClientConnect()

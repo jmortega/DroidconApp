@@ -71,11 +71,17 @@ open class UploadAvatarCommand(val imageURL : String? = null) : CheckedCommand()
     }
 }
 
+/**
+ * Remove reference to the avatar image.  For use after uploading new avatar.
+ */
 class QuickClearAvatarTask(val userId: Long) : TaskQueue.Task
 {
     override fun run(context: Context?)
     {
-        DatabaseHelper.getInstance(context).getUserAccountDao().queryForId(userId)
+        val dao = DatabaseHelper.getInstance(context).getUserAccountDao()
+        val userAccount = dao.queryForId(userId)
+        userAccount!!.avatarKey = null;
+        dao.createOrUpdate(userAccount)
 
     }
 

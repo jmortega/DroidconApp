@@ -11,6 +11,7 @@ import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.network.dao.userAccountToDb
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.droidconandroid.data.UserAuthHelper
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -61,7 +62,7 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
         fun saveUserResponse(context: Context, user: UserAccount?, response: UserInfoResponse): UserAccount?
         {
             val newDbUser = UserAccount()
-            userAccountToDb(response.user, newDbUser)
+            UserAuthHelper.userAccountToDb(response.user, newDbUser)
 
             if(user == null || !user.equals(newDbUser))
             {

@@ -8,6 +8,7 @@ import co.touchlab.droidconandroid.network.EmailLoginRequest
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.droidconandroid.data.UserAuthHelper
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -22,9 +23,7 @@ open class EmailLoginTask(val email: String, val name: String?, val password: St
 
         if(loginResult?.uuid != null)
         {
-            val appPrefs = AppPrefs.getInstance(context)
-            appPrefs.setUserUuid(loginResult?.uuid)
-            appPrefs.setUserId(loginResult?.userId)
+            UserAuthHelper.processLoginResonse(context!!, loginResult!!)
             CommandBusHelper.submitCommandSync(context, RefreshScheduleDataKot())
         }
 
