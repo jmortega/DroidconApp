@@ -16,27 +16,35 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.view.View
 
 /**
  * Created by kgalligan on 8/1/14.
  */
-class MyProfileActivity : FragmentActivity()
+class MyProfileFragment : Fragment()
 {
     class object
     {
-        fun callMe(a: Activity)
+        fun newInstance(): MyProfileFragment
         {
-            val i = Intent(a, javaClass <MyProfileActivity> ())
-            a.startActivity(i)
+            return MyProfileFragment()
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?)
+    override fun onActivityCreated(savedInstanceState: Bundle?)
     {
-        super<FragmentActivity>.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_profile)
+        super<Fragment>.onActivityCreated(savedInstanceState)
+        getLoaderManager()!!.initLoader(0, null, this.UDLoaderCallbacks())
+    }
 
-        getSupportLoaderManager()!!.initLoader(0, null, this.UDLoaderCallbacks())
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    {
+        val view = inflater!!.inflate(R.layout.activity_my_profile, null)
+        //Probably putting stuff here...
+        return view
     }
 
     fun showDetail(user: UserAccount)
@@ -44,9 +52,10 @@ class MyProfileActivity : FragmentActivity()
         val qrwriter = QRCodeWriter()
         val bitMatrix = qrwriter.encode("user_" + user.userCode, BarcodeFormat.QR_CODE, 600, 600)
 
-        (findView(R.id.userCode) as TextView).setText(user.userCode)
-        (findView(R.id.userName) as TextView).setText(user.name)
-        (findView(R.id.qrCode) as ImageView).setImageBitmap(toBitmap(bitMatrix!!))
+        val view = getView()!!
+        (view.findView(R.id.userCode) as TextView).setText(user.userCode)
+        (view.findView(R.id.userName) as TextView).setText(user.name)
+        (view.findView(R.id.qrCode) as ImageView).setImageBitmap(toBitmap(bitMatrix!!))
     }
 
     fun toBitmap(matrix: BitMatrix): Bitmap
@@ -69,7 +78,7 @@ class MyProfileActivity : FragmentActivity()
     {
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<DoubleTapResult<UserAccount, Int>>?
         {
-            return UserDetailLoader(this@MyProfileActivity, AppPrefs.getInstance(this@MyProfileActivity).getUserId()!!)
+            return UserDetailLoader(getActivity()!!, AppPrefs.getInstance(getActivity()).getUserId()!!)
         }
         override fun onLoadFinished(loader: Loader<DoubleTapResult<UserAccount, Int>>?, data: DoubleTapResult<UserAccount, Int>?)
         {

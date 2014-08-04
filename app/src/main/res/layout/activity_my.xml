@@ -29,12 +29,6 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/goMyProfile"
-        android:text="My Profile" />
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/updateProfile"
         android:text="Update Profile" />
 

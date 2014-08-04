@@ -43,9 +43,6 @@
         </receiver>
 
         <activity
-            android:name=".MyProfileActivity"
-            android:label="My Profile" />
-        <activity
             android:name=".EmailLoginActivity"
             android:label="Email Login" />
         <activity

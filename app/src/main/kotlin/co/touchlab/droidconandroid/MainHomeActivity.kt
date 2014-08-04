@@ -44,7 +44,7 @@ class MyPagerAdapter(val fm: FragmentManager) : FragmentPagerAdapter(fm)
         when (position)
         {
             0 -> return ScheduleDataFragment.newInstance()
-            1 -> return ScheduleDataFragment.newInstance()
+            1 -> return MyProfileFragment.newInstance()
 //            2 -> return ThirdFragment.newInstance("ThirdFragment, Instance 1");
 //            3 -> return ThirdFragment.newInstance("ThirdFragment, Instance 2");
 //            4 -> return ThirdFragment.newInstance("ThirdFragment, Instance 3");
@@ -56,8 +56,8 @@ class MyPagerAdapter(val fm: FragmentManager) : FragmentPagerAdapter(fm)
     {
         when (position)
                 {
-            0 -> return "Test 0"
-            1 -> return "Test 1"
+            0 -> return "Schedule"
+            1 -> return "My Profile"
 //            2 -> return ThirdFragment.newInstance("ThirdFragment, Instance 1");
 //            3 -> return ThirdFragment.newInstance("ThirdFragment, Instance 2");
 //            4 -> return ThirdFragment.newInstance("ThirdFragment, Instance 3");
