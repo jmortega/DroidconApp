@@ -28,7 +28,7 @@ open class GoogleLoginTask(val email:String, val name: String?, val imageURL: St
         DataHelper.loginGoogle(context, token, name)
         CommandBusHelper.submitCommandSync(context, RefreshScheduleDataKot())
         if (!TextUtils.isEmpty(imageURL))
-            CommandBusHelper.submitCommandSync(context, UploadAvatarCommand(imageURL))
+            CommandBusHelper.submitCommandSync(context, UploadAvatarCommand(imageURL!!))
 
         EventBusExt.getDefault()!!.post(this);
     }

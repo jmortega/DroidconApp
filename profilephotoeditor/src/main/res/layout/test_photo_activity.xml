@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	                android:orientation="vertical"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:background="@color/cover_purple_dark">
+
+
+	    <RelativeLayout
+	            android:id="@+id/photoSorterContainer"
+	            android:layout_width="match_parent"
+	            android:layout_height="0dp"
+	            android:padding="@dimen/padding_medium"
+	            android:layout_weight="1">
+
+	        <co.touchlab.profilephotoeditor.PhotoSortrView
+	                android:id="@+id/photoSorter"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:padding="@dimen/padding_medium"
+	                android:layout_centerInParent="true"/>
+
+	    </RelativeLayout>
+
+
+	    <FrameLayout
+	            android:id="@+id/confirmContainer"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:background="@color/cover_purple"
+	            android:padding="@dimen/padding_medium">
+
+	        <Button
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:text="@string/confirm"
+	                android:onClick="saveAvatar"
+	                android:textColor="@android:color/white"/>
+
+	    </FrameLayout>
+
+	</LinearLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/include_network">
+
+    </FrameLayout>
+
+</FrameLayout>

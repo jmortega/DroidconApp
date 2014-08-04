@@ -1,10 +1,7 @@
-package co.touchlab.droidconandroid;
+package co.touchlab.profilephotoeditor;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,180 +13,40 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import co.touchlab.android.superbus.appsupport.CommandBusHelper;
-import co.touchlab.android.threading.eventbus.EventBusExt;
-import co.touchlab.android.threading.tasks.TaskQueue;
-import co.touchlab.droidconandroid.data.AppPrefs;
-import co.touchlab.droidconandroid.data.UserAccount;
-import co.touchlab.droidconandroid.superbus.UploadAvatarCommand;
-import co.touchlab.droidconandroid.tasks.GrabUserProfile;
-import co.touchlab.droidconandroid.tasks.UpdateUserProfileTask;
-import co.touchlab.profilephotoeditor.BitmapUtils;
-import co.touchlab.profilephotoeditor.CameraUtils;
-import co.touchlab.profilephotoeditor.PhotoPickActivity;
-import co.touchlab.profilephotoeditor.PhotoScaleActivity;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class EditUserProfile extends BsyncActivity implements GrabUserProfile.UserProfileUpdate
+/**
+ * Created by kgalligan on 8/3/14.
+ */
+public class PhotoPickActivity extends Activity
 {
-    public static final String HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES = "https://s3.amazonaws.com/droidconimages/";
-    private EditText myName;
-    private EditText myProfile;
-    private TextView myUserCode;
-    private EditText myCompany;
-    private EditText myTwitter;
-    private EditText myWebsite;
-    private ImageView myPic;
-
-    public static void callMe(Context c)
-    {
-        Intent i = new Intent(c, EditUserProfile.class);
-        c.startActivity(i);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user_profile);
-
-        if (savedInstanceState == null)
-        {
-            refreshProfile();
-        }
-
-        myName = (EditText) findViewById(R.id.myName);
-        myProfile = (EditText) findViewById(R.id.myProfile);
-        myUserCode = (TextView) findViewById(R.id.myUserCode);
-        myCompany = (EditText) findViewById(R.id.myCompany);
-        myTwitter = (EditText) findViewById(R.id.myTwitter);
-        myWebsite = (EditText) findViewById(R.id.myWebsite);
-        myPic = (ImageView) findViewById(R.id.myPic);
-        findViewById(R.id.save).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                saveProfile();
-            }
-        });
-
-        EventBusExt.getDefault().register(this);
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        EventBusExt.getDefault().unregister(this);
-    }
-
-    public void onEventMainThread(UploadAvatarCommand command)
-    {
-        refreshProfile();
-    }
-
-    private void refreshProfile()
-    {
-        AppPrefs appPrefs = AppPrefs.getInstance(this);
-        bsyncTaskManager.post(this, new GrabUserProfile(appPrefs.getUserId()));
-    }
-
-    private void saveProfile()
-    {
-        TaskQueue.execute(this, new UpdateUserProfileTask(
-                this,
-                myName.getText().toString(),
-                myProfile.getText().toString(),
-                myCompany.getText().toString(),
-                myTwitter.getText().toString(),
-                null,
-                myWebsite.getText().toString()
-        ));
-        finish();
-    }
-
-    @Override
-    public void profile(UserAccount ua)
-    {
-        myName.setText(ua.name);
-        myProfile.setText(ua.profile);
-        myCompany.setText(ua.company);
-        myTwitter.setText(ua.twitter);
-        myWebsite.setText(ua.website);
-        myUserCode.setText(ua.userCode);
-        if (!TextUtils.isEmpty(ua.avatarKey))
-        {
-            Picasso.with(this).load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + ua.avatarKey).into(myPic);
-        }
-        else
-        {
-            myPic.setImageResource(R.drawable.android_profile);
-        }
-
-        myPic.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                callPhotoGrabber();
-            }
-        });
-    }
-
-    private void callPhotoGrabber()
-    {
-        new AlertDialog.Builder(this).setMessage("The thing and stuff")
-                .setPositiveButton("Camera", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        startCamera();
-                    }
-                })
-                .setNegativeButton("Gallery", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        startGalleryPicker();
-                    }
-                }).show();
-    }
-
     public static final int PHOTO_SELECT = 100;
     public static final int PHOTO_CAPTURE = 101;
     public static final int PHOTO_EDIT_COMPLETE = 102;
     public static final String GALLERY_CONTENT_URI_PREFIX = "content://media/";
     private String photoPath;
 
-    /*public interface UserProfileCallback
+    public interface UserProfileCallback
     {
-//        void onDialogShow();
-//
-//        void onDialogClose();
+        void onDialogShow();
+
+        void onDialogClose();
 
         void onDialogHide();
 
-//        void startCamera();
+        void startCamera();
 
         String cameraPhotoPath();
 
         void photoEditComplete(String path);
 
-    }*/
+    }
 
-//    private UserProfileCallback mCallback;
+    private UserProfileCallback mCallback;
     private Uri imageURI;
 
     public void setImageURI(Uri imageURI)
@@ -245,7 +102,7 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
                 if (resultCode == Activity.RESULT_OK)
                 {
                     Bitmap bitmap;
-                    String cameraPhotoPath = cameraPhotoPath();
+                    String cameraPhotoPath = mCallback.cameraPhotoPath();
                     File cameraPhotoFile = cameraPhotoPath != null ? new File(cameraPhotoPath) : null;
 
                     if (cameraPhotoFile != null && cameraPhotoFile.exists())
@@ -268,7 +125,7 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
             case PHOTO_EDIT_COMPLETE:
                 if (resultCode == Activity.RESULT_OK)
                 {
-                    onDialogHide();
+                    mCallback.onDialogHide();
                     final String avatarPath = intent.getStringExtra("avatarPath");
                     new Handler().postDelayed(new Runnable()
                     {
@@ -280,8 +137,8 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
                             // slap on 300 seconds to let this transition to finish, then show
                             // the loader. The SendNewAvatar runnable has a delay of 600ms before
                             // so the loading screen has enough visibility time.
-                            //                            showLoadingScreen(true);
-                            photoEditComplete(avatarPath);
+//                            showLoadingScreen(true);
+                            mCallback.photoEditComplete(avatarPath);
                         }
                     }, 300);
                 }
@@ -321,21 +178,11 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
         }
     }
 
-    public void onDialogHide()
-    {
-
-    }
-
     public String cameraPhotoPath()
     {
         String path = photoPath;
         photoPath = null;
         return path;
-    }
-
-    public void photoEditComplete(String path)
-    {
-        CommandBusHelper.submitCommandAsync(this, new UploadAvatarCommand(path));
     }
 
     public void startGalleryPicker()
@@ -368,7 +215,7 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
         @Override
         protected void onPostExecute(File file)
         {
-            Intent intent = PhotoScaleActivity.callMe(EditUserProfile.this, file.getPath());
+            Intent intent = PhotoScaleActivity.callMe(PhotoPickActivity.this, file.getPath());
             startActivityForResult(intent, PHOTO_EDIT_COMPLETE);
         }
     }

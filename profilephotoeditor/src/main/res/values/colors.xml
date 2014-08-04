@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="cover_purple_xdark">#FF15142A</color>
+    <color name="cover_purple_dark_alpha">#99302E47</color>
+    <color name="cover_purple_dark">#FF302E47</color>
+    <color name="cover_purple">#FF393654</color>
+    <color name="cover_purple_light">#FF666091</color>
+    <color name="cover_purple_lighter">#FF7A74A4</color>
+
+    <color name="cover_yellow">#FFEEA302</color>
+    <color name="cover_red">#FF740A13</color>
+    <color name="cover_red_light">#FFA47474</color>
+
+    <color name="cover_gradient_start">#FFE19C35</color>
+    <color name="cover_gradient_end">#FFFDCD39</color>
+
+    <color name="divider_dark">#33000000</color>
+    <color name="divider_light">#337D7D7D</color>
+    <color name="dark_gray">#666666</color>
+
+    <color name="dialog_dim">#E62f2d48</color>
+    <color name="black_alpha_40">#66000000</color>
+
+    <color name="cover_white_alpha_80">#CCFFFFFF</color>
+    <color name="cover_white_alpha_60">#99FFFFFF</color>
+    <color name="cover_white_alpha_30">#4BFFFFFF</color>
+    <color name="graph_indicator_unselected">#80FFFFFF</color>
+
+</resources>

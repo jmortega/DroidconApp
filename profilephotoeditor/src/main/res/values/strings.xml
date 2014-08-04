@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Profile Photo Editor</string>
+    <string name="menu_label_rotate_image">Rotate image 90°</string>
+    <string name="user_profile_pic_scale">Move and Scale</string>
+    <string name="confirm">Confirm</string>
+    <string name="error_picture_select">There was an error retreiving the picture</string>
+</resources>

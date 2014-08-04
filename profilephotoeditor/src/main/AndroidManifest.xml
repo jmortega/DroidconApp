@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.touchlab.profilephotoeditor">
+
+    <application android:allowBackup="true"
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_launcher"
+>
+
+        <activity
+                    android:name=".PhotoScaleActivity"
+                    android:label="@string/user_profile_pic_scale" />
+
+    </application>
+
+</manifest>

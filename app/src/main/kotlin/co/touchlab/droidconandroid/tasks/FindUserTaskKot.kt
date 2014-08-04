@@ -56,6 +56,25 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
 {
     public var user: UserAccount? = null
 
+    class object
+    {
+        fun saveUserResponse(context: Context, user: UserAccount?, response: UserInfoResponse): UserAccount?
+        {
+            val newDbUser = UserAccount()
+            userAccountToDb(response.user, newDbUser)
+
+            if(user == null || !user.equals(newDbUser))
+            {
+                val databaseHelper = DatabaseHelper.getInstance(context)
+                databaseHelper.getUserAccountDao().createOrUpdate(newDbUser)
+                return newDbUser
+            }
+
+            return null
+        }
+
+    }
+
     override fun onPostExecute(host: UserInfoUpdate?)
     {
         val userInfoUpdate = host as UserInfoUpdate
@@ -79,18 +98,18 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
         try
         {
             val response = loadRequest()
-            val newDbUser = UserAccount()
-            userAccountToDb(response!!.user, newDbUser)
+            if(response != null)
+            {
+                val updatedUser = saveUserResponse(context, user, response)
 
-            if(user != null && user.equals(newDbUser))
-            {
-                cancelPost()
-            }
-            else
-            {
-                this.user = newDbUser
-                val databaseHelper = DatabaseHelper.getInstance(context)
-                databaseHelper.getUserAccountDao().createOrUpdate(user)
+                if (updatedUser == null)
+                {
+                    cancelPost()
+                }
+                else
+                {
+                    this.user = updatedUser
+                }
             }
         }
         catch(e: PermanentException)
