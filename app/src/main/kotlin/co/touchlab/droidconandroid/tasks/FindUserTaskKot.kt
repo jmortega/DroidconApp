@@ -9,7 +9,6 @@ import co.touchlab.android.superbus.errorcontrol.PermanentException
 import co.touchlab.droidconandroid.network.SingleUserInfoRequest
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.data.UserAccount
-import co.touchlab.droidconandroid.network.dao.userAccountToDb
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.data.UserAuthHelper
 

@@ -14,8 +14,8 @@ import java.text.ParseException
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.data.EventSpeaker
 import java.util.concurrent.Callable
-import co.touchlab.droidconandroid.network.dao.userAccountToDb
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.droidconandroid.data.UserAuthHelper
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -86,7 +86,7 @@ open class RefreshScheduleDataKot : CheckedCommand()
                                         userAccount = UserAccount()
                                     }
 
-                                    userAccountToDb(ua, userAccount!!)
+                                    UserAuthHelper.userAccountToDb(ua, userAccount!!)
 
                                     userAccountDao.createOrUpdate(userAccount)
 

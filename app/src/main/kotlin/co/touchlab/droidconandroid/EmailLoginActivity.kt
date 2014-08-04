@@ -10,6 +10,7 @@ import android.content.Intent
 import co.touchlab.droidconandroid.tasks.LocalUserDisplayNameTask
 import android.text.TextUtils
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.droidconandroid.tasks.AbstractLoginTask
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -58,9 +59,11 @@ class EmailLoginActivity : Activity()
             name!!.setText(task.displayName)
     }
 
-    public fun onEventMainThread(task: EmailLoginTask)
+    public fun onEventMainThread(task: AbstractLoginTask)
     {
         finish()
         MyActivity.startMe(this)
+        if(task.firstLogin)
+            EditUserProfile.callMe(this)
     }
 }

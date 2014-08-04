@@ -6,10 +6,10 @@ import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.SingleUserInfoRequest
 import co.touchlab.droidconandroid.network.NetworkErrorHandler
-import co.touchlab.droidconandroid.network.dao.userAccountToDb
 import co.touchlab.droidconandroid.network.NetworkErrorHandler.NetworkException
 import co.touchlab.droidconandroid.network.NetworkErrorHandler.NotFoundException
 import co.touchlab.android.threading.loaders.networked.AbstractDoubleTapLoader
+import co.touchlab.droidconandroid.data.UserAuthHelper
 
 /**
  * Created by kgalligan on 7/29/14.
@@ -48,7 +48,7 @@ class UserDetailLoader(c: Context, val userId: Long) : AbstractDoubleTapLoader<U
             val dbUser = getUserFromDb()
 
             val newDbUser = UserAccount()
-            userAccountToDb(userAccount, newDbUser)
+            UserAuthHelper.userAccountToDb(userAccount, newDbUser)
             val databaseHelper = DatabaseHelper.getInstance(getContext())
             databaseHelper.getUserAccountDao().createOrUpdate(newDbUser)
 

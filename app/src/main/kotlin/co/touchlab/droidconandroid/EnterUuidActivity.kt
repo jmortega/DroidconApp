@@ -16,6 +16,7 @@ import com.google.android.gms.common.ConnectionResult
 import android.content.IntentSender
 import co.touchlab.droidconandroid.utils.Toaster
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.droidconandroid.tasks.AbstractLoginTask
 
 /**
  * Created by kgalligan on 7/21/14.
@@ -77,10 +78,12 @@ class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAda
         googleDisconnectIfConnected()
     }
 
-    public fun onEventMainThread(t: GoogleLoginTask)
+    public fun onEventMainThread(t: AbstractLoginTask)
     {
         c.finish()
         MyActivity.startMe(c)
+        if(t.firstLogin)
+            EditUserProfile.callMe(c)
     }
 
     override fun onDestroy()
