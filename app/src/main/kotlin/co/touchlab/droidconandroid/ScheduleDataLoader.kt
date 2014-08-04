@@ -14,12 +14,19 @@ import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 /**
  * Created by kgalligan on 8/1/14.
  */
-class ScheduleDataLoader(c: Context) : AbstractEventBusLoader<List<Event>>(c)
+class ScheduleDataLoader(c: Context, val all: Boolean) : AbstractEventBusLoader<List<Event>>(c)
 {
     override fun findContent(): List<Event>?
     {
         val dao = DatabaseHelper.getInstance(getContext()).getEventDao()
-        val events = dao.queryForAll()!!
+        val events = if(all)
+        {
+            dao.queryForAll()!!
+        }
+        else
+        {
+            dao.queryBuilder()!!.where()!!.isNotNull("rsvpUuid")!!.query()!!
+        }
 
         Collections.sort(events, object : Comparator<Event>
         {

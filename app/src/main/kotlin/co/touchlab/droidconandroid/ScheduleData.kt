@@ -53,9 +53,14 @@ class ScheduleDataFragment() : Fragment()
 
     class object
     {
-        fun newInstance(): ScheduleDataFragment
+        val ALL_EVENTS = "ALL_EVENTS"
+        fun newInstance(all: Boolean): ScheduleDataFragment
         {
-            return ScheduleDataFragment()
+            val scheduleDataFragment = ScheduleDataFragment()
+            val args = Bundle()
+            args.putBoolean(ALL_EVENTS, all)
+            scheduleDataFragment.setArguments(args)
+            return scheduleDataFragment
         }
     }
 
@@ -82,12 +87,12 @@ class ScheduleDataFragment() : Fragment()
     {
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<Event>>?
         {
-            return ScheduleDataLoader(getActivity()!!)
+            return ScheduleDataLoader(getActivity()!!, getArguments()!!.getBoolean(ALL_EVENTS))
         }
 
         override fun onLoadFinished(loader: Loader<List<Event>>?, data: List<Event>?)
         {
-            if (data == null || data.empty)
+            if (data == null)
             {
                 Toaster.showMessage(getActivity(), "NoData")
             }
