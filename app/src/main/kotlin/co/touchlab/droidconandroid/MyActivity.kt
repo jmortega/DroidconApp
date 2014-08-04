@@ -34,7 +34,7 @@ public class MyActivity : Activity()
         {
             override fun onClick(v: View)
             {
-                ScheduleDataActivity.callMe(this@MyActivity)
+                MainHomeActivity.callMe(this@MyActivity)
             }
         })
 

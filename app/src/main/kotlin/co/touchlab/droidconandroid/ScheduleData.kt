@@ -51,6 +51,15 @@ class ScheduleDataFragment() : Fragment()
     var eventList: ListView? = null
     var adapter: EventAdapter? = null
 
+    class object
+    {
+        fun newInstance(): ScheduleDataFragment
+        {
+            return ScheduleDataFragment()
+        }
+    }
+
+
     override fun onCreateView(inflater: LayoutInflater?, container: view.ViewGroup?, savedInstanceState: Bundle?): View?
     {
         val view = inflater!!.inflate(R.layout.fragment_schedule_data, null)!!
