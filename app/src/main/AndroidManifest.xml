@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="co.touchlab.droidconandroid">
+    package="co.touchlab.droidconandroid" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
-
 
     <application
         android:name=".DroidconApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MyActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +30,7 @@
             android:name="co.touchlab.android.superbus.SuperbusService"
             android:exported="false" />
 
-        <receiver android:name="co.touchlab.android.superbus.network.ConnectionChangeReceiver">
+        <receiver android:name="co.touchlab.android.superbus.network.ConnectionChangeReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
@@ -40,19 +38,16 @@
 
         <activity
             android:name=".MyProfileActivity"
-            android:label="My Profile"/>
-
+            android:label="My Profile" />
         <activity
             android:name=".EmailLoginActivity"
-            android:label="Email Login"/>
-
+            android:label="Email Login" />
         <activity
             android:name=".EnterUuidActivity"
-            android:label="@string/title_activity_debug_enter_uuid"/>
-
+            android:label="@string/title_activity_debug_enter_uuid" />
         <activity
             android:name=".ScheduleDataActivity"
-            android:label="@string/title_activity_debug_schedule_display"/>
+            android:label="@string/title_activity_debug_schedule_display" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -60,14 +55,17 @@
 
         <activity
             android:name=".FindUserKot"
-            android:label="@string/title_activity_find_user"/>
+            android:label="@string/title_activity_find_user" />
         <activity
             android:name=".UserDetailActivity"
-            android:label="User Detail"/>
-
+            android:label="User Detail" />
         <activity
             android:name=".EventDetailActivity"
-            android:label="Event Detail"/>
+            android:label="Event Detail" />
+        <activity
+            android:name=".EditUserProfile"
+            android:label="@string/title_activity_edit_user_profile" >
+        </activity>
     </application>
 
 </manifest>

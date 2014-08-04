@@ -190,4 +190,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
             throw new RuntimeException(e);
         }
     }
+
+    public void inTransaction(final Runnable r)
+    {
+        performTransactionOrThrowRuntime(new Callable<Void>()
+        {
+            @Override
+            public Void call() throws Exception
+            {
+                r.run();
+                return null;
+            }
+        });
+    }
 }

@@ -54,5 +54,13 @@ public class MyActivity : Activity()
             }
         })
 
+        findView(R.id.updateProfile).setOnClickListener(object : View.OnClickListener
+        {
+            override fun onClick(v: View)
+            {
+                EditUserProfile.callMe(this@MyActivity)
+            }
+        })
+
     }
 }

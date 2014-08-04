@@ -6,8 +6,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks
 import co.touchlab.android.threading.loaders.networked.DoubleTapResult
 import co.touchlab.droidconandroid.data.UserAccount
 import android.support.v4.content.Loader
-import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
-import co.touchlab.droidconandroid.utils.Toaster
 import co.touchlab.droidconandroid.data.AppPrefs
 import android.widget.TextView
 import android.widget.ImageView

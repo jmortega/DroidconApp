@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import co.touchlab.android.threading.tasks.BsyncTaskManager
-import co.touchlab.droidconandroid.tasks.FindUserByIdTask
 import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import co.touchlab.droidconandroid.utils.Toaster

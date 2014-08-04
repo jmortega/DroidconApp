@@ -1,17 +1,10 @@
 package co.touchlab.droidconandroid
 
 import android.content.Context
-import co.touchlab.android.threading.loaders.AbstractEventBusLoader
-import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.data.DatabaseHelper
-import co.touchlab.droidconandroid.tasks.FindUserByIdTask
-import co.touchlab.android.threading.loaders.networked.AbstractDoubleTapEventBusLoader
-import co.touchlab.android.threading.loaders.networked.DoubleTapResult
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.SingleUserInfoRequest
-import retrofit.ErrorHandler
-import retrofit.RetrofitError
 import co.touchlab.droidconandroid.network.NetworkErrorHandler
 import co.touchlab.droidconandroid.network.dao.userAccountToDb
 import co.touchlab.droidconandroid.network.NetworkErrorHandler.NetworkException

@@ -35,7 +35,8 @@ open class UploadAvatarCommand(var imageURL : String? = null) : CheckedCommand()
 
         val uuid = AppPrefs.getInstance(context).getUserUuid()
         val postClient = BusHttpClient(context.getString(R.string.base_url))
-        postClient.post("dataTest/uploadAvatar/" + uuid, "image/jpeg", body)
+        postClient.addHeader("uuid", uuid);
+        postClient.post("dataTest/uploadAvatar", "image/jpeg", body)
         postClient.checkAndThrowError()
     }
 

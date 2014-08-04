@@ -4,17 +4,19 @@
     <string name="app_name">Droidcon Android</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <!--<string name="base_url">http://192.168.0.104:9000/</string>-->
-    <string name="base_url">http://192.168.0.7:9000/</string>
+    <!-- <string name="base_url">http://192.168.0.104:9000/</string> -->
+    <string name="base_url">http://192.168.0.8:9000/</string>
+    <!--<string name="base_url">http://10.67.104.168:9000/</string>-->
     <string name="title_activity_debug_enter_uuid">DebugEnterUuid</string>
     <string name="title_activity_debug_schedule_display">DebugScheduleDisplayActivity</string>
     <string name="google_error">Cannot login with Google. Please contact support.</string>
     <string name="network_error">Network problems...</string>
     <string name="error_user_not_found">User not found</string>
     <string name="title_activity_find_user">FindUser</string>
-
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
     <string name="register">Register</string>
     <string name="unregister">Unregister</string>
+    <string name="title_activity_edit_user_profile">EditUserProfile</string>
+
 </resources>

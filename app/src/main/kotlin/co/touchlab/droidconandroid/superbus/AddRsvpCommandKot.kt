@@ -12,7 +12,7 @@ import co.touchlab.droidconandroid.network.AddRsvpRequest
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class AddRsvpCommandKot(var eventId : Long? = null, var rsvpUuid : String? = null) : CheckedCommand()
+class AddRsvpCommandKot(var eventId : Long? = null, var rsvpUuid : String? = null) : CheckedCommand()
 {
     override fun logSummary(): String
     {
