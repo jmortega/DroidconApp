@@ -26,9 +26,11 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.data.UserAccount;
+import co.touchlab.droidconandroid.superbus.QuickClearAvatarTask;
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand;
 import co.touchlab.droidconandroid.tasks.GrabUserProfile;
 import co.touchlab.droidconandroid.tasks.UpdateUserProfileTask;
+import co.touchlab.droidconandroid.utils.Toaster;
 import co.touchlab.profilephotoeditor.BitmapUtils;
 import co.touchlab.profilephotoeditor.CameraUtils;
 import co.touchlab.profilephotoeditor.PhotoPickActivity;
@@ -181,23 +183,6 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
     public static final String GALLERY_CONTENT_URI_PREFIX = "content://media/";
     private String photoPath;
 
-    /*public interface UserProfileCallback
-    {
-//        void onDialogShow();
-//
-//        void onDialogClose();
-
-        void onDialogHide();
-
-//        void startCamera();
-
-        String cameraPhotoPath();
-
-        void photoEditComplete(String path);
-
-    }*/
-
-//    private UserProfileCallback mCallback;
     private Uri imageURI;
 
     public void setImageURI(Uri imageURI)
@@ -278,20 +263,7 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
                 {
                     onDialogHide();
                     final String avatarPath = intent.getStringExtra("avatarPath");
-                    new Handler().postDelayed(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            // Loading screen is inside of handler because this case gets called
-                            // during the transition from MoveScaleAct and UserProfileActivity. We
-                            // slap on 300 seconds to let this transition to finish, then show
-                            // the loader. The SendNewAvatar runnable has a delay of 600ms before
-                            // so the loading screen has enough visibility time.
-                            //                            showLoadingScreen(true);
-                            photoEditComplete(avatarPath);
-                        }
-                    }, 300);
+                    photoEditComplete(avatarPath);
                 }
                 else if (resultCode == PhotoScaleActivity.RESULT_FAILED)
                 {
@@ -343,7 +315,10 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
 
     public void photoEditComplete(String path)
     {
+        TaskQueue.execute(this, new QuickClearAvatarTask(AppPrefs.getInstance(this).getUserId()));
+        refreshProfile();
         CommandBusHelper.submitCommandAsync(this, new UploadAvatarCommand(path));
+        Toaster.showMessage(this, "Photo updating.  May take a bit...");
     }
 
     public void startGalleryPicker()

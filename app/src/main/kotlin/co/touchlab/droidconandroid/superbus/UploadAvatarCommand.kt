@@ -13,6 +13,8 @@ import co.touchlab.android.threading.eventbus.EventBusExt
 import com.google.gson.Gson
 import co.touchlab.droidconandroid.network.dao.UserInfoResponse
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
+import co.touchlab.android.threading.tasks.TaskQueue
+import co.touchlab.droidconandroid.data.DatabaseHelper
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -64,6 +66,20 @@ open class UploadAvatarCommand(val imageURL : String? = null) : CheckedCommand()
     }
 
     override fun handlePermanentError(context: Context, exception: PermanentException): Boolean
+    {
+        return false
+    }
+}
+
+class QuickClearAvatarTask(val userId: Long) : TaskQueue.Task
+{
+    override fun run(context: Context?)
+    {
+        DatabaseHelper.getInstance(context).getUserAccountDao().queryForId(userId)
+
+    }
+
+    override fun handleError(e: Exception?): Boolean
     {
         return false
     }
