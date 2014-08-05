@@ -31,7 +31,6 @@ class UserAuthHelper
         fun userAccountToDb(ua: co.touchlab.droidconandroid.network.dao.UserAccount, dbUa: co.touchlab.droidconandroid.data.UserAccount)
         {
             dbUa.id = ua.id
-            dbUa.uuid = ua.uuid
             dbUa.name = ua.name
             dbUa.profile = ua.profile
             dbUa.avatarKey = ua.avatarKey

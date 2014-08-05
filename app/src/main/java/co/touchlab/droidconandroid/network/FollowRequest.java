@@ -14,5 +14,5 @@ public interface FollowRequest
 {
     @FormUrlEncoded
     @POST("/dataTest/follow")
-    Response follow(@Field("uuid") String uuid, @Field("otherId") Long otherId) throws TransientException, PermanentException;
+    Response follow(@Field("otherId") Long otherId) throws TransientException, PermanentException;
 }

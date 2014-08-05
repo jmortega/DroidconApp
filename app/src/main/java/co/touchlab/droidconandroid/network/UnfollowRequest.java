@@ -14,5 +14,5 @@ public interface UnfollowRequest
 {
     @FormUrlEncoded
     @POST("/dataTest/unfollow")
-    Response unfollow(@Field("uuid") String uuid, @Field("otherId") Long otherId) throws TransientException, PermanentException;
+    Response unfollow(@Field("otherId") Long otherId) throws TransientException, PermanentException;
 }

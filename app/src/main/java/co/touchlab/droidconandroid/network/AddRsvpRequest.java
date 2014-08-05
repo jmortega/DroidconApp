@@ -14,5 +14,5 @@ public interface AddRsvpRequest
 {
     @FormUrlEncoded
     @POST("/dataTest/rsvpEvent/{eventId}")
-    BasicIdResult addRsvp(@Path("eventId") Long eventId, @Field("uuid") String uuid, @Field("rsvpUuid") String rsvpUuid) throws TransientException, PermanentException;
+    BasicIdResult addRsvp(@Path("eventId") Long eventId, @Field("rsvpUuid") String rsvpUuid) throws TransientException, PermanentException;
 }

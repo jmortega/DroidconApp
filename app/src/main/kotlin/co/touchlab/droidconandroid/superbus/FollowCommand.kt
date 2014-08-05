@@ -31,7 +31,7 @@ open class FollowCommand(var otherId : Long? = null) : CheckedCommand()
         val userUuid = AppPrefs.getInstance(context).getUserUuid()
         if(userUuid != null)
         {
-            followRequest.follow(userUuid, otherId!!)
+            followRequest.follow(otherId!!)
         }
     }
 

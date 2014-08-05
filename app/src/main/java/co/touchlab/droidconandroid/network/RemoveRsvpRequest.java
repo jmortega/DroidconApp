@@ -14,5 +14,5 @@ public interface RemoveRsvpRequest
 {
     @FormUrlEncoded
     @POST("/dataTest/unRsvpEvent/{eventId}")
-    BasicIdResult removeRsvp(@Path("eventId") Long eventId, @Field("uuid") String uuid) throws TransientException, PermanentException;
+    BasicIdResult removeRsvp(@Path("eventId") Long eventId) throws TransientException, PermanentException;
 }

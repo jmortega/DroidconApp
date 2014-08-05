@@ -17,9 +17,6 @@ public class UserAccount
     public Long id;
 
     @DatabaseField
-    public String uuid;
-
-    @DatabaseField
     public String name;
 
     @DatabaseField
@@ -62,7 +59,6 @@ public class UserAccount
         if (profile != null ? !profile.equals(that.profile) : that.profile != null) return false;
         if (twitter != null ? !twitter.equals(that.twitter) : that.twitter != null) return false;
         if (userCode != null ? !userCode.equals(that.userCode) : that.userCode != null) return false;
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
         if (website != null ? !website.equals(that.website) : that.website != null) return false;
 
         return true;
@@ -72,7 +68,6 @@ public class UserAccount
     public int hashCode()
     {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (profile != null ? profile.hashCode() : 0);
         result = 31 * result + (avatarKey != null ? avatarKey.hashCode() : 0);

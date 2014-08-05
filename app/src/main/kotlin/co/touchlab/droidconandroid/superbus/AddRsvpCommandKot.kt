@@ -29,16 +29,14 @@ class AddRsvpCommandKot(var eventId : Long? = null, var rsvpUuid : String? = nul
         val restAdapter = DataHelper.makeRequestAdapter(context)
         val addRsvpRequest = restAdapter!!.create(javaClass<AddRsvpRequest>())
 
-
-        val userUuid = AppPrefs.getInstance(context).getUserUuid()
-        if(eventId != null && userUuid != null && rsvpUuid != null)
+        if(eventId != null  && rsvpUuid != null)
         {
-            val basicIdResult = addRsvpRequest!!.addRsvp(eventId!!, userUuid, rsvpUuid!!)
+            val basicIdResult = addRsvpRequest!!.addRsvp(eventId!!, rsvpUuid!!)
             Log.w("asdf", "Result id: " + basicIdResult!!.id)
         }
         else
         {
-            throw PermanentException("Some value is null: "+ eventId +"/"+ userUuid +"/"+ rsvpUuid)
+            throw PermanentException("Some value is null: "+ eventId +"/"+ rsvpUuid)
         }
     }
 

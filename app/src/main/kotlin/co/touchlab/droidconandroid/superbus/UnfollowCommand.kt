@@ -31,7 +31,7 @@ open class UnfollowCommand(var otherId : Long? = null) : CheckedCommand()
         val userUuid = AppPrefs.getInstance(context).getUserUuid()
         if(userUuid != null)
         {
-            unfollowRequest.unfollow(userUuid, otherId!!)
+            unfollowRequest.unfollow(otherId!!)
         }
     }
 
