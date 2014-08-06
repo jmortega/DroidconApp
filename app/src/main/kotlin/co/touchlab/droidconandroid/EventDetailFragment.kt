@@ -142,6 +142,8 @@ class EventDetailFragment() : Fragment()
             {
                 TaskQueue.execute(getActivity(), AddRsvpTaskKot(getActivity()!!, event.id))
             }
+            //Chage this if we have a tablet situation
+            getActivity()!!.finish()
         }
 
         speakerList!!.setAdapter(EventSpeakersAdapter(getActivity()!!, eventDetailTask.speakers!!))

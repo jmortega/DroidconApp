@@ -9,6 +9,7 @@ import co.touchlab.android.superbus.network.ConnectionChangeBusEventListener;
 import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.data.DatabaseHelper;
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot;
+import com.crashlytics.android.Crashlytics;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -19,6 +20,7 @@ public class DroidconApplication extends AbstractCommandPersistedApplication
     public void onCreate()
     {
         super.onCreate();
+        Crashlytics.start(this);
         DatabaseHelper.getInstance(this);
         if(AppPrefs.getInstance(this).isLoggedIn())
             CommandBusHelper.submitCommandAsync(this, new RefreshScheduleDataKot());

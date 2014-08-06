@@ -12,7 +12,6 @@ import retrofit.http.Path;
  */
 public interface RemoveRsvpRequest
 {
-    @FormUrlEncoded
     @POST("/dataTest/unRsvpEvent/{eventId}")
     BasicIdResult removeRsvp(@Path("eventId") Long eventId) throws TransientException, PermanentException;
 }

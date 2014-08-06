@@ -12,7 +12,8 @@ buildscript {
 }
 apply plugin: 'android'
 apply plugin: 'kotlin-android'
-//apply plugin: 'crashlytics'
+apply plugin: 'crashlytics'
+
 repositories {
     maven { url 'http://download.crashlytics.com/maven' }
     flatDir {
@@ -54,7 +55,7 @@ dependencies {
     compile 'com.android.support:support-v4:19.1.0'
     compile 'com.squareup.picasso:picasso:2.1.1'
     compile 'com.squareup.retrofit:retrofit:1.6.1'
-//    compile 'com.crashlytics.android:crashlytics:1.+'
+    compile 'com.crashlytics.android:crashlytics:1.+'
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.google.zxing:core:3.1.0'
     compile 'com.google.zxing:android-core:3.1.0'
