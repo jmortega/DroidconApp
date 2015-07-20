@@ -24,7 +24,7 @@ import co.touchlab.droidconandroid.tasks.AbstractLoginTask
 class EnterUuidActivity : FractivityAdapterActivity()
 {
 
-    class object
+    companion object
     {
         val REQUEST_CODE_RESOLVE_ERR = 9000
         public fun startMe(c: Context)
@@ -54,9 +54,9 @@ class EnterUuidActivity : FractivityAdapterActivity()
 
 class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAdapter(c, savedInstanceState)
 {
-    val mGoogleApiClient: GoogleApiClient
+    val mGoogleApiClient: GoogleApiClient?
 
-    {
+    init {
         c.setContentView(R.layout.activity_debug_enter_uuid)
         mGoogleApiClient = GoogleApiClient.Builder(c).addConnectionCallbacks(ConnectionCallbacksImpl())!!.addOnConnectionFailedListener(OnConnectionFailedListenerImpl())!!.addApi(Plus.API)!!.addScope(Plus.SCOPE_PLUS_LOGIN)!!.build()!!
 
@@ -93,19 +93,20 @@ class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAda
 
     fun googleClientConnect()
     {
-        mGoogleApiClient.connect()
+        mGoogleApiClient!!.connect()
     }
 
     private fun googleDisconnectIfConnected()
     {
-        if (mGoogleApiClient.isConnected())
+        if (mGoogleApiClient!!.isConnected())
             mGoogleApiClient.disconnect()
     }
 
     public fun forceGoogleConnect()
     {
         googleDisconnectIfConnected()
-        mGoogleApiClient.connect()
+        mGoogleApiClient!!.connect()
+
     }
 
     public inner class ConnectionCallbacksImpl() : GoogleApiClient.ConnectionCallbacks
@@ -145,7 +146,7 @@ class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAda
                 }
                 catch (e: IntentSender.SendIntentException)
                 {
-                    mGoogleApiClient.connect()
+                    mGoogleApiClient!!.connect()
                 }
 
             }

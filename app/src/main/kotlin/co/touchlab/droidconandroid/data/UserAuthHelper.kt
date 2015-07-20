@@ -10,7 +10,7 @@ import co.touchlab.droidconandroid.network.dao.LoginResult
  */
 class UserAuthHelper
 {
-    class object
+    companion object
     {
         fun processLoginResonse(c: Context, result: LoginResult): UserAccount
         {

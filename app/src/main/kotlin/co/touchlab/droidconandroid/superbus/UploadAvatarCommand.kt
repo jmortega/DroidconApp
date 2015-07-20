@@ -74,7 +74,7 @@ open class UploadAvatarCommand(val imageURL : String? = null) : CheckedCommand()
 /**
  * Remove reference to the avatar image.  For use after uploading new avatar.
  */
-class QuickClearAvatarTask(val userId: Long) : TaskQueue.Task
+class QuickClearAvatarTask(val userId: Long) : TaskQueue.Task()
 {
     override fun run(context: Context?)
     {

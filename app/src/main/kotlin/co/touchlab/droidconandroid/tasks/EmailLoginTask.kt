@@ -39,7 +39,7 @@ open class EmailLoginTask(val email: String, val name: String?, val password: St
 
 class GoogleLoginTask(val email: String, val name: String?, val imageURL: String?) : AbstractLoginTask()
 {
-    class object
+    companion object
     {
         val SCOPE: String = "audience:server:client_id:654878069390-0rs83f4a457ggmlln2jnmedv1b808bkv.apps.googleusercontent.com"
         val GOOGLE_LOGIN_COMPLETE: String = "GOOGLE_LOGIN_COMPLETE";
@@ -66,7 +66,7 @@ class GoogleLoginTask(val email: String, val name: String?, val imageURL: String
     }
 }
 
-abstract class AbstractLoginTask : TaskQueue.Task
+abstract class AbstractLoginTask : TaskQueue.Task()
 {
     var firstLogin: Boolean = false
 

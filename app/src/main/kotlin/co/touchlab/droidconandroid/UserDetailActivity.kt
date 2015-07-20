@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentActivity
  */
 class UserDetailActivity : FragmentActivity()
 {
-    class object
+    companion object
     {
         val USER_ID = "USER_ID"
         fun callMe(a: Activity, id: Long)

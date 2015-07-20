@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils
  */
 class TextHelper
 {
-    class object
+    companion object
     {
         fun findTagLinks(s: String): String
         {
@@ -15,7 +15,7 @@ class TextHelper
                 return ""
 
             val regex = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"
-            val result = s.replaceAll(regex, { match -> "<a href='" + match.group() + "'>" + match.group() + "</a>" })
+            val result = s.replace(regex.toRegex(), { match -> "<a href='" + match + "'>" + match + "</a>" })
             return result
         }
     }

@@ -8,7 +8,7 @@ import co.touchlab.android.threading.eventbus.EventBusExt
 /**
  * Created by kgalligan on 7/27/14.
  */
-class LocalUserDisplayNameTask(var displayName: String? = null) : TaskQueue.Task
+class LocalUserDisplayNameTask(var displayName: String? = null) : TaskQueue.Task()
 {
     override fun run(context: Context?)
     {

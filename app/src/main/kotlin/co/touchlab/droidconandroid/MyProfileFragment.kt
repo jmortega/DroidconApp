@@ -26,7 +26,7 @@ import android.view.View
  */
 class MyProfileFragment : Fragment()
 {
-    class object
+    companion object
     {
         fun newInstance(): MyProfileFragment
         {

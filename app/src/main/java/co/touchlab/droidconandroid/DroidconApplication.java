@@ -1,6 +1,11 @@
 package co.touchlab.droidconandroid;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.multidex.MultiDex;
+
+import com.crashlytics.android.Crashlytics;
+
 import co.touchlab.android.superbus.SuperbusConfig;
 import co.touchlab.android.superbus.appsupport.AbstractCommandPersistedApplication;
 import co.touchlab.android.superbus.appsupport.CommandBusHelper;
@@ -9,7 +14,6 @@ import co.touchlab.android.superbus.network.ConnectionChangeBusEventListener;
 import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.data.DatabaseHelper;
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot;
-import com.crashlytics.android.Crashlytics;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -36,5 +40,11 @@ public class DroidconApplication extends AbstractCommandPersistedApplication
     protected SQLiteDatabase getWritableDatabase()
     {
         return DatabaseHelper.getInstance(this).getWritableDatabase();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

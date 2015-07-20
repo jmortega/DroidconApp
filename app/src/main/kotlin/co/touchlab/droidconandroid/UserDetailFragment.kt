@@ -41,7 +41,7 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
     private var website: TextView? = null
     private var followToggle: Button? = null
 
-    class object
+    companion object
     {
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
         val USER_ID = "USER_ID"

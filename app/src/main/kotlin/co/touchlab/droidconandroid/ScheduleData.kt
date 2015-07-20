@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat
  */
 class ScheduleDataActivity : FragmentActivity()
 {
-    class object
+    companion object
     {
         val USER_ID = "USER_ID"
 
@@ -51,7 +51,7 @@ class ScheduleDataFragment() : Fragment()
     var eventList: ListView? = null
     var adapter: EventAdapter? = null
 
-    class object
+    companion object
     {
         val ALL_EVENTS = "ALL_EVENTS"
         fun newInstance(all: Boolean): ScheduleDataFragment

@@ -4,17 +4,13 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import co.touchlab.android.threading.tasks.TaskQueue;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by kgalligan on 8/3/14.
  */
-public class SendNewAvatar implements TaskQueue.Task
+public class SendNewAvatar extends TaskQueue.Task
 {
     private String path;
     private int width;

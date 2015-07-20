@@ -21,7 +21,7 @@ class EmailLoginActivity : Activity()
     var email: EditText? = null
     var password: EditText? = null
 
-    public class object
+    public companion  object
     {
         public fun startMe(c: Context)
         {

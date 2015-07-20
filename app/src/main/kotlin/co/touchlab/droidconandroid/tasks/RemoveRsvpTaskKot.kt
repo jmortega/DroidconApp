@@ -13,7 +13,7 @@ import co.touchlab.android.threading.eventbus.EventBusExt
  */
 class RemoveRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
 {
-    class object
+    companion object
     {
         public fun createTask(c : Context, event: Event)
         {
@@ -24,7 +24,7 @@ class RemoveRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
     {
         databaseHelper.performTransactionOrThrowRuntime(object : Callable<Void>
         {
-            throws(javaClass<Exception>())
+//            throws(javaClass<Exception>())
             override fun call(): Void?
             {
                 val dao = databaseHelper.getEventDao()

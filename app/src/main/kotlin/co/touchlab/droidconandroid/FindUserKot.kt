@@ -23,7 +23,7 @@ import android.graphics.Point
  */
 public class FindUserKot : FragmentActivity(), UserInfoUpdate
 {
-    class object
+    companion object
     {
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
         val USER_PREFIX: String = "user_"
@@ -62,7 +62,7 @@ public class FindUserKot : FragmentActivity(), UserInfoUpdate
             }
         })
 
-        findView(R.id.startScanner).setOnClickListener { (v) -> startScan() }
+        findView(R.id.startScanner).setOnClickListener { v -> startScan() }
     }
 
     fun startScan()

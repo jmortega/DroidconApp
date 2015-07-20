@@ -20,13 +20,13 @@ class FindUserTaskKot(val code: String) : AbstractFindUserTask()
     override fun doInBackground(context: Context?)
     {
 
-        handleData(context!!, { (): UserAccount? ->
+        handleData(context!!, fun(): UserAccount? {
             val databaseHelper = DatabaseHelper.getInstance(context)
-            UserAccount.findByCode(databaseHelper, code)
-        }, {(): UserInfoResponse? ->
+            return UserAccount.findByCode(databaseHelper, code)
+        }, fun(): UserInfoResponse? {
             val restAdapter = DataHelper.makeRequestAdapter(context)
             val findUserRequest = restAdapter!!.create(javaClass<FindUserRequest>())!!
-            findUserRequest.getUserInfo(code)
+            return findUserRequest.getUserInfo(code)
         })
     }
 }
@@ -37,17 +37,15 @@ class FindUserByIdTask(val id: Long) : AbstractFindUserTask()
 {
     override fun doInBackground(context: Context?)
     {
-        handleData(context!!, {(): UserAccount? ->
-            DatabaseHelper.getInstance(context).getUserAccountDao().queryForId(id)
-        }, {(): UserInfoResponse? ->
+        handleData(context!!, fun(): UserAccount? = DatabaseHelper.getInstance(context).getUserAccountDao().queryForId(id), fun(): UserInfoResponse? {
             val restAdapter = DataHelper.makeRequestAdapter(context)
             val findUserRequest = restAdapter!!.create(javaClass<SingleUserInfoRequest>())!!
-            findUserRequest.getUserInfo(id)
+            return findUserRequest.getUserInfo(id)
         })
     }
 }
 
-trait UserInfoUpdate
+interface UserInfoUpdate
 {
     fun showResult(findUserTask: AbstractFindUserTask)
 }
@@ -56,7 +54,7 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
 {
     public var user: UserAccount? = null
 
-    class object
+    companion object
     {
         fun saveUserResponse(context: Context, user: UserAccount?, response: UserInfoResponse): UserAccount?
         {

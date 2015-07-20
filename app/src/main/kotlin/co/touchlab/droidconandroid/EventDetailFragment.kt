@@ -39,7 +39,7 @@ class EventDetailFragment() : Fragment()
     private var speakerList: ListView? = null
     private var rsvpButton: Button? = null
 
-    class object
+    companion object
     {
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
         val EVENT_ID = "EVENT_ID"
@@ -149,7 +149,7 @@ class EventDetailFragment() : Fragment()
         speakerList!!.setAdapter(EventSpeakersAdapter(getActivity()!!, eventDetailTask.speakers!!))
 
 
-        speakerList!!.setOnItemClickListener { (adapterView, view, position, id) ->
+        speakerList!!.setOnItemClickListener { adapterView, view, position, id ->
             val userAccount = speakerList!!.getAdapter()!!.getItem(position) as UserAccount
             UserDetailActivity.callMe(getActivity()!!, userAccount.id!!)
         }

@@ -12,7 +12,7 @@ import co.touchlab.android.threading.eventbus.EventBusExt
  */
 class FollowToggleTask(c: Context, val otherId: Long) : DatabaseTaskKot(c)
 {
-    class object
+    companion object
     {
         public fun createTask(c: Context, otherId: Long)
         {

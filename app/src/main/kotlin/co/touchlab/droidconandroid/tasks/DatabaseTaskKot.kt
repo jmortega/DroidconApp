@@ -7,7 +7,7 @@ import android.content.Context
 /**
  * Created by kgalligan on 7/21/14.
  */
-abstract class DatabaseTaskKot(c: Context) : TaskQueue.Task
+abstract class DatabaseTaskKot(c: Context) : TaskQueue.Task()
 {
     val databaseHelper: DatabaseHelper = DatabaseHelper.getInstance(c)
 }

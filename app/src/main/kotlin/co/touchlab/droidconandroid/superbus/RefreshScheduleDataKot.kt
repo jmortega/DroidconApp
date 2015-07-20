@@ -44,7 +44,7 @@ open class RefreshScheduleDataKot : CheckedCommand()
         val databaseHelper = DatabaseHelper.getInstance(context)
         databaseHelper.performTransactionOrThrowRuntime (object : Callable<Void>
         {
-            throws(javaClass<Exception>())
+//            throws(javaClass<Exception>())
             override fun call(): Void?
             {
                 val eventDao = databaseHelper.getEventDao()

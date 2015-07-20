@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentActivity
  */
 class EventDetailActivity : FragmentActivity()
 {
-    class object
+    companion object
     {
         val EVENT_ID = "EVENT_ID"
         fun callMe(a: Activity, id: Long)

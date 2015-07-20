@@ -26,7 +26,7 @@ class UpdateUserProfileTask(c: Context, val name: String?,
         if (appPrefs.isLoggedIn())
         {
             databaseHelper.inTransaction {
-                () ->
+                ->
                 val dao = databaseHelper.getUserAccountDao()
                 val userAccount = dao.queryForId(appPrefs.getUserId())!!
                 userAccount.name = name

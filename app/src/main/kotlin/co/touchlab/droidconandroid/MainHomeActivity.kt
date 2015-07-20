@@ -17,7 +17,7 @@ import android.support.v4.view.PagerTabStrip
 
 class MainHomeActivity : FragmentActivity()
 {
-    class object
+    companion object
     {
         fun callMe(c: Activity)
         {

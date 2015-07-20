@@ -9,7 +9,7 @@ import android.view.View
 
 public class MyActivity : Activity()
 {
-    public class object
+    public companion object
     {
         public fun startMe(c : Context)
         {

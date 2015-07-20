@@ -12,7 +12,7 @@ import java.io.FileWriter
  */
 class CacheHelper
 {
-    class object
+    companion object
     {
         synchronized fun findFile(c: Context, name: String): String?
         {
