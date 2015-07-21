@@ -27,7 +27,7 @@ public class DataHelper
 
     public static RestAdapter.Builder makeRequestAdapterBuilder(Context context)
     {
-        return makeRequestAdapterBuilder(context, new RetrofitBusErrorHandler());
+        return makeRequestAdapterBuilder(context, null);
     }
 
     @NotNull

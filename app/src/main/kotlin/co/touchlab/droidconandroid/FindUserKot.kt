@@ -2,7 +2,6 @@ package co.touchlab.droidconandroid
 
 import android.app.Activity
 import android.widget.EditText
-import co.touchlab.android.threading.tasks.BsyncTaskManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,18 +9,20 @@ import android.view.View
 import co.touchlab.droidconandroid.tasks.FindUserTaskKot
 import co.touchlab.droidconandroid.utils.Toaster
 import android.view.MenuItem
-import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import org.apache.commons.lang3.StringUtils
 import com.google.zxing.integration.android.IntentIntegrator
 import android.graphics.Point
+import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.android.threading.tasks.TaskQueue
+import co.touchlab.android.threading.tasks.sticky.StickyTaskManager
 
 /**
  * Created by kgalligan on 7/26/14.
  */
-public class FindUserKot : FragmentActivity(), UserInfoUpdate
+public class FindUserKot : FragmentActivity()
 {
     companion object
     {
@@ -35,7 +36,7 @@ public class FindUserKot : FragmentActivity(), UserInfoUpdate
     }
 
     private var userCode: EditText? = null
-    private var bsyncTaskManager: BsyncTaskManager<Activity>? = null
+    private var stickyTaskManager: StickyTaskManager? = null
 
     public fun callMe(c: Context)
     {
@@ -43,12 +44,11 @@ public class FindUserKot : FragmentActivity(), UserInfoUpdate
         c.startActivity(i)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?)
+    override fun onCreate(savedInstanceState: Bundle)
     {
         super<FragmentActivity>.onCreate(savedInstanceState)
 
-        bsyncTaskManager = BsyncTaskManager(savedInstanceState)
-        bsyncTaskManager!!.register(this)
+        stickyTaskManager = StickyTaskManager(savedInstanceState)
 
         setContentView(R.layout.activity_find_user)
         userCode = findViewById(R.id.userCode) as EditText
@@ -58,11 +58,18 @@ public class FindUserKot : FragmentActivity(), UserInfoUpdate
             override fun onClick(v: View)
             {
                 val userCodeVal = userCode!!.getText().toString()
-                bsyncTaskManager!!.post(this@FindUserKot, FindUserTaskKot(userCodeVal))
+                TaskQueue.loadQueueDefault(this@FindUserKot).execute(FindUserTaskKot(userCodeVal))
             }
         })
 
         findView(R.id.startScanner).setOnClickListener { v -> startScan() }
+
+        EventBusExt.getDefault().register(this)
+    }
+
+    override fun onDestroy() {
+        super<FragmentActivity>.onDestroy()
+        EventBusExt.getDefault().unregister(this)
     }
 
     fun startScan()
@@ -99,16 +106,10 @@ public class FindUserKot : FragmentActivity(), UserInfoUpdate
     override fun onSaveInstanceState(outState: Bundle)
     {
         super<FragmentActivity>.onSaveInstanceState(outState)
-        bsyncTaskManager!!.onSaveInstanceState(outState)
+        stickyTaskManager!!.onSaveInstanceState(outState)
     }
 
-    override fun onDestroy()
-    {
-        super<FragmentActivity>.onDestroy()
-        bsyncTaskManager!!.unregister()
-    }
-
-    override fun showResult(findUserTask: AbstractFindUserTask)
+    public fun onEventMainThread(findUserTask: AbstractFindUserTask)
     {
         val userId = findUserTask.user?.id
         if (findUserTask.isError() || userId == null)

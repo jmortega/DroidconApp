@@ -10,6 +10,7 @@ import co.touchlab.droidconandroid.network.SingleUserInfoRequest
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.android.threading.tasks.Task
 import co.touchlab.droidconandroid.data.UserAuthHelper
 
 /**
@@ -17,9 +18,7 @@ import co.touchlab.droidconandroid.data.UserAuthHelper
  */
 class FindUserTaskKot(val code: String) : AbstractFindUserTask()
 {
-    override fun doInBackground(context: Context?)
-    {
-
+    override fun run(context: Context?) {
         handleData(context!!, fun(): UserAccount? {
             val databaseHelper = DatabaseHelper.getInstance(context)
             return UserAccount.findByCode(databaseHelper, code)
@@ -35,8 +34,7 @@ data class FindUserResponse(val user: UserAccount)
 
 class FindUserByIdTask(val id: Long) : AbstractFindUserTask()
 {
-    override fun doInBackground(context: Context?)
-    {
+    override fun run(context: Context?) {
         handleData(context!!, fun(): UserAccount? = DatabaseHelper.getInstance(context).getUserAccountDao().queryForId(id), fun(): UserInfoResponse? {
             val restAdapter = DataHelper.makeRequestAdapter(context)
             val findUserRequest = restAdapter!!.create(javaClass<SingleUserInfoRequest>())!!
@@ -45,14 +43,10 @@ class FindUserByIdTask(val id: Long) : AbstractFindUserTask()
     }
 }
 
-interface UserInfoUpdate
-{
-    fun showResult(findUserTask: AbstractFindUserTask)
-}
-
-abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>()
+abstract class AbstractFindUserTask() : Task()
 {
     public var user: UserAccount? = null
+    public var errorStringCode: Int? = null
 
     companion object
     {
@@ -73,14 +67,16 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
 
     }
 
-    override fun onPostExecute(host: UserInfoUpdate?)
+    public fun isError():Boolean
     {
-        val userInfoUpdate = host as UserInfoUpdate
-        userInfoUpdate.showResult(this)
+        return errorStringCode != null
     }
 
-    override fun handleError(e: Exception?): Boolean
-    {
+    override fun onComplete(context: Context?) {
+        EventBusExt.getDefault()!!.post(this)
+    }
+
+    override fun handleError(context: Context?, e: Throwable?): Boolean {
         return false
     }
 
@@ -102,7 +98,7 @@ abstract class AbstractFindUserTask() : LiveNetworkBsyncTaskKot<UserInfoUpdate>(
 
                 if (updatedUser == null)
                 {
-                    cancelPost()
+//                    cancelPost()
                 }
                 else
                 {

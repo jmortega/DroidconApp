@@ -126,7 +126,7 @@ class EnterUuidAdapter(c: Activity, savedInstanceState: Bundle?) : FractivityAda
                 }
             }
 
-            TaskQueue.execute(c, GoogleLoginTask(accountName!!, person?.getDisplayName(), imageURL))
+            TaskQueue.loadQueueDefault(c).execute(GoogleLoginTask(accountName!!, person?.getDisplayName(), imageURL))
         }
 
         override fun onConnectionSuspended(i: Int)

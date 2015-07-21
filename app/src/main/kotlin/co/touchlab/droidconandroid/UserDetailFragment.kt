@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import co.touchlab.droidconandroid.tasks.UserInfoUpdate
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import co.touchlab.droidconandroid.utils.Toaster
 import android.text.TextUtils
@@ -23,13 +22,14 @@ import android.support.v4.app.LoaderManager
 import co.touchlab.droidconandroid.data.UserAccount
 import android.support.v4.content.Loader
 import android.support.v4.app.LoaderManager.LoaderCallbacks
+import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.loaders.networked.DoubleTapResult
 import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
 
 /**
  * Created by kgalligan on 7/27/14.
  */
-class UserDetailFragment() : Fragment(), UserInfoUpdate
+class UserDetailFragment() : Fragment()
 {
     private var userAvatar: ImageView? = null
     private var userName: TextView? = null
@@ -56,6 +56,16 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
 
             return f
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        EventBusExt.getDefault().register(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBusExt.getDefault().unregister(this)
     }
 
     private fun findUserIdArg(): Long
@@ -145,7 +155,7 @@ class UserDetailFragment() : Fragment(), UserInfoUpdate
         return view
     }
 
-    override fun showResult(findUserTask: AbstractFindUserTask)
+    public fun onEventMainThread(findUserTask: AbstractFindUserTask)
     {
         if (findUserTask.isError())
         {

@@ -33,16 +33,47 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField "int", "CONVENTION_ID", "50"
+        buildConfigField "int", "CONVENTION_ID", "900"
 
         multiDexEnabled true
     }
+
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        staging{
+            storeFile file("release.jks")
+            keyAlias "android"
+            storePassword "80smovies"
+            keyPassword "80smovies"
+        }
+        release {
+            storeFile file("release.jks")
+            keyAlias "android"
+            storePassword "80smovies"
+            keyPassword "80smovies"
+        }
+    }
+
     buildTypes {
+        staging {
+            debuggable true
+            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'

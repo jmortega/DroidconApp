@@ -39,12 +39,12 @@ class EmailLoginActivity : Activity()
         password = findView(R.id.password) as EditText
 
         findView(R.id.goButton).setOnClickListener { v ->
-            TaskQueue.execute(this, EmailLoginTask(email!!.getText().toString(), name!!.getText().toString(), password!!.getText().toString()))
+            TaskQueue.loadQueueDefault(this).execute(EmailLoginTask(email!!.getText().toString(), name!!.getText().toString(), password!!.getText().toString()))
         }
 
         EventBusExt.getDefault()!!.register(this)
 
-        TaskQueue.execute(this, LocalUserDisplayNameTask())
+        TaskQueue.loadQueueDefault(this).execute(LocalUserDisplayNameTask())
     }
 
     override fun onDestroy()

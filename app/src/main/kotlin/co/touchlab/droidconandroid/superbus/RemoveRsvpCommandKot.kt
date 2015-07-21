@@ -4,6 +4,7 @@ import co.touchlab.android.superbus.CheckedCommand
 import co.touchlab.android.superbus.errorcontrol.PermanentException
 import co.touchlab.android.superbus.Command
 import android.content.Context
+import android.util.Log
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.network.RemoveRsvpRequest
@@ -42,6 +43,7 @@ open class RemoveRsvpCommandKot(var eventId : Long? = null) : CheckedCommand()
 
     override fun handlePermanentError(context: Context, exception: PermanentException): Boolean
     {
-        return false
+        Log.w("asdf", "Whoops", exception);
+        return true;
     }
 }

@@ -5,12 +5,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import co.touchlab.android.threading.tasks.Task;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by kgalligan on 8/3/14.
  */
-public class SendNewAvatar extends TaskQueue.Task
+public class SendNewAvatar extends Task
 {
     private String path;
     private int width;
@@ -89,6 +90,12 @@ public class SendNewAvatar extends TaskQueue.Task
         }*/
     }
 
+    @Override
+    protected boolean handleError(Context context, Throwable e)
+    {
+        return false;
+    }
+
     private Bitmap scaleBitmap(String path)
     {
         int length = width;
@@ -129,10 +136,4 @@ public class SendNewAvatar extends TaskQueue.Task
         return inSampleSize;
     }
 
-
-    @Override
-    public boolean handleError(Exception e)
-    {
-        return false;
-    }
 }

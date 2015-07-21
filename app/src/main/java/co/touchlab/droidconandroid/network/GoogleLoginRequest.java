@@ -14,5 +14,5 @@ public interface GoogleLoginRequest
 {
     @FormUrlEncoded
     @POST("/deviceAuth/loginUser")
-    LoginResult login(@Field("googleToken") String googleToken, @Field("name") String name) throws TransientException, PermanentException;
+    LoginResult login(@Field("googleToken") String googleToken, @Field("name") String name) throws Exception;
 }

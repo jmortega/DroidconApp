@@ -42,6 +42,7 @@ class AddRsvpCommandKot(var eventId : Long? = null, var rsvpUuid : String? = nul
 
     override fun handlePermanentError(context: Context, exception: PermanentException): Boolean
     {
-        return false
+        Log.w("asdf", "Whoops", exception);
+        return true;
     }
 }

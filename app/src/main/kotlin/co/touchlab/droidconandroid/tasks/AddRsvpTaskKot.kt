@@ -14,11 +14,15 @@ import co.touchlab.android.threading.eventbus.EventBusExt
  */
 open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
 {
+    override fun handleError(context: Context?, e: Throwable?): Boolean {
+        throw UnsupportedOperationException()
+    }
+
     companion object
     {
         public fun createTask(c : Context, event: Event)
         {
-            TaskQueue.execute(c, AddRsvpTaskKot(c, event.id))
+            TaskQueue.loadQueueDefault(c).execute(AddRsvpTaskKot(c, event.id))
         }
     }
     override fun run(context: Context?)
@@ -44,8 +48,5 @@ open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
 
         EventBusExt.getDefault()!!.post(this);
     }
-    override fun handleError(e: Exception?): Boolean
-    {
-        throw UnsupportedOperationException()
-    }
+
 }

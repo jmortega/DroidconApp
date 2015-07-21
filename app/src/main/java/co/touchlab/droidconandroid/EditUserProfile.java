@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
@@ -33,7 +32,6 @@ import co.touchlab.droidconandroid.tasks.UpdateUserProfileTask;
 import co.touchlab.droidconandroid.utils.Toaster;
 import co.touchlab.profilephotoeditor.BitmapUtils;
 import co.touchlab.profilephotoeditor.CameraUtils;
-import co.touchlab.profilephotoeditor.PhotoPickActivity;
 import co.touchlab.profilephotoeditor.PhotoScaleActivity;
 import com.squareup.picasso.Picasso;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +40,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class EditUserProfile extends BsyncActivity implements GrabUserProfile.UserProfileUpdate
+public class EditUserProfile extends StickyTaskManagerActivity
 {
     public static final String HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES = "https://s3.amazonaws.com/droidconimages/";
     private EditText myName;
@@ -104,12 +102,12 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
     private void refreshProfile()
     {
         AppPrefs appPrefs = AppPrefs.getInstance(this);
-        bsyncTaskManager.post(this, new GrabUserProfile(appPrefs.getUserId()));
+        TaskQueue.loadQueueDefault(this).execute(new GrabUserProfile(appPrefs.getUserId()));
     }
 
     private void saveProfile()
     {
-        TaskQueue.execute(this, new UpdateUserProfileTask(
+        TaskQueue.loadQueueDefault(this).execute(new UpdateUserProfileTask(
                 this,
                 myName.getText().toString(),
                 myProfile.getText().toString(),
@@ -121,7 +119,11 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
         finish();
     }
 
-    @Override
+    public void onEventMainThread(GrabUserProfile grabUserProfile)
+    {
+        profile(grabUserProfile.userAccount);
+    }
+
     public void profile(UserAccount ua)
     {
         //This is a little shitty.  Assuming an empty code means we haven't
@@ -315,7 +317,7 @@ public class EditUserProfile extends BsyncActivity implements GrabUserProfile.Us
 
     public void photoEditComplete(String path)
     {
-        TaskQueue.execute(this, new QuickClearAvatarTask(AppPrefs.getInstance(this).getUserId()));
+        TaskQueue.loadQueueDefault(this).execute(new QuickClearAvatarTask(AppPrefs.getInstance(this).getUserId()));
         refreshProfile();
         CommandBusHelper.submitCommandAsync(this, new UploadAvatarCommand(path));
         Toaster.showMessage(this, "Photo updating.  May take a bit...");

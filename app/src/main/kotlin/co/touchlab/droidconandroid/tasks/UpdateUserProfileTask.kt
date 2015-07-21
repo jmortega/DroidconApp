@@ -1,6 +1,7 @@
 package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
+import android.util.Log
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import co.touchlab.android.superbus.CheckedCommand
@@ -20,6 +21,10 @@ class UpdateUserProfileTask(c: Context, val name: String?,
                             val linkedIn: String?,
                             val website: String?) : DatabaseTaskKot(c)
 {
+    override fun handleError(context: Context?, e: Throwable?): Boolean {
+        return false
+    }
+
     override fun run(context: Context?)
     {
         val appPrefs = AppPrefs.getInstance(context)
@@ -40,17 +45,15 @@ class UpdateUserProfileTask(c: Context, val name: String?,
             }
         }
     }
-    override fun handleError(e: Exception?): Boolean
-    {
-        return false
-    }
+
 }
 
 class UpdateUserProfileCommand() : CheckedCommand()
 {
     override fun handlePermanentError(context: Context, exception: PermanentException): Boolean
     {
-        throw UnsupportedOperationException()
+        Log.w("asdf", "Whoops", exception);
+        return true;
     }
     override fun logSummary(): String?
     {

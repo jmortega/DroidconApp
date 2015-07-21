@@ -12,11 +12,15 @@ import co.touchlab.android.threading.eventbus.EventBusExt
  */
 class FollowToggleTask(c: Context, val otherId: Long) : DatabaseTaskKot(c)
 {
+    override fun handleError(context: Context?, e: Throwable?): Boolean {
+        return false
+    }
+
     companion object
     {
         public fun createTask(c: Context, otherId: Long)
         {
-            TaskQueue.execute(c, FollowToggleTask(c, otherId))
+            TaskQueue.loadQueueDefault(c).execute(FollowToggleTask(c, otherId))
         }
     }
 
@@ -40,10 +44,5 @@ class FollowToggleTask(c: Context, val otherId: Long) : DatabaseTaskKot(c)
             EventBusExt.getDefault()!!.post(this);
         }
 
-    }
-
-    override fun handleError(e: Exception?): Boolean
-    {
-        return false
     }
 }

@@ -12,6 +12,8 @@ import co.touchlab.droidconandroid.data.UserAuthHelper
 import com.google.android.gms.auth.GoogleAuthUtil
 import co.touchlab.droidconandroid.network.GoogleLoginRequest
 import android.text.TextUtils
+import android.util.Log
+import co.touchlab.android.threading.tasks.Task
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import org.apache.commons.lang3.StringUtils
 import co.touchlab.droidconandroid.network.dao.LoginResult
@@ -21,6 +23,11 @@ import co.touchlab.droidconandroid.network.dao.LoginResult
  */
 open class EmailLoginTask(val email: String, val name: String?, val password: String?) : AbstractLoginTask()
 {
+    override fun handleError(context: Context?, e: Throwable?): Boolean {
+        Log.w("dude", "dude2", e);
+        return false
+    }
+
     override fun run(context: Context?)
     {
         val restAdapter = DataHelper.makeRequestAdapter(context)
@@ -31,17 +38,18 @@ open class EmailLoginTask(val email: String, val name: String?, val password: St
 
         EventBusExt.getDefault()!!.post(this);
     }
-    override fun handleError(e: Exception?): Boolean
-    {
-        return false
-    }
 }
 
 class GoogleLoginTask(val email: String, val name: String?, val imageURL: String?) : AbstractLoginTask()
 {
+    override fun handleError(context: Context?, e: Throwable?): Boolean {
+        Log.w("dude", "dude2", e);
+        return false
+    }
+
     companion object
     {
-        val SCOPE: String = "audience:server:client_id:654878069390-0rs83f4a457ggmlln2jnmedv1b808bkv.apps.googleusercontent.com"
+        val SCOPE: String = "audience:server:client_id:654878069390-ft2vt5sp4v0pcfk4poausabjnah0aeod.apps.googleusercontent.com"
         val GOOGLE_LOGIN_COMPLETE: String = "GOOGLE_LOGIN_COMPLETE";
         val GOOGLE_LOGIN_UUID: String = "GOOGLE_LOGIN_UUID";
     }
@@ -60,13 +68,10 @@ class GoogleLoginTask(val email: String, val name: String?, val imageURL: String
         EventBusExt.getDefault()!!.post(this);
     }
 
-    override fun handleError(e: Exception?): Boolean
-    {
-        return false
-    }
+
 }
 
-abstract class AbstractLoginTask : TaskQueue.Task()
+abstract class AbstractLoginTask : Task()
 {
     var firstLogin: Boolean = false
 

@@ -11,6 +11,10 @@ import co.touchlab.android.threading.eventbus.EventBusExt
  */
 open class EventDetailLoadTask(c: Context, val eventId: Long) : DatabaseTaskKot(c)
 {
+    override fun handleError(context: Context?, e: Throwable?): Boolean {
+        return false
+    }
+
     var event: Event? = null
     var speakers: MutableList<UserAccount>? = null
 
@@ -30,10 +34,5 @@ open class EventDetailLoadTask(c: Context, val eventId: Long) : DatabaseTaskKot(
         }
 
         EventBusExt.getDefault()?.post(this)
-    }
-
-    override fun handleError(e: Exception?): Boolean
-    {
-        return false
     }
 }

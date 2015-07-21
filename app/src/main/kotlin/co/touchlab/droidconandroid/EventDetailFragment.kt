@@ -102,7 +102,7 @@ class EventDetailFragment() : Fragment()
 
     private fun startDetailRefresh()
     {
-        TaskQueue.execute(getActivity(), EventDetailLoadTask(getActivity()!!, findEventIdArg()))
+        TaskQueue.loadQueueDefault(getActivity()).execute(EventDetailLoadTask(getActivity()!!, findEventIdArg()))
     }
 
     public fun onEventMainThread(eventDetailTask: EventDetailLoadTask)
@@ -136,11 +136,11 @@ class EventDetailFragment() : Fragment()
         rsvpButton!!.setOnClickListener { v ->
             if (event.isRsvped())
             {
-                TaskQueue.execute(getActivity(), RemoveRsvpTaskKot(getActivity()!!, event.id))
+                TaskQueue.loadQueueDefault(getActivity()).execute( RemoveRsvpTaskKot(getActivity()!!, event.id))
             }
             else
             {
-                TaskQueue.execute(getActivity(), AddRsvpTaskKot(getActivity()!!, event.id))
+                TaskQueue.loadQueueDefault(getActivity()).execute(AddRsvpTaskKot(getActivity()!!, event.id))
             }
             //Chage this if we have a tablet situation
             getActivity()!!.finish()

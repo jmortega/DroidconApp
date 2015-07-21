@@ -10,6 +10,7 @@ import co.touchlab.droidconandroid.data.DatabaseHelper
 import java.text.SimpleDateFormat
 import co.touchlab.droidconandroid.BuildConfig
 import android.database.SQLException
+import android.util.Log
 import java.text.ParseException
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.data.EventSpeaker
@@ -127,6 +128,7 @@ open class RefreshScheduleDataKot : CheckedCommand()
 
     override fun handlePermanentError(context: Context, exception: PermanentException): Boolean
     {
-        return false
+        Log.w("asdf", "Whoops", exception);
+        return true;
     }
 }
