@@ -2,4 +2,38 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="drawer_width">240dp</dimen>
+    <dimen name="status_bar_height">25dip</dimen>
+
+    <dimen name="padding_micro">2dp</dimen>
+    <dimen name="padding_tiny">4dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_wedge">12dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="padding_xlarge">32dp</dimen>
+    <dimen name="padding_xxlarge">48dp</dimen>
+
+    <dimen name="height_xxtiny">24dp</dimen>
+    <dimen name="height_xtiny">32dp</dimen>
+    <dimen name="height_tiny">36dp</dimen>
+    <dimen name="height_small">48dp</dimen>
+    <dimen name="height_medium">56dp</dimen>
+    <dimen name="height_large">64dp</dimen>
+    <dimen name="height_xlarge">72dp</dimen>
+    <dimen name="height_xxlarge">80dp</dimen>
+
+    <dimen name="text_xxtiny">8sp</dimen>
+    <dimen name="text_xtiny">10sp</dimen>
+    <dimen name="text_tiny">12sp</dimen>
+    <dimen name="text_small">14sp</dimen>
+    <dimen name="text_medium">16sp</dimen>
+    <dimen name="text_large">18sp</dimen>
+    <dimen name="text_xlarge">24sp</dimen>
+    <dimen name="text_xxlarge">28sp</dimen>
+    <dimen name="text_xxxlarge">32sp</dimen>
+    <dimen name="text_xxxxlarge">36sp</dimen>
+    <dimen name="text_huge">48sp</dimen>
+    <dimen name="text_xhuge">64sp</dimen>
+
 </resources>
