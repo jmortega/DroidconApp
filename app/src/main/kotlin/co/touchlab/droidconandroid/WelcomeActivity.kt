@@ -83,8 +83,6 @@ public class WelcomeActivity : AppCompatActivity()
                 }
             }
         }
-
-
     }
 }
 
@@ -95,6 +93,7 @@ class WelcomePagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapt
             0 -> return WelcomeFragment.newInstance(R.color.droidcon_green, R.drawable.welcome_0, R.color.white, R.string.welcome_0_title, R.string.welcome_0_desc)
             1 -> return WelcomeFragment.newInstance(R.color.droidcon_pink, R.drawable.welcome_1, R.color.white, R.string.welcome_1_title, R.string.welcome_1_desc)
             2 -> return WelcomeFragment.newInstance(R.color.droidcon_blue, R.drawable.welcome_2, R.color.white, R.string.welcome_2_title, R.string.welcome_2_desc)
+//            todo add correct image
             3 -> return WelcomeFragment.newInstance(android.R.color.white, R.drawable.welcome_2, R.color.orange, R.string.welcome_3_title, R.string.welcome_3_desc)
         }
         throw IllegalStateException("Too many fragments")
