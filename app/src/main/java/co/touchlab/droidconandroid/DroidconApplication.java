@@ -1,8 +1,6 @@
 package co.touchlab.droidconandroid;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -42,9 +40,4 @@ public class DroidconApplication extends AbstractCommandPersistedApplication
         return DatabaseHelper.getInstance(this).getWritableDatabase();
     }
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
 }

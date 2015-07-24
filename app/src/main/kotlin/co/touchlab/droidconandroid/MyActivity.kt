@@ -2,10 +2,11 @@ package co.touchlab.droidconandroid
 
 import android.app.Activity
 import android.content.Context
-import android.os.Bundle
 import android.content.Intent
-import co.touchlab.droidconandroid.data.AppPrefs
+import android.os.Bundle
 import android.view.View
+import android.webkit.WebView
+import co.touchlab.droidconandroid.data.AppPrefs
 
 public class MyActivity : Activity()
 {
@@ -22,7 +23,13 @@ public class MyActivity : Activity()
     {
         super.onCreate(savedInstanceState)
 
-        if (!AppPrefs.getInstance(this).isLoggedIn())
+
+        if (!AppPrefs.getInstance(this).getHasSeenWelcome())
+        {
+            startActivity(WelcomeActivity.getLaunchIntent(this@MyActivity))
+            finish()
+        }
+        else if (!AppPrefs.getInstance(this).isLoggedIn())
         {
             EnterUuidActivity.startMe(this@MyActivity)
             finish()

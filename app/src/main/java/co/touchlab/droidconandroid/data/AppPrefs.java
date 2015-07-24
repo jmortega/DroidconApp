@@ -11,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 public class AppPrefs
 {
     public static final String USER_UUID = "USER_UUID";
-    public static final String USER_ID = "USER_ID";
+    public static final String USER_ID   = "USER_ID";
+    public static final String SEEN_WELCOME = "seen_welcome";
     private static AppPrefs instance;
 
     private SharedPreferences prefs;
@@ -19,7 +20,7 @@ public class AppPrefs
     @NotNull
     public static synchronized AppPrefs getInstance(Context context)
     {
-        if (instance == null)
+        if(instance == null)
         {
             instance = new AppPrefs();
             instance.prefs = context.getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
@@ -35,22 +36,74 @@ public class AppPrefs
 
     public String getUserUuid()
     {
-        return prefs.getString(USER_UUID, null);
+        return getString(USER_UUID, null);
     }
 
     public void setUserUuid(String uuid)
     {
-        prefs.edit().putString(USER_UUID, uuid).apply();
+        setString(USER_UUID, uuid);
     }
 
     public Long getUserId()
     {
-        long id = prefs.getLong(USER_ID, -1);
+        long id = getLong(USER_ID, - 1l);
         return id == -1 ? null : id;
     }
 
     public void setUserId(Long id)
     {
-        prefs.edit().putLong(USER_ID, id).apply();
+        setLong(USER_ID, id);
+    }
+
+    public boolean getHasSeenWelcome()
+    {
+        return getBoolean(SEEN_WELCOME, false);
+    }
+
+    public void setHasSeenWelcome()
+    {
+        setBoolean(SEEN_WELCOME, true);
+    }
+
+
+    //helper methods
+    private void setBoolean(String key, Boolean value)
+    {
+        prefs.edit().putBoolean(key, value).apply();
+    }
+
+    private Boolean getBoolean(String key, Boolean defaultVal)
+    {
+        return prefs.getBoolean(key, defaultVal);
+    }
+
+    private void setString(String key, String value)
+    {
+        prefs.edit().putString(key, value).apply();
+    }
+
+    private String getString(String key, String defaultVal)
+    {
+        return prefs.getString(key, defaultVal);
+    }
+
+    private void setInt(String key, Integer value)
+    {
+        prefs.edit().putInt(key, value).apply();
+    }
+
+    private Integer getInt(String key, Integer defaultVal)
+    {
+        return prefs.getInt(key, defaultVal);
+    }
+
+    private void setLong(String key, Long value)
+    {
+        prefs.edit().putLong(key, value).apply();
+    }
+
+    private Long getLong(String key, Long defaultVal)
+    {
+        return prefs.getLong(key, defaultVal);
     }
 }

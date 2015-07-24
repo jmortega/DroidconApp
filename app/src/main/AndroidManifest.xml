@@ -66,6 +66,10 @@
             android:name=".EventDetailActivity"
             android:label="Event Detail" />
         <activity
+            android:name=".WelcomeActivity"
+            android:theme="@style/NoActionBar.TransparentStatusBar"
+            android:label="Welcome" />
+        <activity
             android:name=".EditUserProfile"
             android:label="@string/title_activity_edit_user_profile"></activity>
         <meta-data android:name="com.crashlytics.ApiKey" android:value="90b5b9675372e1f2aff36d43ea5d6869040d37f3"/>
