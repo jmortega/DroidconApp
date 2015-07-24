@@ -34,6 +34,6 @@
     <color name="sign_in_primary">#26c6da</color>
     <color name="sign_in_primary_dark">#00bcd4</color>
     <color name="bg_gray">#f5f5f5</color>
-    <color name="sign_in_text_dark">#008094</color>
+    <color name="sign_in_text_dark">#00951E</color>
     <color name="sign_in_text_light">#757575</color>
 </resources>
