@@ -5,8 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <!-- <string name="base_url">http://192.168.0.104:9000/</string> -->
-    <!--<string name="base_url">http://192.168.1.193:9000/</string>-->
-    <string name="base_url">http://192.168.2.3:9000/</string>
+    <string name="base_url">http://192.168.1.193:9000/</string>
+    <!--<string name="base_url">http://192.168.2.3:9000/</string>-->
     <!--<string name="base_url">http://droidcon-server.herokuapp.com/</string>-->
     <string name="title_activity_debug_enter_uuid">DebugEnterUuid</string>
     <string name="title_activity_debug_schedule_display">DebugScheduleDisplayActivity</string>
@@ -31,5 +31,9 @@
     <string name="welcome_3_desc">Sponsors are cool.</string>
     <string name="next">Next</string>
     <string name="lets_go">Let\'s go!</string>
+    <string name="select_an_account">Select an account</string>
+    <string name="choose_account">Please choose an account to use:</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

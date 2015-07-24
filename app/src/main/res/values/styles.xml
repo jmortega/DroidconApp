@@ -3,9 +3,14 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
     </style>
 
-    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/sign_in_primary</item>
+        <item name="colorPrimaryDark">@color/sign_in_primary_dark</item>
+    </style>
 
     <style name="NoActionBar.TransparentStatusBar" parent="NoActionBar">
         <!-- todo transparent status bar pre-lollipop-->
