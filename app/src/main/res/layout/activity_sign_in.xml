@@ -94,7 +94,7 @@
                 android:enabled="false"
                 android:padding="@dimen/padding_small"
                 android:text="@string/ok"
-                android:textColor="@color/sign_in_text_light"/>
+                android:textColor="@color/selectable_text"/>
         </LinearLayout>
     </LinearLayout>
 
