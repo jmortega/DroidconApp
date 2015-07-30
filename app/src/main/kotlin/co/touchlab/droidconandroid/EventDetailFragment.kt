@@ -170,8 +170,8 @@ class EventDetailFragment() : Fragment()
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View?
         {
             var view = if (convertView == null)LayoutInflater.from(getActivity()!!).inflate(R.layout.list_user_summary, null) else convertView
-            val avatarView = view!!.findView(R.id.userAvatar) as ImageView
-            val userName = view!!.findView(R.id.userName) as TextView
+            val avatarView = view!!.findView(R.id.profile_image) as ImageView
+            val userName = view!!.findView(R.id.name) as TextView
 
             val userAccount = getItem(position)!!
             if (!TextUtils.isEmpty(userAccount.avatarKey))

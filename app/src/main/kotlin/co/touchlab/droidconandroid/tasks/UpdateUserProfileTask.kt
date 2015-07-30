@@ -19,7 +19,12 @@ class UpdateUserProfileTask(c: Context, val name: String?,
                             val company: String?,
                             val twitter: String?,
                             val linkedIn: String?,
-                            val website: String?) : DatabaseTaskKot(c)
+                            val website: String?,
+                            val phoneticName: String?,
+                            val nickname: String?,
+                            val phone: String?,
+                            val email: String?,
+                            val gPlus: String?) : DatabaseTaskKot(c)
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {
         return false
@@ -40,6 +45,11 @@ class UpdateUserProfileTask(c: Context, val name: String?,
                 userAccount.twitter = twitter
                 userAccount.linkedIn = linkedIn
                 userAccount.website = website
+                userAccount.phoneticName = phoneticName
+                userAccount.nickname = nickname
+                userAccount.phone = phone
+                userAccount.email = email
+                userAccount.gPlus = gPlus
                 dao.createOrUpdate(userAccount)
                 CommandBusHelper.submitCommandSync(context, UpdateUserProfileCommand())
             }
@@ -80,7 +90,12 @@ class UpdateUserProfileCommand() : CheckedCommand()
                         userAccount.company,
                         userAccount.twitter,
                         userAccount.linkedIn,
-                        userAccount.website
+                        userAccount.website,
+                        userAccount.phoneticName,
+                        userAccount.nickname,
+                        userAccount.phone,
+                        userAccount.email,
+                        userAccount.gPlus
                 )
             }
             else

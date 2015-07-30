@@ -1,17 +1,19 @@
 package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
-import co.touchlab.droidconandroid.R
-import co.touchlab.droidconandroid.network.dao.UserInfoResponse
-import co.touchlab.droidconandroid.network.DataHelper
-import co.touchlab.droidconandroid.network.FindUserRequest
 import co.touchlab.android.superbus.errorcontrol.PermanentException
-import co.touchlab.droidconandroid.network.SingleUserInfoRequest
-import co.touchlab.droidconandroid.data.DatabaseHelper
-import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
+import co.touchlab.droidconandroid.R
+import co.touchlab.droidconandroid.data.DatabaseHelper
+import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.data.UserAuthHelper
+import co.touchlab.droidconandroid.network.DataHelper
+import co.touchlab.droidconandroid.network.FindUserRequest
+import co.touchlab.droidconandroid.network.SingleUserInfoRequest
+import co.touchlab.droidconandroid.network.dao.UserInfoResponse
+import retrofit.RetrofitError
+import java.net.HttpURLConnection
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -38,7 +40,15 @@ class FindUserByIdTask(val id: Long) : AbstractFindUserTask()
         handleData(context!!, fun(): UserAccount? = DatabaseHelper.getInstance(context).getUserAccountDao().queryForId(id), fun(): UserInfoResponse? {
             val restAdapter = DataHelper.makeRequestAdapter(context)
             val findUserRequest = restAdapter!!.create(javaClass<SingleUserInfoRequest>())!!
-            return findUserRequest.getUserInfo(id)
+            try {
+                return findUserRequest.getUserInfo(id)
+            } catch(e: RetrofitError) {
+                if(e.getResponse().getStatus() == HttpURLConnection.HTTP_NOT_FOUND) {
+                    errorStringCode = R.string.error_user_not_found
+                    return null
+                }
+                throw RuntimeException(e)
+            }
         })
     }
 }

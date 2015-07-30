@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+
+    app:vc_width="72dp"
+    app:vc_height="72dp"
+    app:vc_viewportWidth="72"
+    app:vc_viewportHeight="72"
+        app:vc_tint="@color/social_icons"
+
+        android:tint="@color/social_icons"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+
+    <path
+        app:vc_fillColor="#000000" android:fillColor="#000000"
+        app:vc_pathData="M46,43.1l-4.9,5.1c-7.2-4.1-13.2-10.1-17.3-17.4l5.3-5c0.5-0.5,0.7-1.1,0.6-1.8l-1.9-10.4 
+c-0.2-1-1-1.6-2-1.6h-7.7H14c-1,0-1.9,0.8-1.9,1.8c0,0.1,0,0.2,0,0.3C12.2,39.5,32.7,60,58,60h0c1,0,1.9-0.8,1.9-1.9V46.4 
+c0-1-0.7-1.8-1.6-2l-10.4-1.9C47.2,42.4,46.5,42.6,46,43.1Z" android:pathData="M46,43.1l-4.9,5.1c-7.2-4.1-13.2-10.1-17.3-17.4l5.3-5c0.5-0.5,0.7-1.1,0.6-1.8l-1.9-10.4 
+c-0.2-1-1-1.6-2-1.6h-7.7H14c-1,0-1.9,0.8-1.9,1.8c0,0.1,0,0.2,0,0.3C12.2,39.5,32.7,60,58,60h0c1,0,1.9-0.8,1.9-1.9V46.4 
+c0-1-0.7-1.8-1.6-2l-10.4-1.9C47.2,42.4,46.5,42.6,46,43.1Z" />
+</vector>

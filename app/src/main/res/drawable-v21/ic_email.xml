@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+
+    app:vc_width="72dp"
+    app:vc_height="72dp"
+    app:vc_viewportWidth="72"
+    app:vc_viewportHeight="72"
+        app:vc_tint="@color/social_icons"
+
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72"
+        android:tint="@color/social_icons">
+
+    <path
+        app:vc_fillColor="#000000" android:fillColor="#000000"
+        app:vc_pathData="M56.8,16.7H15.2c-1.8,0-3.2,1.4-3.2,3.2v32.1c0,1.8,1.4,3.2,3.2,3.2h41.6c1.8,0,3.2-1.4,3.2-3.2V19.9 
+C60,18.2,58.6,16.7,56.8,16.7Z 
+M54.6,26.6L36,38.2L17.4,26.8v-5.3L36,33.1v-0.2l18.6-11.3V26.6z" android:pathData="M56.8,16.7H15.2c-1.8,0-3.2,1.4-3.2,3.2v32.1c0,1.8,1.4,3.2,3.2,3.2h41.6c1.8,0,3.2-1.4,3.2-3.2V19.9 
+C60,18.2,58.6,16.7,56.8,16.7Z 
+M54.6,26.6L36,38.2L17.4,26.8v-5.3L36,33.1v-0.2l18.6-11.3V26.6z" />
+</vector>

@@ -1,68 +1,222 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    tools:context="co.touchlab.droidconandroid.FindUser">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="co.touchlab.droidconandroid.FindUser">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/userAvatar" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/bg_profile"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/padding_small"
+            android:padding="@dimen/padding_medium">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/close"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_action_cancel"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="@dimen/height_xlarge"
+                android:layout_height="@dimen/height_xlarge"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/padding_medium"
+                tools:src="@drawable/profile_placeholder"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/profile_image"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_xxlarge"
+                    tools:text="First Last"/>
+
+                <TextView
+                    android:id="@+id/company"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textColor="@color/white"
+                    tools:text="Company"/>
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/followToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="30sp"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/userName" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/phone_wrapper"
             android:visibility="gone"
-            android:id="@+id/followToggle"/>
+            tools:visibility="visible"
+            android:orientation="horizontal">
+
+            <com.wnafee.vector.MorphButton
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                style="@style/ProfileIcons"
+                app:vc_startDrawable="@drawable/ic_phone"/>
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                tools:text="(212) 222-2222"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/email_wrapper"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:orientation="horizontal">
+
+            <com.wnafee.vector.MorphButton
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                style="@style/ProfileIcons"
+                app:vc_startDrawable="@drawable/ic_email"/>
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                tools:text="test@touchlab.co"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/company_wrapper"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:orientation="horizontal">
+
+            <com.wnafee.vector.MorphButton
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                style="@style/ProfileIcons"
+                app:vc_startDrawable="@drawable/ic_work"/>
+
+            <TextView
+                android:id="@+id/company2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                tools:text="Company"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/website_wrapper"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:orientation="horizontal">
+
+            <com.wnafee.vector.MorphButton
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                style="@style/ProfileIcons"
+                app:vc_startDrawable="@drawable/ic_website"/>
+
+            <TextView
+                android:id="@+id/website"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                tools:text="www.touchlab.co"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/wrapper_twitter"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:orientation="horizontal">
+
+            <com.wnafee.vector.MorphButton
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                style="@style/ProfileIcons"
+                app:vc_startDrawable="@drawable/ic_twitter"/>
+
+            <TextView
+                android:id="@+id/twitter"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/twitter"
+                tools:text="\@TouchLabNY"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/gPlus_wrapper"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:orientation="horizontal">
+
+            <com.wnafee.vector.MorphButton
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                style="@style/ProfileIcons"
+                app:vc_startDrawable="@drawable/ic_gplus"/>
+
+            <TextView
+                android:id="@+id/gPlus"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/g_plus"
+                tools:text="+TouchLab"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/userCodeVal" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/company" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/twitter" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linkedIn" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/website" />
-
-</LinearLayout>
+</ScrollView>

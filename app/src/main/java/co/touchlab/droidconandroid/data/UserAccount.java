@@ -42,6 +42,22 @@ public class UserAccount
 
     @DatabaseField
     public boolean following;
+    
+    @DatabaseField
+    public String email;
+    
+    @DatabaseField
+    public String phoneticName;    
+    
+    @DatabaseField
+    public String nickname;
+    
+    @DatabaseField
+    public String gPlus;    
+    
+    @DatabaseField
+    public String phone;
+    
 
     @Override
     public boolean equals(Object o)
@@ -60,6 +76,11 @@ public class UserAccount
         if (twitter != null ? !twitter.equals(that.twitter) : that.twitter != null) return false;
         if (userCode != null ? !userCode.equals(that.userCode) : that.userCode != null) return false;
         if (website != null ? !website.equals(that.website) : that.website != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (phoneticName != null ? !phoneticName.equals(that.phoneticName) : that.phoneticName != null) return false;
+        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        if (nickname != null ? !nickname.equals(that.nickname) : that.nickname != null) return false;
+        if (gPlus != null ? !gPlus.equals(that.gPlus) : that.gPlus != null) return false;
 
         return true;
     }
@@ -76,6 +97,11 @@ public class UserAccount
         result = 31 * result + (twitter != null ? twitter.hashCode() : 0);
         result = 31 * result + (linkedIn != null ? linkedIn.hashCode() : 0);
         result = 31 * result + (website != null ? website.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (phoneticName != null ? phoneticName.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
+        result = 31 * result + (gPlus != null ? gPlus.hashCode() : 0);
         return result;
     }
 

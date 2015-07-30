@@ -3,9 +3,15 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/accent_pink</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="colorControlActivated">@color/accent_pink</item>
+        <item name="colorControlHighlight">@color/accent_pink</item>
+    </style>
 
     <style name="NoActionBar.TransparentStatusBar" parent="NoActionBar">
         <!-- todo transparent status bar pre-lollipop-->
@@ -17,6 +23,29 @@
         <item name="strokeWidth">0dp</item>
         <item name="radius">5dp</item>
         <item name="centered">true</item>
+    </style>
+
+    <style name="SignInEditText" parent="AppTheme">
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:layout_marginBottom">@dimen/padding_small</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="ActionBar" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/droidcon_green</item>
+        <item name="theme">@style/ActionBar.ThemeOverlay</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="ActionBar.ThemeOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+    
+    <style name="ProfileIcons">
+        <item name="android:layout_marginTop">@dimen/padding_small</item>
+        <item name="android:layout_marginBottom">@dimen/padding_small</item>
+        <item name="android:layout_marginLeft">@dimen/padding_xxlarge</item>
+        <item name="android:layout_marginRight">@dimen/padding_xxlarge</item>
     </style>
 
 </resources>

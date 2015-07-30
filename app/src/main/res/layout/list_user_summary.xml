@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/userAvatar" />
+        android:id="@+id/profile_image" />
 
     <TextView
         android:layout_width="0dp"
@@ -16,6 +16,6 @@
         android:layout_weight="1"
         android:textSize="30sp"
         android:layout_gravity="center_vertical"
-        android:id="@+id/userName" />
+        android:id="@+id/name" />
 
 </LinearLayout>

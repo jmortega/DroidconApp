@@ -54,7 +54,7 @@ class MyProfileFragment : Fragment()
 
         val view = getView()!!
         (view.findView(R.id.userCode) as TextView).setText(user.userCode)
-        (view.findView(R.id.userName) as TextView).setText(user.name)
+        (view.findView(R.id.name) as TextView).setText(user.name)
         (view.findView(R.id.qrCode) as ImageView).setImageBitmap(toBitmap(bitMatrix!!))
     }
 

@@ -1,28 +1,29 @@
 package co.touchlab.droidconandroid
 
-import android.app.Activity
-import android.widget.EditText
 import android.content.Context
 import android.content.Intent
+import android.graphics.Point
 import android.os.Bundle
-import android.view.View
-import co.touchlab.droidconandroid.tasks.FindUserTaskKot
-import co.touchlab.droidconandroid.utils.Toaster
-import android.view.MenuItem
-import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
-import org.apache.commons.lang3.StringUtils
-import com.google.zxing.integration.android.IntentIntegrator
-import android.graphics.Point
+import android.support.v7.app.AppCompatActivity
+import android.text.TextUtils
+import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.tasks.sticky.StickyTaskManager
+import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
+import co.touchlab.droidconandroid.tasks.FindUserByIdTask
+import co.touchlab.droidconandroid.utils.Toaster
+import com.google.zxing.integration.android.IntentIntegrator
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by kgalligan on 7/26/14.
  */
-public class FindUserKot : FragmentActivity()
+public class FindUserKot : AppCompatActivity()
 {
     companion object
     {
@@ -44,9 +45,9 @@ public class FindUserKot : FragmentActivity()
         c.startActivity(i)
     }
 
-    override fun onCreate(savedInstanceState: Bundle)
+    override fun onCreate(savedInstanceState: Bundle?)
     {
-        super<FragmentActivity>.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
         stickyTaskManager = StickyTaskManager(savedInstanceState)
 
@@ -58,7 +59,9 @@ public class FindUserKot : FragmentActivity()
             override fun onClick(v: View)
             {
                 val userCodeVal = userCode!!.getText().toString()
-                TaskQueue.loadQueueDefault(this@FindUserKot).execute(FindUserTaskKot(userCodeVal))
+                if(!TextUtils.isEmpty(userCodeVal)) {
+                    TaskQueue.loadQueueDefault(this@FindUserKot).execute(FindUserByIdTask(java.lang.Long.parseLong(userCodeVal)))
+                }
             }
         })
 
@@ -68,7 +71,7 @@ public class FindUserKot : FragmentActivity()
     }
 
     override fun onDestroy() {
-        super<FragmentActivity>.onDestroy()
+        super.onDestroy()
         EventBusExt.getDefault().unregister(this)
     }
 
@@ -105,38 +108,29 @@ public class FindUserKot : FragmentActivity()
 
     override fun onSaveInstanceState(outState: Bundle)
     {
-        super<FragmentActivity>.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState)
         stickyTaskManager!!.onSaveInstanceState(outState)
     }
 
     public fun onEventMainThread(findUserTask: AbstractFindUserTask)
     {
-        val userId = findUserTask.user?.id
-        if (findUserTask.isError() || userId == null)
-        {
-            Toaster.showMessage(this, findUserTask.errorStringCode!!)
-        }
-        else
-        {
-            val fragmentManager = getSupportFragmentManager()
-            val ft = fragmentManager!!.beginTransaction()!!
+        if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            val userId = findUserTask.user?.id
+            if (findUserTask.isError() || userId == null) {
+                Toaster.showMessage(this, findUserTask.errorStringCode!!)
+            } else {
+                val fragmentManager = getSupportFragmentManager()
+                val ft = fragmentManager!!.beginTransaction()!!
 
-            ft.replace(R.id.fragmentContainer, UserDetailFragment.createFragment(userId), "USER_FRAGMENT")
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.commit();
+                ft.replace(R.id.fragmentContainer, UserDetailFragment.createFragment(userId), UserDetailFragment.TAG)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
+            }
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item!!.getItemId()
-        if (id == R.id.action_settings)
-        {
-            return true
-        }
-        return super<FragmentActivity>.onOptionsItemSelected(item)
+    fun closeFragment() {
+        getSupportFragmentManager().popBackStack()
     }
 }
