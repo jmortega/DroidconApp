@@ -118,7 +118,8 @@ public class EditUserProfile extends StickyTaskManagerActivity
     {
         String phoneString = getStringFromEditText(phone);
         String emailString = getStringFromEditText(email);
-        if(!TextUtils.isEmpty(getStringFromEditText(name)))
+        String nameString = getStringFromEditText(name);
+        if(TextUtils.isEmpty(nameString))
         {
             Toast.makeText(this, R.string.error_name, Toast.LENGTH_SHORT).show();
         }

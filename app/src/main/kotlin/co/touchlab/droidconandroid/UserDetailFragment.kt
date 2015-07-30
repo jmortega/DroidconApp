@@ -1,30 +1,31 @@
 package co.touchlab.droidconandroid
 
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.app.LoaderManager
+import android.support.v4.app.LoaderManager.LoaderCallbacks
+import android.support.v4.content.Loader
+import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
-import co.touchlab.droidconandroid.utils.Toaster
-import android.text.TextUtils
-import com.squareup.picasso.Picasso
-import android.text.Html
-import co.touchlab.droidconandroid.utils.TextHelper
-import android.text.method.LinkMovementMethod
-import android.widget.Button
-import co.touchlab.droidconandroid.data.AppPrefs
-import co.touchlab.droidconandroid.tasks.FollowToggleTask
-import org.apache.commons.lang3.StringUtils
-import android.support.v4.app.LoaderManager
-import co.touchlab.droidconandroid.data.UserAccount
-import android.support.v4.content.Loader
-import android.support.v4.app.LoaderManager.LoaderCallbacks
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.loaders.networked.DoubleTapResult
 import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
+import co.touchlab.droidconandroid.data.AppPrefs
+import co.touchlab.droidconandroid.data.UserAccount
+import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
+import co.touchlab.droidconandroid.tasks.FollowToggleTask
+import co.touchlab.droidconandroid.utils.CustomTarget
+import co.touchlab.droidconandroid.utils.PaletteTransformation
+import co.touchlab.droidconandroid.utils.Toaster
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -47,6 +48,7 @@ class UserDetailFragment() : Fragment()
     private var company2: TextView? = null
     private var companyWrapper: View? = null
     private var followToggle: Button? = null
+    private var header: View? = null
 
     companion object
     {
@@ -159,6 +161,7 @@ class UserDetailFragment() : Fragment()
         company2 = view.findView(R.id.company2) as TextView
         companyWrapper = view.findView(R.id.company_wrapper)
         followToggle = view.findView(R.id.followToggle) as Button
+        header = view.findView(R.id.header)
 
         var close = view.findView(R.id.close);
         close.setOnClickListener{
@@ -191,8 +194,22 @@ class UserDetailFragment() : Fragment()
     private fun showUserData(userAccount: UserAccount)
     {
         val avatarKey = userAccount.avatarKey
+//       http://jakewharton.com/coercing-picasso-to-play-with-palette/
         if (!TextUtils.isEmpty(avatarKey)) {
-            Picasso.with(getActivity())!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(avatar)
+
+            Picasso.with(getActivity())!!
+                    .load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!
+                    .transform(PaletteTransformation.instance())
+                    .into(object : CustomTarget(){
+                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                            super.onBitmapLoaded(bitmap, from)
+                            var palette = PaletteTransformation.getPalette(bitmap);
+
+                            avatar!!.setImageBitmap(bitmap)
+                            header!!.setBackgroundColor(palette.getDarkVibrantColor(getResources().getColor(R.color.bg_profile)))
+                        }
+                    })
+
         }
 
 
@@ -215,7 +232,7 @@ class UserDetailFragment() : Fragment()
             emailWrapper!!.setVisibility(View.VISIBLE)
         }
 
-        if(!TextUtils.isEmpty(userAccount.email)) {
+        if(!TextUtils.isEmpty(userAccount.company)) {
             company!!.setText(userAccount.company)
             company2!!.setText(userAccount.company)
             companyWrapper!!.setVisibility(View.VISIBLE)
