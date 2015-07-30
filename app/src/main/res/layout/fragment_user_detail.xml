@@ -3,6 +3,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent" android:layout_height="match_parent"
             android:orientation="vertical"
+            android:background="@color/white"
             tools:context="co.touchlab.droidconandroid.FindUser">
 
     <LinearLayout
@@ -13,8 +14,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@color/bg_profile"
             android:orientation="horizontal"
+            android:id="@+id/header"
+            android:background="@color/social_icons"
             android:layout_marginBottom="@dimen/padding_small"
             android:padding="@dimen/padding_medium">
 
