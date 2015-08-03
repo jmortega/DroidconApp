@@ -57,8 +57,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".FindUserKot"
-            android:theme="@style/AppTheme" />
+            android:name=".FindUserKot" />
         <activity
             android:name=".UserDetailActivity"
             android:label="User Detail" />
@@ -70,8 +69,11 @@
             android:theme="@style/NoActionBar.TransparentStatusBar"
             android:label="Welcome" />
         <activity
-            android:name=".EditUserProfile"
-            android:theme="@style/AppTheme"/>
+            android:name=".EditUserProfile"></activity>
+
+        <activity android:name=".SignInActivity"
+                  android:theme="@style/NoActionBar"/>
+        
         <meta-data android:name="com.crashlytics.ApiKey" android:value="90b5b9675372e1f2aff36d43ea5d6869040d37f3"/>
     </application>
 

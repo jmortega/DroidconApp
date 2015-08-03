@@ -6,6 +6,8 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="colorControlActivated">@color/accent_pink</item>
         <item name="colorControlHighlight">@color/accent_pink</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
     </style>
 
     <style name="NoActionBar.TransparentStatusBar" parent="AppTheme">
