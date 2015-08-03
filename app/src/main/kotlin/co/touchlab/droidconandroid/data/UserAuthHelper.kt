@@ -22,6 +22,9 @@ class UserAuthHelper
             val appPrefs = AppPrefs.getInstance(c)
             appPrefs.setUserUuid(result.uuid)
             appPrefs.setUserId(result.userId)
+            appPrefs.setAvatarKey(newDbUser.avatarKey)
+            appPrefs.setName(newDbUser.name)
+            appPrefs.setEmail(newDbUser.email)
 
             CommandBusHelper.submitCommandSync(c, RefreshScheduleDataKot())
 

@@ -1,19 +1,14 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorAccent">@color/accent_pink</item>
         <item name="windowActionModeOverlay">true</item>
-    </style>
-
-    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/white</item>
         <item name="colorControlActivated">@color/accent_pink</item>
         <item name="colorControlHighlight">@color/accent_pink</item>
     </style>
 
-    <style name="NoActionBar.TransparentStatusBar" parent="NoActionBar">
+    <style name="NoActionBar.TransparentStatusBar" parent="AppTheme">
         <!-- todo transparent status bar pre-lollipop-->
     </style>
 

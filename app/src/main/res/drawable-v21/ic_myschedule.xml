@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72"
+    android:tint="@color/drawer_icons"
+    app:vc_viewportWidth="72"
+    app:vc_viewportHeight="72"
+    app:vc_tint="@color/drawer_icons">
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M52.3,18.3h-2v-5.5h-5.2v5.5H27.2v-5.5H22v5.5h-1.7c-2.8,0-5.1,2.3-5.1,5.1v32.4c0,2.8,2.3,5.1,5.1,5.1h32
+c2.8,0,5.1-2.3,5.1-5.1V23.3C57.4,20.5,55.1,18.3,52.3,18.3z
+M51.8,54.1H20V29.8h31.8V54.1z M47.5,50H37.1V39.6h10.4V50z"
+        app:vc_fillColor="#000000"
+        app:vc_pathData="M52.3,18.3h-2v-5.5h-5.2v5.5H27.2v-5.5H22v5.5h-1.7c-2.8,0-5.1,2.3-5.1,5.1v32.4c0,2.8,2.3,5.1,5.1,5.1h32
+c2.8,0,5.1-2.3,5.1-5.1V23.3C57.4,20.5,55.1,18.3,52.3,18.3z
+M51.8,54.1H20V29.8h31.8V54.1z M47.5,50H37.1V39.6h10.4V50z" />
+</vector>

@@ -2,6 +2,7 @@ package co.touchlab.droidconandroid.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,9 +11,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AppPrefs
 {
-    public static final String USER_UUID = "USER_UUID";
-    public static final String USER_ID   = "USER_ID";
+    public static final String USER_UUID    = "USER_UUID";
+    public static final String USER_ID      = "USER_ID";
     public static final String SEEN_WELCOME = "seen_welcome";
+    public static final String AVATAR_KEY = "avatar_key";
+    public static final String NAME = "name";
+    public static final String EMAIL = "email";
     private static AppPrefs instance;
 
     private SharedPreferences prefs;
@@ -63,6 +67,36 @@ public class AppPrefs
     public void setHasSeenWelcome()
     {
         setBoolean(SEEN_WELCOME, true);
+    }
+
+    public void setAvatarKey(String key)
+    {
+        setString(AVATAR_KEY, key);
+    }
+
+    public String getAvatarKey()
+    {
+        return getString(AVATAR_KEY, null);
+    }
+
+    public void setName(String name)
+    {
+        setString(NAME, name);
+    }
+
+    public String getName()
+    {
+        return getString(NAME, null);
+    }
+
+    public void setEmail(String key)
+    {
+        setString(EMAIL, key);
+    }
+
+    public String getEmail()
+    {
+        return getString(EMAIL, null);
     }
 
 

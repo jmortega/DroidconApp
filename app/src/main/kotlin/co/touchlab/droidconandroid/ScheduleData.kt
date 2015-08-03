@@ -54,6 +54,10 @@ class ScheduleDataFragment() : Fragment()
     companion object
     {
         val ALL_EVENTS = "ALL_EVENTS"
+
+        val EXPLORE = "EXPLORE"
+        val MY_SCHEDULE = "MY_SCHEDULE"
+
         fun newInstance(all: Boolean): ScheduleDataFragment
         {
             val scheduleDataFragment = ScheduleDataFragment()

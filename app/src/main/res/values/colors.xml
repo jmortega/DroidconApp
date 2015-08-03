@@ -31,6 +31,7 @@
 
     <color name="accent_pink">#ec3395</color>
     <color name="social_icons">#989898</color>
+    <color name="drawer_icons">@color/black_55</color>
     <color name="edit_text_bg">#bdbdbd</color>
     <color name="twitter">#38a4dd</color>
     <color name="g_plus">#f1592b</color>

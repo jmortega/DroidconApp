@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:padding="@dimen/padding_medium"
+             android:background="@color/social_icons"
+             android:layout_height="@dimen/drawer_header_height"
+             android:orientation="vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="@dimen/height_large"
+        android:layout_height="@dimen/height_large"
+        android:id="@+id/profile_image"
+        tools:src="@drawable/profile_placeholder"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/email"
+        android:id="@+id/name"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/white"
+        android:singleLine="true"
+        tools:text="First Last"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/email"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:singleLine="true"
+        tools:text="test@touchlab.co"/>
+
+</RelativeLayout>

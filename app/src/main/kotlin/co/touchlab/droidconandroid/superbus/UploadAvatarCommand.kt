@@ -88,6 +88,7 @@ class QuickClearAvatarTask(val userId: Long) : Task()
         val dao = DatabaseHelper.getInstance(context).getUserAccountDao()
         val userAccount = dao.queryForId(userId)
         userAccount!!.avatarKey = null;
+        AppPrefs.getInstance(context).setAvatarKey(null)
         dao.createOrUpdate(userAccount)
 
     }
