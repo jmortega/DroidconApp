@@ -31,7 +31,7 @@ public class MyActivity : Activity()
         }
         else if (!AppPrefs.getInstance(this).isLoggedIn())
         {
-            EnterUuidActivity.startMe(this@MyActivity)
+            startActivity(SignInActivity.getLaunchIntent(this@MyActivity))
             finish()
         }
 
