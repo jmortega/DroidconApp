@@ -1,35 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
-             android:padding="@dimen/padding_medium"
-             android:background="@color/social_icons"
              android:layout_height="@dimen/drawer_header_height"
+             android:background="@color/social_icons"
              android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="@dimen/height_large"
-        android:layout_height="@dimen/height_large"
-        android:id="@+id/profile_image"
-        tools:src="@drawable/profile_placeholder"/>
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="match_parent"
+        android:scaleType="centerCrop"
+        android:layout_height="match_parent"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/email"
-        android:id="@+id/name"
-        android:fontFamily="sans-serif-medium"
-        android:textColor="@color/white"
-        android:singleLine="true"
-        tools:text="First Last"/>
+    <View
+        android:layout_width="match_parent"
+        android:background="@drawable/gradient_270"
+        android:layout_height="match_parent"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/email"
-        android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:singleLine="true"
-        tools:text="test@touchlab.co"/>
 
-</RelativeLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/status_bar_height"
+                    android:padding="@dimen/padding_medium">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            android:id="@+id/profile_image"
+            android:layout_width="@dimen/height_large"
+            android:layout_height="@dimen/height_large"
+            tools:src="@drawable/profile_placeholder"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/email"
+            android:fontFamily="sans-serif-medium"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            tools:text="First Last"/>
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            tools:text="test@touchlab.co"/>
+    </RelativeLayout>
+
+
+</FrameLayout>

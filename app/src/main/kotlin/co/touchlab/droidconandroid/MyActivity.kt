@@ -10,7 +10,10 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.data.AppPrefs
+import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
+import co.touchlab.droidconandroid.superbus.UploadCoverCommand
 import co.touchlab.droidconandroid.ui.DrawerAdapter
 import co.touchlab.droidconandroid.ui.DrawerClickListener
 import co.touchlab.droidconandroid.ui.NavigationItem
@@ -55,6 +58,21 @@ public class MyActivity : AppCompatActivity()
         {
             replaceContentWithFragment(ScheduleDataFragment.newInstance(true))
         }
+
+        EventBusExt.getDefault().register(this)
+    }
+
+    public fun onEventMainThread(command: UploadAvatarCommand) {
+        drawerAdapter!!.notifyDataSetChanged()
+    }
+
+    public fun onEventMainThread(command: UploadCoverCommand) {
+        drawerAdapter!!.notifyDataSetChanged()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBusExt.getDefault().unregister(this)
     }
 
     private fun replaceContentWithFragment(fragment: Fragment) {

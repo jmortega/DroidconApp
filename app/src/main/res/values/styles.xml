@@ -8,9 +8,6 @@
         <item name="colorControlHighlight">@color/accent_pink</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
-    </style>
-
-    <style name="NoActionBar.TransparentStatusBar" parent="AppTheme">
         <!-- todo transparent status bar pre-lollipop-->
     </style>
 
@@ -29,7 +26,7 @@
     </style>
 
     <style name="ActionBar" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/droidcon_green</item>
+        <item name="android:background">@color/primary</item>
         <item name="theme">@style/ActionBar.ThemeOverlay</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>

@@ -13,10 +13,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Toolbar;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,7 +27,7 @@ import java.io.IOException;
 /**
  * Created by kgalligan on 8/3/14.
  */
-public class PhotoScaleActivity extends Activity
+public class PhotoScaleActivity extends AppCompatActivity
 {
 	public static final String CONTENT_URI_PREFIX = "content://";
 
@@ -44,7 +46,7 @@ public class PhotoScaleActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.test_photo_activity);
-        setActionBar(getActionBar());
+//        setActionBar(getActionBar());
 
         photoSortrView = (PhotoSortrView) findViewById(R.id.photoSorter);
 	    mLoadingView = findViewById(R.id.include_network);

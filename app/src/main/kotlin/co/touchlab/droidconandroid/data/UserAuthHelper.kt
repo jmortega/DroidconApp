@@ -1,9 +1,10 @@
 package co.touchlab.droidconandroid.data
 
 import android.content.Context
+import android.text.TextUtils
 import co.touchlab.android.superbus.appsupport.CommandBusHelper
-import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.droidconandroid.network.dao.LoginResult
+import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 
 /**
  * Created by kgalligan on 8/4/14.
@@ -22,9 +23,8 @@ class UserAuthHelper
             val appPrefs = AppPrefs.getInstance(c)
             appPrefs.setUserUuid(result.uuid)
             appPrefs.setUserId(result.userId)
-            appPrefs.setAvatarKey(newDbUser.avatarKey)
-            appPrefs.setName(newDbUser.name)
-            appPrefs.setEmail(newDbUser.email)
+
+            saveDrawerAppPrefs(c, newDbUser)
 
             CommandBusHelper.submitCommandSync(c, RefreshScheduleDataKot())
 
@@ -48,6 +48,15 @@ class UserAuthHelper
             dbUa.phoneticName = ua.phoneticName
             dbUa.phone = ua.phone
             dbUa.email = ua.email
+            dbUa.coverKey = ua.coverKey
+        }
+
+         fun saveDrawerAppPrefs(context: Context, user: UserAccount) {
+             val appPrefs = AppPrefs.getInstance(context)
+             appPrefs.setAvatarKey(user.avatarKey)
+             appPrefs.setCoverKey(user.coverKey)
+             appPrefs.setName(user.name)
+             appPrefs.setEmail(user.email)
         }
     }
 }

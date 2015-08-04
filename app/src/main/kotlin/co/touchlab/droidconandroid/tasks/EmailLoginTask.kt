@@ -1,22 +1,21 @@
 package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
-import co.touchlab.android.threading.tasks.TaskQueue
-import co.touchlab.droidconandroid.network.DataHelper
-import co.touchlab.android.superbus.appsupport.CommandBusHelper
-import co.touchlab.droidconandroid.network.EmailLoginRequest
-import co.touchlab.droidconandroid.data.AppPrefs
-import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
-import co.touchlab.android.threading.eventbus.EventBusExt
-import co.touchlab.droidconandroid.data.UserAuthHelper
-import com.google.android.gms.auth.GoogleAuthUtil
-import co.touchlab.droidconandroid.network.GoogleLoginRequest
 import android.text.TextUtils
 import android.util.Log
+import co.touchlab.android.superbus.appsupport.CommandBusHelper
+import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
-import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
-import org.apache.commons.lang3.StringUtils
+import co.touchlab.droidconandroid.data.UserAuthHelper
+import co.touchlab.droidconandroid.network.DataHelper
+import co.touchlab.droidconandroid.network.EmailLoginRequest
+import co.touchlab.droidconandroid.network.GoogleLoginRequest
 import co.touchlab.droidconandroid.network.dao.LoginResult
+import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
+import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
+import co.touchlab.droidconandroid.superbus.UploadCoverCommand
+import com.google.android.gms.auth.GoogleAuthUtil
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -40,7 +39,7 @@ open class EmailLoginTask(val email: String, val name: String?, val password: St
     }
 }
 
-class GoogleLoginTask(val email: String, val name: String?, val imageURL: String?) : AbstractLoginTask()
+class GoogleLoginTask(val email: String, val name: String?, val imageURL: String?, val coverURL: String?) : AbstractLoginTask()
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {
         Log.w("dude", "dude2", e);
@@ -64,6 +63,9 @@ class GoogleLoginTask(val email: String, val name: String?, val imageURL: String
         handleLoginResult(context, loginResult)
         if (!TextUtils.isEmpty(imageURL))
             CommandBusHelper.submitCommandSync(context, UploadAvatarCommand(imageURL!!))
+
+        if (!TextUtils.isEmpty(coverURL))
+            CommandBusHelper.submitCommandSync(context, UploadCoverCommand(coverURL!!))
 
         EventBusExt.getDefault()!!.post(this);
     }

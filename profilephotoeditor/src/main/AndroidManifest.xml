@@ -8,6 +8,7 @@
 
         <activity
                     android:name=".PhotoScaleActivity"
+                    android:theme="@style/Theme.AppCompat.Light"
                     android:label="@string/user_profile_pic_scale" />
 
     </application>

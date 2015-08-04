@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.*
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.TaskQueue
+import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.tasks.AbstractLoginTask
 import co.touchlab.droidconandroid.tasks.GoogleLoginTask
 import co.touchlab.droidconandroid.utils.Toaster
@@ -62,11 +63,12 @@ public class SignInActivity : AppCompatActivity() {
         (okButton as Button).setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 googleApiClient = GoogleApiClient.Builder(this@SignInActivity)
-                        .addConnectionCallbacks(ConnectionCallbacksImpl())!!
-                        .addOnConnectionFailedListener(OnConnectionFailedListenerImpl())!!
-                        .addApi(Plus.API)!!
+                        .addConnectionCallbacks(ConnectionCallbacksImpl())
+                        .addOnConnectionFailedListener(OnConnectionFailedListenerImpl())
+                        .addApi(Plus.API)
                         .setAccountName(accountAdapter.getSelectedAccount())
-                        .addScope(Plus.SCOPE_PLUS_LOGIN)!!.build()!!
+                        .addScope(Plus.SCOPE_PLUS_LOGIN)
+                        .build()!!
                 forceGoogleConnect()
 
                 okButton!!.setEnabled(false);
@@ -123,20 +125,30 @@ public class SignInActivity : AppCompatActivity() {
         googleApiClient!!.connect()
     }
 
+    private val PROFILE_PIC_SIZE: Int = 100
+
     public inner class ConnectionCallbacksImpl() : GoogleApiClient.ConnectionCallbacks {
         override fun onConnected(bundle: Bundle?) {
             val accountName = Plus.AccountApi.getAccountName(googleApiClient)
             val person = Plus.PeopleApi.getCurrentPerson(googleApiClient)
             var imageURL: String? = null
+            var coverURL: String? = null
             if (person != null && person.hasImage()) {
                 val image = person.getImage()
 
                 if (image != null && image.hasUrl()) {
-                    imageURL = image.getUrl()
+                    val url = image.getUrl()
+                    imageURL = url.substring(0, url.length() - 2) + PROFILE_PIC_SIZE;
+                }
+
+                val cover = person.getCover()
+                if(cover != null && cover.getCoverPhoto() != null && cover.getCoverPhoto().hasUrl())
+                {
+                    coverURL = cover.getCoverPhoto().getUrl();
                 }
             }
 
-            TaskQueue.loadQueueDefault(this@SignInActivity).execute(GoogleLoginTask(accountName!!, person?.getDisplayName(), imageURL))
+            TaskQueue.loadQueueDefault(this@SignInActivity).execute(GoogleLoginTask(accountName!!, person?.getDisplayName(), imageURL, coverURL))
         }
 
         override fun onConnectionSuspended(i: Int) {

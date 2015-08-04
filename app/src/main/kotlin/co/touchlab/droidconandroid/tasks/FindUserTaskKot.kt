@@ -5,6 +5,7 @@ import co.touchlab.android.superbus.errorcontrol.PermanentException
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
 import co.touchlab.droidconandroid.R
+import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.data.UserAuthHelper
@@ -69,6 +70,11 @@ abstract class AbstractFindUserTask() : Task()
             {
                 val databaseHelper = DatabaseHelper.getInstance(context)
                 databaseHelper.getUserAccountDao().createOrUpdate(newDbUser)
+
+                if(AppPrefs.getInstance(context).getUserId() == newDbUser.id)
+                {
+                    UserAuthHelper.saveDrawerAppPrefs(context, newDbUser)
+                }
                 return newDbUser
             }
 

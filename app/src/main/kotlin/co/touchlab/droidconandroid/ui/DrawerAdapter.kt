@@ -41,21 +41,20 @@ class DrawerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if(getItemViewType(position) == VIEW_TYPE_HEADER){
             val headerHolder = holder as HeaderViewHolder
             val avatarKey = AppPrefs.getInstance(context).getAvatarKey()
-            //       http://jakewharton.com/coercing-picasso-to-play-with-palette/
             if (!TextUtils.isEmpty(avatarKey)) {
 
-                Picasso.with(context)!!
-                        .load(UserDetailFragment.HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!
-                        .transform(PaletteTransformation.instance())
-                        .into(object : CustomTarget(){
-                            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                                super.onBitmapLoaded(bitmap, from)
-                                var palette = PaletteTransformation.getPalette(bitmap);
+                Picasso.with(context)
+                        .load(UserDetailFragment.HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)
+                        .into(headerHolder.avatar)
 
-                                headerHolder.avatar.setImageBitmap(bitmap)
-                                headerHolder.itemView.setBackgroundColor(palette.getDarkVibrantColor(resources.getColor(R.color.bg_profile)))
-                            }
-                        })
+            }
+
+            val coverKey = AppPrefs.getInstance(context).getCoverKey()
+            if (!TextUtils.isEmpty(coverKey)) {
+
+                Picasso.with(context)
+                        .load(UserDetailFragment.HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + coverKey)
+                        .into(headerHolder.cover)
 
             }
 
@@ -71,7 +70,7 @@ class DrawerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             val selected = selectedPos == position
             navHolder.itemView.setSelected(selected)
             if(selected) {
-                drawable.setColorFilter(PorterDuffColorFilter(resources.getColor(R.color.droidcon_green), PorterDuff.Mode.SRC_IN))
+                drawable.setColorFilter(PorterDuffColorFilter(resources.getColor(R.color.primary), PorterDuff.Mode.SRC_IN))
                 navHolder.highlight.setVisibility(View.VISIBLE)
             } else {
                 drawable.setColorFilter(PorterDuffColorFilter(resources.getColor(R.color.drawer_icons), PorterDuff.Mode.SRC_IN))
@@ -139,11 +138,13 @@ class DrawerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public val name: TextView
         public val email: TextView
         public val avatar: ImageView
+        public val cover: ImageView
 
         init {
             name = itemView.findViewById(R.id.name) as TextView
             email = itemView.findViewById(R.id.email) as TextView
             avatar = itemView.findViewById(R.id.profile_image) as ImageView
+            cover = itemView.findViewById(R.id.cover) as ImageView
         }
     }
 

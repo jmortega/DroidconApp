@@ -17,6 +17,7 @@ public class AppPrefs
     public static final String AVATAR_KEY = "avatar_key";
     public static final String NAME = "name";
     public static final String EMAIL = "email";
+    public static final String COVER_KEY = "cover_key";
     private static AppPrefs instance;
 
     private SharedPreferences prefs;
@@ -97,6 +98,16 @@ public class AppPrefs
     public String getEmail()
     {
         return getString(EMAIL, null);
+    }
+
+    public void setCoverKey(String key)
+    {
+        setString(COVER_KEY, key);
+    }
+
+    public String getCoverKey()
+    {
+        return getString(COVER_KEY, null);
     }
 
 

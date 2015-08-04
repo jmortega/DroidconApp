@@ -46,9 +46,6 @@
             android:name=".EmailLoginActivity"
             android:label="Email Login" />
         <activity
-            android:name=".EnterUuidActivity"
-            android:label="@string/title_activity_debug_enter_uuid" />
-        <activity
             android:name=".ScheduleDataActivity"
             android:label="@string/title_activity_debug_schedule_display" />
 
@@ -65,14 +62,12 @@
             android:name=".EventDetailActivity"
             android:label="Event Detail" />
         <activity
-            android:name=".WelcomeActivity"
-            android:theme="@style/NoActionBar.TransparentStatusBar"
-            android:label="Welcome" />
-        <activity
-            android:name=".EditUserProfile"></activity>
+            android:name=".WelcomeActivity" />
 
-        <activity android:name=".SignInActivity"
-                  android:theme="@style/NoActionBar"/>
+        <activity
+            android:name=".EditUserProfile"/>
+
+        <activity android:name=".SignInActivity"/>
         
         <meta-data android:name="com.crashlytics.ApiKey" android:value="90b5b9675372e1f2aff36d43ea5d6869040d37f3"/>
     </application>
