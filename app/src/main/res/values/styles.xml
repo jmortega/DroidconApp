@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent_pink</item>
         <item name="windowActionModeOverlay">true</item>
     </style>
@@ -11,6 +13,8 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="colorControlActivated">@color/accent_pink</item>
         <item name="colorControlHighlight">@color/accent_pink</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
     </style>
 
     <style name="NoActionBar.TransparentStatusBar" parent="NoActionBar">
