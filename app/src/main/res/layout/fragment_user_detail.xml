@@ -11,66 +11,82 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:orientation="horizontal"
-            android:id="@+id/header"
-            android:background="@color/social_icons"
             android:layout_marginBottom="@dimen/padding_small"
-            android:padding="@dimen/padding_medium">
+            android:layout_height="200dp">
+
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/close"
-                android:background="?attr/selectableItemBackground"
-                android:src="@drawable/ic_action_cancel"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/header"
+                android:scaleType="centerCrop"
+                android:background="@color/social_icons"/>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
-                android:layout_width="@dimen/height_xlarge"
-                android:layout_height="@dimen/height_xlarge"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/padding_medium"
-                tools:src="@drawable/profile_placeholder"/>
+            <View
+                android:layout_width="match_parent"
+                android:background="@drawable/gradient_270"
+                android:layout_height="match_parent"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/profile_image"
-                android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_medium">
 
-                <TextView
-                    android:id="@+id/name"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_xxlarge"
-                    tools:text="First Last"/>
+                    android:id="@+id/close"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_action_cancel"/>
 
-                <TextView
-                    android:id="@+id/company"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="@dimen/height_xlarge"
+                    android:layout_height="@dimen/height_xlarge"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/padding_medium"
+                    tools:src="@drawable/profile_placeholder"/>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    android:textColor="@color/white"
-                    tools:text="Company"/>
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/profile_image"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_xxlarge"
+                        tools:text="First Last"/>
+
+                    <TextView
+                        android:id="@+id/company"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        android:textColor="@color/white"
+                        tools:text="Company"/>
+
+                </LinearLayout>
 
 
-            <Button
-                android:id="@+id/followToggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:visibility="gone"/>
-        </RelativeLayout>
+                <Button
+                    android:id="@+id/followToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,13 +97,14 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
+                android:id="@+id/phone_icon"
                 style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_phone"/>
+                tools:src="@drawable/ic_phone"/>
 
             <TextView
                 android:id="@+id/phone"
@@ -107,11 +124,12 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
+                android:id="@+id/email_icon"
                 style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_email"/>
+                tools:src="@drawable/ic_email"/>
 
             <TextView
                 android:id="@+id/email"
@@ -131,11 +149,12 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_work"/>
+                android:id="@+id/company_icon"
+                tools:src="@drawable/ic_work"/>
 
             <TextView
                 android:id="@+id/company2"
@@ -155,11 +174,12 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_website"/>
+                android:id="@+id/website_icon"
+                tools:src="@drawable/ic_website"/>
 
             <TextView
                 android:id="@+id/website"
@@ -179,11 +199,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_twitter"/>
+                android:src="@drawable/ic_twitter"/>
 
             <TextView
                 android:id="@+id/twitter"
@@ -203,11 +223,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_gplus"/>
+                android:src="@drawable/ic_gplus"/>
 
             <TextView
                 android:id="@+id/gPlus"

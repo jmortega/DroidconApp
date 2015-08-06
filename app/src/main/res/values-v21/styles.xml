@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="NoActionBar.TransparentStatusBar" parent="NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/accent_pink</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="colorControlActivated">@color/accent_pink</item>
+        <item name="colorControlHighlight">@color/accent_pink</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>

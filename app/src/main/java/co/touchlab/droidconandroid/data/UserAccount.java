@@ -57,6 +57,9 @@ public class UserAccount
     
     @DatabaseField
     public String phone;
+
+    @DatabaseField
+    public String coverKey;
     
 
     @Override
@@ -81,6 +84,7 @@ public class UserAccount
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
         if (nickname != null ? !nickname.equals(that.nickname) : that.nickname != null) return false;
         if (gPlus != null ? !gPlus.equals(that.gPlus) : that.gPlus != null) return false;
+        if (coverKey != null ? !coverKey.equals(that.coverKey) : that.coverKey != null) return false;
 
         return true;
     }
@@ -102,6 +106,7 @@ public class UserAccount
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
         result = 31 * result + (gPlus != null ? gPlus.hashCode() : 0);
+        result = 31 * result + (coverKey != null ? coverKey.hashCode() : 0);
         return result;
     }
 

@@ -57,9 +57,7 @@ open class UploadAvatarCommand(val imageURL : String? = null) : CheckedCommand()
         val uploadResponse = postClient.post("dataTest/uploadAvatar", "image/jpeg", body)
         postClient.checkAndThrowError()
 
-        val userResponseString = uploadResponse?.getBodyAsString()
-        if(userResponseString == null)
-            throw RuntimeException("No user response")
+        val userResponseString = uploadResponse?.getBodyAsString() ?: throw RuntimeException("No user response")
         val gson = Gson()
         val userInfoResponse = gson.fromJson(userResponseString, javaClass<UserInfoResponse>())
         AbstractFindUserTask.saveUserResponse(context, null, userInfoResponse!!)
@@ -88,6 +86,7 @@ class QuickClearAvatarTask(val userId: Long) : Task()
         val dao = DatabaseHelper.getInstance(context).getUserAccountDao()
         val userAccount = dao.queryForId(userId)
         userAccount!!.avatarKey = null;
+        AppPrefs.getInstance(context).setAvatarKey(null)
         dao.createOrUpdate(userAccount)
 
     }

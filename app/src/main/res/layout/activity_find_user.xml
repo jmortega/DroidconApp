@@ -3,6 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:orientation="vertical"
+             android:layout_marginTop="@dimen/status_bar_height"
              tools:context="co.touchlab.droidconandroid.FindUser">
 
     <RelativeLayout
@@ -14,18 +15,18 @@
             android:id="@+id/userCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/startScanner"/>
+            android:layout_toLeftOf="@+id/findUser"/>
         <Button
             android:id="@+id/startScanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_below="@+id/userCode"
             android:text="Scan"/>
         <Button
             android:id="@+id/findUser"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/userCode"
             android:text="Find"/>
     </RelativeLayout>
 

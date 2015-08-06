@@ -60,7 +60,12 @@ public class FindUserKot : AppCompatActivity()
             {
                 val userCodeVal = userCode!!.getText().toString()
                 if(!TextUtils.isEmpty(userCodeVal)) {
-                    TaskQueue.loadQueueDefault(this@FindUserKot).execute(FindUserByIdTask(java.lang.Long.parseLong(userCodeVal)))
+
+                    try {
+                        TaskQueue.loadQueueDefault(this@FindUserKot).execute(FindUserByIdTask(java.lang.Long.parseLong(userCodeVal)))
+                    } catch(e: NumberFormatException) {
+                        Toaster.showMessage(this@FindUserKot, "Search is only by ID right now.")
+                    }
                 }
             }
         })
@@ -101,7 +106,7 @@ public class FindUserKot : AppCompatActivity()
             val scanResults = scanResult.getContents()
             if(StringUtils.startsWith(scanResults, USER_PREFIX))
             {
-                userCode!!.setText(scanResults!!.substring(USER_PREFIX.length))
+                userCode!!.setText(scanResults!!.substring(USER_PREFIX.length()))
             }
         }
     }

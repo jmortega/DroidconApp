@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72"
+    android:tint="@color/drawer_icons"
+    app:vc_viewportWidth="72"
+    app:vc_viewportHeight="72"
+    app:vc_tint="@color/drawer_icons">
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M53.3,19.4c-9.4-9.4-24.6-9.4-33.9,0S10,44,19.4,53.3s24.6,9.4,33.9,0S62.7,28.8,53.3,19.4z
+M22.3,50.4 l9-19.4l19.4-9l-8.8,19.6L22.3,50.4z
+M38.6,37.8c-1.1,1.1-2.9,1.1-4,0c-1.1-1.1-1.1-2.9,0-4s2.9-1.1,4,0
+C39.7,34.9,39.7,36.7,38.6,37.8z"
+        app:vc_fillColor="#000000"
+        app:vc_pathData="M53.3,19.4c-9.4-9.4-24.6-9.4-33.9,0S10,44,19.4,53.3s24.6,9.4,33.9,0S62.7,28.8,53.3,19.4z
+M22.3,50.4 l9-19.4l19.4-9l-8.8,19.6L22.3,50.4z
+M38.6,37.8c-1.1,1.1-2.9,1.1-4,0c-1.1-1.1-1.1-2.9,0-4s2.9-1.1,4,0
+C39.7,34.9,39.7,36.7,38.6,37.8z" />
+</vector>

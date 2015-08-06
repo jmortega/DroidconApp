@@ -1,6 +1,8 @@
 package co.touchlab.droidconandroid
 
 import android.graphics.Bitmap
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
@@ -23,9 +25,9 @@ import co.touchlab.droidconandroid.tasks.FollowToggleTask
 import co.touchlab.droidconandroid.utils.CustomTarget
 import co.touchlab.droidconandroid.utils.PaletteTransformation
 import co.touchlab.droidconandroid.utils.Toaster
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
+import com.wnafee.vector.MorphButton
+import com.wnafee.vector.compat.ResourcesCompat
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -35,8 +37,10 @@ class UserDetailFragment() : Fragment()
     private var avatar: ImageView? = null
     private var name: TextView? = null
     private var phone: TextView? = null
+    private var phoneIcon: ImageView? = null
     private var phoneWrapper: View? = null
     private var email: TextView? = null
+    private var emailIcon: ImageView? = null
     private var emailWrapper: View? = null
     private var company: TextView? = null
     private var twitter: TextView? = null
@@ -44,11 +48,13 @@ class UserDetailFragment() : Fragment()
     private var gPlus: TextView? = null
     private var gPlusWrapper: View? = null
     private var website: TextView? = null
+    private var websiteIcon: ImageView? = null
     private var websiteWrapper: View? = null
     private var company2: TextView? = null
+    private var companyIcon: ImageView? = null
     private var companyWrapper: View? = null
     private var followToggle: Button? = null
-    private var header: View? = null
+    private var header: ImageView? = null
 
     companion object
     {
@@ -148,8 +154,10 @@ class UserDetailFragment() : Fragment()
         avatar = view.findView(R.id.profile_image) as ImageView
         name = view.findView(R.id.name) as TextView
         phone = view.findView(R.id.phone) as TextView
+        phoneIcon = view.findView(R.id.phone_icon) as ImageView
         phoneWrapper = view.findView(R.id.phone_wrapper)
         email = view.findView(R.id.email) as TextView
+        emailIcon = view.findView(R.id.email_icon) as ImageView
         emailWrapper = view.findView(R.id.email_wrapper)
         company = view.findView(R.id.company) as TextView
         twitter = view.findView(R.id.twitter) as TextView
@@ -157,11 +165,13 @@ class UserDetailFragment() : Fragment()
         gPlus = view.findView(R.id.gPlus) as TextView
         gPlusWrapper = view.findViewById(R.id.gPlus_wrapper)
         website = view.findView(R.id.website) as TextView
+        websiteIcon = view.findView(R.id.website_icon) as ImageView
         websiteWrapper = view.findView(R.id.website_wrapper)
         company2 = view.findView(R.id.company2) as TextView
+        companyIcon = view.findView(R.id.company_icon) as ImageView
         companyWrapper = view.findView(R.id.company_wrapper)
         followToggle = view.findView(R.id.followToggle) as Button
-        header = view.findView(R.id.header)
+        header = view.findView(R.id.header) as ImageView
 
         var close = view.findView(R.id.close);
         close.setOnClickListener{
@@ -194,24 +204,41 @@ class UserDetailFragment() : Fragment()
     private fun showUserData(userAccount: UserAccount)
     {
         val avatarKey = userAccount.avatarKey
-//       http://jakewharton.com/coercing-picasso-to-play-with-palette/
         if (!TextUtils.isEmpty(avatarKey)) {
 
             Picasso.with(getActivity())!!
-                    .load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!
+                    .load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)
+                    .into(avatar)
+
+        }
+
+        val coverKey = userAccount.coverKey
+        val iconsDefaultColor = getResources().getColor(R.color.social_icons)
+        if (!TextUtils.isEmpty(coverKey)) {
+            //       http://jakewharton.com/coercing-picasso-to-play-with-palette/
+            Picasso.with(getActivity())!!
+                    .load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + coverKey)
                     .transform(PaletteTransformation.instance())
                     .into(object : CustomTarget(){
                         override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                             super.onBitmapLoaded(bitmap, from)
-                            var palette = PaletteTransformation.getPalette(bitmap);
+                            if(getActivity() != null)
+                            {
+                                var palette = PaletteTransformation.getPalette(bitmap);
 
-                            avatar!!.setImageBitmap(bitmap)
-                            header!!.setBackgroundColor(palette.getDarkVibrantColor(getResources().getColor(R.color.bg_profile)))
+                                header!!.setImageBitmap(bitmap)
+                                val darkVibrantColor = palette.getDarkVibrantColor(iconsDefaultColor)
+
+                                makeIconsPretty(darkVibrantColor)
+                            }
                         }
                     })
 
         }
-
+        else
+        {
+            makeIconsPretty(iconsDefaultColor)
+        }
 
         if(!TextUtils.isEmpty(userAccount.phoneticName))
         {
@@ -281,6 +308,21 @@ class UserDetailFragment() : Fragment()
 
 
         }
+    }
+
+    private fun makeIconsPretty(darkVibrantColor: Int) {
+        val phoneDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_phone);
+        phoneDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
+        phoneIcon!!.setImageDrawable(phoneDrawable)
+        val emailDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_email);
+        emailDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
+        emailIcon!!.setImageDrawable(emailDrawable)
+        val companyDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_work);
+        companyDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
+        companyIcon!!.setImageDrawable(phoneDrawable)
+        val websiteDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_website);
+        websiteDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
+        websiteIcon!!.setImageDrawable(phoneDrawable)
     }
 
 }

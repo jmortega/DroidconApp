@@ -24,7 +24,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
 {
 
     private static final String DATABASE_FILE_NAME = "droidcon";
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static DatabaseHelper instance;
 
     private DatabaseHelper(Context context)

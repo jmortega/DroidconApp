@@ -45,7 +45,6 @@ class UserDetailLoader(c: Context, val userId: Long) : AbstractDoubleTapLoader<U
 
             //TODO: Check if different. Also, put user update in central place.
             //Clear out superbus to prevent overwrite.
-            val dbUser = getUserFromDb()
 
             val newDbUser = UserAccount()
             UserAuthHelper.userAccountToDb(userAccount, newDbUser)

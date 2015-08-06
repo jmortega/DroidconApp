@@ -51,6 +51,9 @@ class UpdateUserProfileTask(c: Context, val name: String?,
                 userAccount.email = email
                 userAccount.gPlus = gPlus
                 dao.createOrUpdate(userAccount)
+
+                AppPrefs.getInstance(context).setName(name)
+                AppPrefs.getInstance(context).setEmail(email)
                 CommandBusHelper.submitCommandSync(context, UpdateUserProfileCommand())
             }
         }
