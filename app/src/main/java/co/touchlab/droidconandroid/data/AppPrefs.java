@@ -11,13 +11,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AppPrefs
 {
-    public static final String USER_UUID    = "USER_UUID";
-    public static final String USER_ID      = "USER_ID";
-    public static final String SEEN_WELCOME = "seen_welcome";
-    public static final String AVATAR_KEY = "avatar_key";
-    public static final String NAME = "name";
-    public static final String EMAIL = "email";
-    public static final String COVER_KEY = "cover_key";
+    public static final String USER_UUID        = "USER_UUID";
+    public static final String USER_ID          = "USER_ID";
+    public static final String SEEN_WELCOME     = "seen_welcome";
+    public static final String AVATAR_KEY       = "avatar_key";
+    public static final String NAME             = "name";
+    public static final String EMAIL            = "email";
+    public static final String COVER_KEY        = "cover_key";
+    public static final String CONVENTION_START = "convention_start";
+    public static final String CONVENTION_END = "convention_end";
     private static AppPrefs instance;
 
     private SharedPreferences prefs;
@@ -110,6 +112,25 @@ public class AppPrefs
         return getString(COVER_KEY, null);
     }
 
+    public void setConventionStartDate(@NotNull String startDate)
+    {
+        setString(CONVENTION_START, startDate);
+    }
+
+    public String getConventionStartDate()
+    {
+        return getString(CONVENTION_START, null);
+    }
+
+    public void setConventionEndDate(@NotNull String endDate)
+    {
+        setString(CONVENTION_END, endDate);
+    }
+
+    public String getConventionEndDate()
+    {
+        return getString(CONVENTION_END, null);
+    }
 
     //helper methods
     private void setBoolean(String key, Boolean value)
