@@ -58,7 +58,7 @@
 
         <activity
             android:name=".FindUserKot"
-            android:label="@string/title_activity_find_user" />
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".UserDetailActivity"
             android:label="User Detail" />
@@ -71,7 +71,7 @@
             android:label="Welcome" />
         <activity
             android:name=".EditUserProfile"
-            android:label="@string/title_activity_edit_user_profile"></activity>
+            android:theme="@style/NoActionBar"/>
 
         <activity android:name=".SignInActivity"
                   android:theme="@style/NoActionBar"/>

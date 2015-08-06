@@ -1,48 +1,58 @@
 package co.touchlab.droidconandroid
 
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.app.LoaderManager
+import android.support.v4.app.LoaderManager.LoaderCallbacks
+import android.support.v4.content.Loader
+import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
-import co.touchlab.droidconandroid.utils.Toaster
-import android.text.TextUtils
-import com.squareup.picasso.Picasso
-import android.text.Html
-import co.touchlab.droidconandroid.utils.TextHelper
-import android.text.method.LinkMovementMethod
-import android.widget.Button
-import co.touchlab.droidconandroid.data.AppPrefs
-import co.touchlab.droidconandroid.tasks.FollowToggleTask
-import org.apache.commons.lang3.StringUtils
-import android.support.v4.app.LoaderManager
-import co.touchlab.droidconandroid.data.UserAccount
-import android.support.v4.content.Loader
-import android.support.v4.app.LoaderManager.LoaderCallbacks
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.loaders.networked.DoubleTapResult
 import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
+import co.touchlab.droidconandroid.data.AppPrefs
+import co.touchlab.droidconandroid.data.UserAccount
+import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
+import co.touchlab.droidconandroid.tasks.FollowToggleTask
+import co.touchlab.droidconandroid.utils.CustomTarget
+import co.touchlab.droidconandroid.utils.PaletteTransformation
+import co.touchlab.droidconandroid.utils.Toaster
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 /**
  * Created by kgalligan on 7/27/14.
  */
 class UserDetailFragment() : Fragment()
 {
-    private var userAvatar: ImageView? = null
-    private var userName: TextView? = null
-    private var profile: TextView? = null
-    private var userCodeVal: TextView? = null
+    private var avatar: ImageView? = null
+    private var name: TextView? = null
+    private var phone: TextView? = null
+    private var phoneWrapper: View? = null
+    private var email: TextView? = null
+    private var emailWrapper: View? = null
     private var company: TextView? = null
     private var twitter: TextView? = null
-    private var linkedIn: TextView? = null
+    private var twitterWrapper: View? = null
+    private var gPlus: TextView? = null
+    private var gPlusWrapper: View? = null
     private var website: TextView? = null
+    private var websiteWrapper: View? = null
+    private var company2: TextView? = null
+    private var companyWrapper: View? = null
     private var followToggle: Button? = null
+    private var header: View? = null
 
     companion object
     {
+        val TAG: String = UserDetailFragment.javaClass.getSimpleName()
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
         val USER_ID = "USER_ID"
 
@@ -135,15 +145,28 @@ class UserDetailFragment() : Fragment()
     {
         val view = inflater!!.inflate(R.layout.fragment_user_detail, null)!!
 
-        userAvatar = view.findView(R.id.userAvatar) as ImageView
-        userName = view.findView(R.id.userName) as TextView
-        profile = view.findView(R.id.profile) as TextView
-        userCodeVal = view.findView(R.id.userCodeVal) as TextView
+        avatar = view.findView(R.id.profile_image) as ImageView
+        name = view.findView(R.id.name) as TextView
+        phone = view.findView(R.id.phone) as TextView
+        phoneWrapper = view.findView(R.id.phone_wrapper)
+        email = view.findView(R.id.email) as TextView
+        emailWrapper = view.findView(R.id.email_wrapper)
         company = view.findView(R.id.company) as TextView
         twitter = view.findView(R.id.twitter) as TextView
-        linkedIn = view.findView(R.id.linkedIn) as TextView
+        twitterWrapper = view.findView(R.id.wrapper_twitter)
+        gPlus = view.findView(R.id.gPlus) as TextView
+        gPlusWrapper = view.findViewById(R.id.gPlus_wrapper)
         website = view.findView(R.id.website) as TextView
+        websiteWrapper = view.findView(R.id.website_wrapper)
+        company2 = view.findView(R.id.company2) as TextView
+        companyWrapper = view.findView(R.id.company_wrapper)
         followToggle = view.findView(R.id.followToggle) as Button
+        header = view.findView(R.id.header)
+
+        var close = view.findView(R.id.close);
+        close.setOnClickListener{
+            (getActivity() as FindUserKot).closeFragment()
+        }
 
         getLoaderManager()!!.initLoader(0, null, this.UDLoaderCallbacks())
 
@@ -171,17 +194,65 @@ class UserDetailFragment() : Fragment()
     private fun showUserData(userAccount: UserAccount)
     {
         val avatarKey = userAccount.avatarKey
-        if (!TextUtils.isEmpty(avatarKey))
-            Picasso.with(getActivity())!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!.into(userAvatar)
-        userName!!.setText(userAccount.name)
-        val profileString = Html.fromHtml(TextHelper.findTagLinks(StringUtils.trimToEmpty(userAccount.profile)!!))
-        profile!!.setMovementMethod(LinkMovementMethod.getInstance())
-        profile!!.setText(profileString)
-        userCodeVal!!.setText(userAccount.userCode)
-        company!!.setText(userAccount.company)
-        twitter!!.setText(userAccount.twitter)
-        linkedIn!!.setText(userAccount.linkedIn)
-        website!!.setText(userAccount.website)
+//       http://jakewharton.com/coercing-picasso-to-play-with-palette/
+        if (!TextUtils.isEmpty(avatarKey)) {
+
+            Picasso.with(getActivity())!!
+                    .load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)!!
+                    .transform(PaletteTransformation.instance())
+                    .into(object : CustomTarget(){
+                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                            super.onBitmapLoaded(bitmap, from)
+                            var palette = PaletteTransformation.getPalette(bitmap);
+
+                            avatar!!.setImageBitmap(bitmap)
+                            header!!.setBackgroundColor(palette.getDarkVibrantColor(getResources().getColor(R.color.bg_profile)))
+                        }
+                    })
+
+        }
+
+
+        if(!TextUtils.isEmpty(userAccount.phoneticName))
+        {
+            name!!.setText("${userAccount.name} (${userAccount.phoneticName})")
+        }
+        else
+        {
+            name!!.setText(userAccount.name)
+        }
+
+        if(!TextUtils.isEmpty(userAccount.phone)) {
+            phone!!.setText(userAccount.phone)
+            phoneWrapper!!.setVisibility(View.VISIBLE)
+        }
+
+        if(!TextUtils.isEmpty(userAccount.email)) {
+            email!!.setText(userAccount.email)
+            emailWrapper!!.setVisibility(View.VISIBLE)
+        }
+
+        if(!TextUtils.isEmpty(userAccount.company)) {
+            company!!.setText(userAccount.company)
+            company2!!.setText(userAccount.company)
+            companyWrapper!!.setVisibility(View.VISIBLE)
+            company!!.setVisibility(View.VISIBLE)
+        }
+
+        if(!TextUtils.isEmpty(userAccount.twitter)) {
+            twitter!!.setText("@${userAccount.twitter}")
+            twitterWrapper!!.setVisibility(View.VISIBLE)
+        }
+
+        if(!TextUtils.isEmpty(userAccount.gPlus)) {
+            gPlus!!.setText("+${userAccount.gPlus}")
+            gPlusWrapper!!.setVisibility(View.VISIBLE)
+        }
+
+        if(!TextUtils.isEmpty(userAccount.website)) {
+            website!!.setText(userAccount.website)
+            websiteWrapper!!.setVisibility(View.VISIBLE)
+        }
 
         val appPrefs = AppPrefs.getInstance(getActivity())
         if (userAccount.id.equals(appPrefs.getUserId()))

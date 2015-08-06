@@ -1,7 +1,5 @@
 package co.touchlab.droidconandroid.network;
 
-import co.touchlab.android.superbus.errorcontrol.PermanentException;
-import co.touchlab.android.superbus.errorcontrol.TransientException;
 import co.touchlab.droidconandroid.network.dao.LoginResult;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;

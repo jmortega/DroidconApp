@@ -14,12 +14,27 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.Toolbar;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
+import android.util.Patterns;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import co.touchlab.android.superbus.appsupport.CommandBusHelper;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -33,22 +48,20 @@ import co.touchlab.droidconandroid.utils.Toaster;
 import co.touchlab.profilephotoeditor.BitmapUtils;
 import co.touchlab.profilephotoeditor.CameraUtils;
 import co.touchlab.profilephotoeditor.PhotoScaleActivity;
-import com.squareup.picasso.Picasso;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class EditUserProfile extends StickyTaskManagerActivity
 {
     public static final String HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES = "https://s3.amazonaws.com/droidconimages/";
-    private EditText myName;
-    private EditText myProfile;
-    private TextView myUserCode;
-    private EditText myCompany;
-    private EditText myTwitter;
-    private EditText myWebsite;
+    private EditText  name;
+    private TextView  userCode;
+    private EditText  company;
+    private EditText  twitter;
+    private EditText  website;
+    private EditText  phoneticName;
+    private EditText  nickname;
+    private EditText  phone;
+    private EditText  email;
+    private EditText  gPlus;
     private ImageView myPic;
 
     public static void callMe(Context c)
@@ -63,28 +76,65 @@ public class EditUserProfile extends StickyTaskManagerActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_profile);
 
-        if (savedInstanceState == null)
+        if(savedInstanceState == null)
         {
             refreshProfile();
         }
 
-        myName = (EditText) findViewById(R.id.myName);
-        myProfile = (EditText) findViewById(R.id.myProfile);
-        myUserCode = (TextView) findViewById(R.id.myUserCode);
-        myCompany = (EditText) findViewById(R.id.myCompany);
-        myTwitter = (EditText) findViewById(R.id.myTwitter);
-        myWebsite = (EditText) findViewById(R.id.myWebsite);
-        myPic = (ImageView) findViewById(R.id.myPic);
-        findViewById(R.id.save).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                saveProfile();
-            }
-        });
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.title_activity_edit_user_profile);
+        toolbar.setNavigationIcon(R.drawable.ic_action_tick);
+        setSupportActionBar(toolbar);
+
+        name = (EditText) findViewById(R.id.name);
+        email = (EditText) findViewById(R.id.email);
+        gPlus = (EditText) findViewById(R.id.gPlus);
+        userCode = (TextView) findViewById(R.id.myUserCode);
+        company = (EditText) findViewById(R.id.company);
+        twitter = (EditText) findViewById(R.id.twitter);
+        website = (EditText) findViewById(R.id.website);
+        phone = (EditText) findViewById(R.id.phone);
+        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        phoneticName = (EditText) findViewById(R.id.phonetic_name);
+        gPlus = (EditText) findViewById(R.id.gPlus);
+        nickname = (EditText) findViewById(R.id.nickname);
+        myPic = (ImageView) findViewById(R.id.profile_image);
 
         EventBusExt.getDefault().register(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if(item.getItemId() == android.R.id.home)
+        {
+            validateChanges();
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void validateChanges()
+    {
+        String phoneString = getStringFromEditText(phone);
+        String emailString = getStringFromEditText(email);
+        String nameString = getStringFromEditText(name);
+        if(TextUtils.isEmpty(nameString))
+        {
+            Toast.makeText(this, R.string.error_name, Toast.LENGTH_SHORT).show();
+        }
+        else if(!TextUtils.isEmpty(phoneString) && PhoneNumberUtils.isGlobalPhoneNumber(phoneString))
+        {
+            Toast.makeText(this, R.string.error_phone, Toast.LENGTH_SHORT).show();
+        }
+        else if(!TextUtils.isEmpty(emailString) && !Patterns.EMAIL_ADDRESS.matcher(getStringFromEditText(email)).matches())
+        {
+            Toast.makeText(this, R.string.error_email, Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            saveProfile();
+        }
     }
 
     @Override
@@ -107,16 +157,23 @@ public class EditUserProfile extends StickyTaskManagerActivity
 
     private void saveProfile()
     {
-        TaskQueue.loadQueueDefault(this).execute(new UpdateUserProfileTask(
-                this,
-                myName.getText().toString(),
-                myProfile.getText().toString(),
-                myCompany.getText().toString(),
-                myTwitter.getText().toString(),
-                null,
-                myWebsite.getText().toString()
-        ));
+        TaskQueue.loadQueueDefault(this).execute(
+                new UpdateUserProfileTask(this, getStringFromEditText(name), null,
+                                          getStringFromEditText(company),
+                                          getStringFromEditText(twitter), null,
+                                          getStringFromEditText(website),
+                                          getStringFromEditText(phoneticName),
+                                          getStringFromEditText(nickname),
+                                          getStringFromEditText(phone),
+                                          getStringFromEditText(email),
+                                          getStringFromEditText(gPlus)));
         finish();
+    }
+
+    @NonNull
+    private String getStringFromEditText(EditText editText)
+    {
+        return editText.getText().toString();
     }
 
     public void onEventMainThread(GrabUserProfile grabUserProfile)
@@ -129,14 +186,18 @@ public class EditUserProfile extends StickyTaskManagerActivity
         //This is a little shitty.  Assuming an empty code means we haven't
         //done the initial data set.  Updates should only be coming from
         //avatar uploads
-        if(StringUtils.isEmpty(myUserCode.getText()))
+        if(StringUtils.isEmpty(userCode.getText()))
         {
-            myName.setText(ua.name);
-            myProfile.setText(ua.profile);
-            myCompany.setText(ua.company);
-            myTwitter.setText(ua.twitter);
-            myWebsite.setText(ua.website);
-            myUserCode.setText(ua.userCode);
+            name.setText(ua.name);
+            nickname.setText(ua.nickname);
+            email.setText(ua.email);
+            phone.setText(ua.phone);
+            phoneticName.setText(ua.phoneticName);
+            gPlus.setText(ua.gPlus);
+            company.setText(ua.company);
+            twitter.setText(ua.twitter);
+            website.setText(ua.website);
+            userCode.setText(ua.userCode);
         }
 
         if (!TextUtils.isEmpty(ua.avatarKey))
@@ -145,7 +206,7 @@ public class EditUserProfile extends StickyTaskManagerActivity
         }
         else
         {
-            myPic.setImageResource(R.drawable.android_profile);
+            myPic.setImageResource(R.drawable.profile_placeholder);
         }
 
         myPic.setOnClickListener(new View.OnClickListener()
@@ -214,8 +275,9 @@ public class EditUserProfile extends StickyTaskManagerActivity
                         {
                             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-                            Cursor cursor = getContentResolver().query(
-                                    selectedImage, filePathColumn, null, null, null);
+                            Cursor cursor = getContentResolver().query(selectedImage,
+                                                                       filePathColumn, null, null,
+                                                                       null);
                             cursor.moveToFirst();
 
                             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -317,7 +379,8 @@ public class EditUserProfile extends StickyTaskManagerActivity
 
     public void photoEditComplete(String path)
     {
-        TaskQueue.loadQueueDefault(this).execute(new QuickClearAvatarTask(AppPrefs.getInstance(this).getUserId()));
+        TaskQueue.loadQueueDefault(this).execute(
+                new QuickClearAvatarTask(AppPrefs.getInstance(this).getUserId()));
         refreshProfile();
         CommandBusHelper.submitCommandAsync(this, new UploadAvatarCommand(path));
         Toaster.showMessage(this, "Photo updating.  May take a bit...");

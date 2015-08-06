@@ -40,6 +40,11 @@ class UserAuthHelper
             dbUa.linkedIn = ua.linkedIn
             dbUa.website = ua.website
             dbUa.following = ua.following
+            dbUa.gPlus = ua.gPlus
+            dbUa.nickname = ua.nickname
+            dbUa.phoneticName = ua.phoneticName
+            dbUa.phone = ua.phone
+            dbUa.email = ua.email
         }
     }
 }

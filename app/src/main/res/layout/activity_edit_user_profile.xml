@@ -1,58 +1,240 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="co.touchlab.droidconandroid.EditUserProfile">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:focusableInTouchMode="true"
+              tools:context="co.touchlab.droidconandroid.EditUserProfile">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:id="@+id/myPic"/>
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/myName"
-        android:hint="Name" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/ActionBar"/>
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/myProfile"
-        android:hint="Profile" />
+    </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/myUserCode" />
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/myCompany"
-        android:hint="Company" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/myTwitter"
-        android:hint="Twitter Handle" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/padding_xxlarge"
+            android:paddingTop="@dimen/padding_medium"
+            android:orientation="vertical">
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/myWebsite"
-        android:hint="http://yoursite.com" />
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:id="@+id/save"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="@dimen/height_xlarge"
+                android:layout_height="@dimen/height_xlarge"
+                android:layout_alignTop="@+id/name"
+                android:layout_margin="@dimen/padding_medium"
+                tools:src="@drawable/profile_placeholder"/>
+
+            <com.wnafee.vector.MorphButton
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                android:layout_marginLeft="@dimen/height_xlarge"
+                android:layout_marginTop="@dimen/height_xlarge"
+                app:vc_startDrawable="@drawable/ic_edit"/>
+
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_small"
+                android:layout_toRightOf="@+id/profile_image"
+                android:inputType="textPersonName"
+                android:hint="@string/hint_name"
+                android:textSize="@dimen/text_xxxlarge"/>
+
+            <EditText
+                android:id="@+id/phonetic_name"
+                style="@style/SignInEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/name"
+                android:inputType="textPhonetic"
+                android:hint="@string/hint_phonetic_name"/>
+
+            <EditText
+                android:id="@+id/nickname"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/phonetic_name"
+                style="@style/SignInEditText"
+                android:hint="@string/hint_nickname"/>
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@+id/phone"
+                         android:layout_alignTop="@+id/phone"
+                         android:layout_toLeftOf="@+id/phone">
+
+                <com.wnafee.vector.MorphButton
+                    android:layout_width="@dimen/social_icon"
+                    android:layout_height="@dimen/social_icon"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    app:vc_startDrawable="@drawable/ic_phone"/>
+
+            </FrameLayout>
+
+
+            <EditText
+                android:id="@+id/phone"
+                android:inputType="phone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/nickname"
+                style="@style/SignInEditText"
+                android:hint="@string/hint_phone"/>
+
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@+id/email"
+                         android:layout_alignTop="@+id/email"
+                         android:layout_toLeftOf="@+id/email">
+
+                <com.wnafee.vector.MorphButton
+                    android:layout_width="@dimen/social_icon"
+                    android:layout_height="@dimen/social_icon"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    app:vc_startDrawable="@drawable/ic_email"/>
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/phone"
+                android:inputType="textEmailAddress"
+                style="@style/SignInEditText"
+                android:hint="@string/hint_email"/>
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@+id/company"
+                         android:layout_alignTop="@+id/company"
+                         android:layout_toLeftOf="@+id/company">
+
+                <com.wnafee.vector.MorphButton
+                    android:layout_width="@dimen/social_icon"
+                    android:layout_height="@dimen/social_icon"
+                    android:layout_gravity="center"
+                    app:vc_startDrawable="@drawable/ic_work"/>
+
+            </FrameLayout>
+
+
+            <EditText
+                android:id="@+id/company"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/email"
+                style="@style/SignInEditText"
+                android:hint="@string/hint_company"/>
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@+id/website"
+                         android:layout_alignTop="@+id/website"
+                         android:layout_toLeftOf="@+id/website">
+
+                <com.wnafee.vector.MorphButton
+                    android:layout_width="@dimen/social_icon"
+                    android:layout_height="@dimen/social_icon"
+                    android:layout_gravity="center"
+                    app:vc_startDrawable="@drawable/ic_website"/>
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/website"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/company"
+                style="@style/SignInEditText"
+                android:hint="@string/hint_website"/>
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@+id/twitter"
+                         android:layout_alignTop="@+id/twitter"
+                         android:layout_toLeftOf="@+id/twitter">
+
+                <com.wnafee.vector.MorphButton
+                    android:layout_width="@dimen/social_icon"
+                    android:layout_height="@dimen/social_icon"
+                    android:layout_gravity="center"
+                    app:vc_startDrawable="@drawable/ic_twitter"/>
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/twitter"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/website"
+                style="@style/SignInEditText"
+                android:inputType="text"
+                android:hint="@string/hint_twitter"/>
+
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@+id/gPlus"
+                         android:layout_alignTop="@+id/gPlus"
+                         android:layout_toLeftOf="@+id/gPlus">
+
+                <com.wnafee.vector.MorphButton
+                    android:layout_width="@dimen/social_icon"
+                    android:layout_height="@dimen/social_icon"
+                    android:layout_gravity="center"
+                    app:vc_startDrawable="@drawable/ic_gplus"/>
+
+            </FrameLayout>
+
+
+            <EditText
+                android:id="@+id/gPlus"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/twitter"
+                style="@style/SignInEditText"
+                android:hint="Profile"/>
+
+
+            <TextView
+                android:id="@+id/myUserCode"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
 </LinearLayout>
