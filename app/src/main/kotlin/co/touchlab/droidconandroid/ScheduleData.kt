@@ -78,7 +78,8 @@ class ScheduleDataFragment() : Fragment()
             override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long)
             {
                 val event = adapter!!.getItem(position)
-                EventDetailActivity.callMe(getActivity()!!, event!!.id)
+                //TODO: replace 0 with track id
+                EventDetailActivity.callMe(getActivity()!!, event!!.id, 0)
             }
         })
 

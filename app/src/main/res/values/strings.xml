@@ -58,5 +58,8 @@
     <string name="error_phone">Please enter a valid phone number.</string>
     <string name="error_email">Please enter a valid email address.</string>
     <string name="error_name">Don\'t forget your name!</string>
+    
+    <!-- Event Detail -->
+    <string name="event_venue_time" >%1$s, %2$s - %3$s</string>
 
 </resources>

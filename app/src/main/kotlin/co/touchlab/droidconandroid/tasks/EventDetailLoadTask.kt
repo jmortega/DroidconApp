@@ -16,7 +16,7 @@ open class EventDetailLoadTask(c: Context, val eventId: Long) : DatabaseTaskKot(
     }
 
     var event: Event? = null
-    var speakers: MutableList<UserAccount>? = null
+    var speakers: ArrayList<UserAccount>? = null
 
     override fun run(context: Context?)
     {
