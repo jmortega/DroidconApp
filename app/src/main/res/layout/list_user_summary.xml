@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignTop="@+id/name"
+        android:layout_width="@dimen/event_speaker_image"
+        android:layout_height="@dimen/event_speaker_image"
+        android:layout_marginLeft="@dimen/padding_medium"
+        android:layout_marginRight="@dimen/padding_medium"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
         tools:src="@drawable/profile_placeholder"/>
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:textSize="@dimen/text_large"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/padding_large"
-        android:id="@+id/name" />
+        android:layout_toRightOf="@id/profile_image"
+        android:layout_alignBaseline="@id/profile_image"
+        android:paddingTop="@dimen/padding_wedge"
+        android:paddingBottom="@dimen/padding_wedge"
+        android:id="@+id/name"/>
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_small"
+        android:layout_below="@id/name"
+        android:layout_alignLeft="@id/name"
+        android:id="@+id/bio" />
+
+</RelativeLayout>

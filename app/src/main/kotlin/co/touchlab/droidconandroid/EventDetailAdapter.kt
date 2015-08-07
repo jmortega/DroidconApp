@@ -1,34 +1,76 @@
 package co.touchlab.droidconandroid
 
+import android.app.Activity
+import android.content.Context
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.text.Layout
+import android.text.TextUtils
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import co.touchlab.droidconandroid.data.UserAccount
+import co.touchlab.droidconandroid.utils.TextHelper
+import com.squareup.picasso.Picasso
 import com.wnafee.vector.compat.ResourcesCompat
 import de.hdodenhof.circleimageview.CircleImageView
+import org.apache.commons.lang3.StringUtils
 import java.util.*
 
 /**
  * Created by samuelhill on 8/7/15.
  */
 
-class EventDetailAdapter(val trackColor: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>()
+class EventDetailAdapter(val context: Context, val trackColor: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
+    val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
+
+    //dataset
     private var data = ArrayList<Detail>()
 
+    //=================== Adapter types ===================
     public val TYPE_HEADER: Int = 0
     public val TYPE_BODY: Int = 1
     public val TYPE_DIVIDER: Int = 3
-    public val TYPE_SPEAKER: Int = 4
+    public val TYPE_SPACE: Int = 4
+    public val TYPE_SPEAKER: Int = 5
 
+    //=================== Public helper functions ===================
+    public fun addHeader(venue: String, icon: Int)
+    {
+        data.add(TextDetail(TYPE_HEADER, venue, icon))
+    }
+
+    public fun addBody(description: String)
+    {
+        data.add(TextDetail(TYPE_BODY, description, 0))
+    }
+
+    public fun addDivider()
+    {
+        data.add(Detail(TYPE_DIVIDER))
+    }
+
+    public fun addSpace(size: Int)
+    {
+        data.add(SpaceDetail(TYPE_SPACE, size))
+    }
+
+    public fun addSpeaker(speaker: UserAccount)
+    {
+        data.add(SpeakerDetail(TYPE_SPEAKER, speaker.avatarKey, speaker.name, speaker.profile, speaker.id))
+    }
+
+    //=================== Adapter Overrides ===================
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder?
     {
         var holder: RecyclerView.ViewHolder? = null
@@ -36,13 +78,24 @@ class EventDetailAdapter(val trackColor: Int) : RecyclerView.Adapter<RecyclerVie
         {
             TYPE_HEADER, TYPE_BODY ->
             {
-                var view = LayoutInflater.from(parent!!.getContext()).inflate(R.layout.item_event_text, parent, false)
+                var view = LayoutInflater.from(context).inflate(R.layout.item_event_text, parent, false)
                 holder = TextVH(view)
             }
             TYPE_DIVIDER ->
             {
-                var view = LayoutInflater.from(parent!!.getContext()).inflate(R.layout.item_drawer_divider, parent, false)
+                var view = LayoutInflater.from(context).inflate(R.layout.item_drawer_divider, parent, false)
                 holder = DividerVH(view)
+            }
+            TYPE_SPEAKER ->
+            {
+                var view = LayoutInflater.from(context).inflate(R.layout.list_user_summary, parent, false)
+                holder = SpeakerVH(view)
+            }
+            TYPE_SPACE ->
+            {
+                var view = View(context)
+                parent!!.addView(view)
+                holder = object: RecyclerView.ViewHolder(view){}
             }
         }
         return holder
@@ -65,7 +118,6 @@ class EventDetailAdapter(val trackColor: Int) : RecyclerView.Adapter<RecyclerVie
             TYPE_HEADER ->
             {
                 var headerVH = holder as TextVH
-                var context = headerVH.image!!.getContext()
                 var iconRes = (data.get(position) as TextDetail).icon
                 var drawable = ResourcesCompat.getDrawable(context, iconRes)
                 drawable.setColorFilter(PorterDuffColorFilter(trackColor, PorterDuff.Mode.SRC_IN))
@@ -78,14 +130,64 @@ class EventDetailAdapter(val trackColor: Int) : RecyclerView.Adapter<RecyclerVie
 
             TYPE_BODY ->
             {
-                var headerVH = holder as TextVH
-                headerVH.image!!.setVisibility(View.INVISIBLE)
+                var bodyVH = holder as TextVH
+                bodyVH.image!!.setVisibility(View.INVISIBLE)
 
-                headerVH.text!!.setText((data.get(position) as TextDetail).text)
+                val descriptionSpanned = Html.fromHtml(StringUtils.trimToEmpty((data.get(position) as TextDetail).text)!!)
+                bodyVH.text!!.setText(descriptionSpanned)
+            }
+
+            TYPE_SPEAKER ->
+            {
+                var speakerVH = holder as SpeakerVH
+                val avatarView = speakerVH.image
+                val nameView = speakerVH.name
+                val user = data.get(position) as SpeakerDetail
+
+                if (!TextUtils.isEmpty(user.avatar))
+                {
+                    //Picasso.with(context).load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + user.avatar).into(avatarView)
+                    Picasso.with(context).load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + "0ed32568-ce43-4eac-9d6d-59f129d36145").into(avatarView)
+                }
+
+                val formatString = context.getResources().getString(R.string.event_speaker_name);
+                nameView!!.setText(formatString.format(user.name))
+                nameView.setTextColor(trackColor)
+
+                speakerVH.itemView.setOnClickListener(View.OnClickListener
+                {
+                    UserDetailActivity.callMe(context as Activity, user.id)
+                })
+
+                val bioSpanned = Html.fromHtml(StringUtils.trimToEmpty(user.bio)!!)
+                speakerVH.bio!!.setText(bioSpanned)
+            }
+
+            TYPE_SPACE ->
+            {
+                var p = holder.itemView.getLayoutParams()
+                p.height = (data.get(position) as SpaceDetail).size
+                holder.itemView.setLayoutParams(p)
             }
         }
     }
 
+    //=================== Adapter type models ===================
+    open inner class Detail(val type: Int)
+    {
+        public fun getItemType(): Int
+        {
+            return type;
+        }
+    }
+
+    inner data class TextDetail(type: Int, val text: String, val icon: Int): Detail(type)
+
+    inner data class SpeakerDetail(type: Int, val avatar: String, val name: String, val bio: String, val id: Long): Detail(type)
+
+    inner data class SpaceDetail(type: Int, val size: Int): Detail(type)
+
+    //=================== Type ViewHolders ===================
     inner class TextVH(val item: View) : RecyclerView.ViewHolder(item)
     {
         public var image: ImageView? = null
@@ -104,36 +206,13 @@ class EventDetailAdapter(val trackColor: Int) : RecyclerView.Adapter<RecyclerVie
     {
         public var image: CircleImageView? = null
         public var name: TextView? = null
+        public var bio: TextView? = null
 
         init
         {
             image = item.findViewById(R.id.profile_image) as CircleImageView
             name = item.findViewById(R.id.name) as TextView
+            bio = item.findViewById(R.id.bio) as TextView
         }
     }
-
-    public fun addHeader(venue: String, icon: Int)
-    {
-        data.add(TextDetail(TYPE_HEADER, venue, icon))
-    }
-
-    public fun addBody(description: String)
-    {
-        data.add(TextDetail(TYPE_BODY, description, 0))
-    }
-
-    public fun addDivider()
-    {
-        data.add(Detail(TYPE_DIVIDER))
-    }
-
-    open inner class Detail(val type: Int)
-    {
-        public fun getItemType(): Int
-        {
-            return type;
-        }
-    }
-
-    inner data class TextDetail(type: Int, val text: String, val icon: Int): Detail(type)
 }

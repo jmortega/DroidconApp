@@ -53,7 +53,6 @@ class EventDetailFragment() : Fragment()
 
     companion object
     {
-        val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
         val EVENT_ID = "EVENT_ID"
         val TRACK_ID = "TRACK_ID"
 
@@ -90,13 +89,16 @@ class EventDetailFragment() : Fragment()
             eventId = getActivity()!!.getIntent()!!.getLongExtra(EVENT_ID, -1)
         }
 
-        if (eventId == null || eventId == -1L)
+        if (eventId == -1L)
             throw IllegalArgumentException("Must set event id");
 
-        return eventId!!
+        return eventId
     }
 
-
+    /**
+     * Gets the track ID argument. This is to make sure we dont flash the incorrect colors
+     * on things like the FAB and toolbar while waiting to load the event details
+     */
     private fun findTrackIdArg(): Int
     {
         var trackId = getArguments()?.getInt(TRACK_ID, -1)
@@ -105,10 +107,10 @@ class EventDetailFragment() : Fragment()
             trackId = getActivity()!!.getIntent()!!.getIntExtra(TRACK_ID, -1)
         }
 
-        if (trackId == null || trackId == -1)
-            throw IllegalArgumentException("Must set event id");
+        if (trackId == -1)
+            throw IllegalArgumentException("Must set track id");
 
-        return trackId!!
+        return trackId
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -121,15 +123,14 @@ class EventDetailFragment() : Fragment()
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
         activity.getSupportActionBar().setDisplayShowHomeEnabled(true)
 
+        //collect the views
         name = view.findViewById(R.id.name) as TextView
         backdrop = view.findViewById(R.id.backdrop) as ImageView
         fab = view.findViewById(R.id.register) as FloatingActionButton
         collapsingToolbar = view.findViewById(R.id.collapsingToolbar) as CollapsingToolbarLayout
-
         recycler = view.findViewById(R.id.recycler) as RecyclerView
 
-        val layoutManager = LinearLayoutManager(getActivity())
-        recycler!!.setLayoutManager(layoutManager)
+        recycler!!.setLayoutManager(LinearLayoutManager(getActivity()))
 
         updateTrackColor(findTrackIdArg())
 
@@ -154,19 +155,23 @@ class EventDetailFragment() : Fragment()
         updateToolbar(event)
         updateFAB(event)
 
-        updateContent(event)
+        updateContent(event, eventDetailTask.speakers)
    }
 
-    public fun onEventMainThread(task: AddRsvpTaskKot)
+    public fun onEventMainThread([suppress("UNUSED_PARAMETER")] task: AddRsvpTaskKot)
     {
         startDetailRefresh()
     }
 
-    public fun onEventMainThread(task: RemoveRsvpTaskKot)
+    public fun onEventMainThread([suppress("UNUSED_PARAMETER")] task: RemoveRsvpTaskKot)
     {
         startDetailRefresh()
     }
 
+    /**
+     * Sets up the floating action bar according to the event details. This includes setting the color
+     * and adjusting the icon according to rsvp status
+     */
     private fun updateFAB(event: Event)
     {
         //Follow Fab
@@ -198,6 +203,9 @@ class EventDetailFragment() : Fragment()
         fab!!.setVisibility(View.VISIBLE)
     }
 
+    /**
+     * Updates the title and colors of the toolbar
+     */
     private fun updateToolbar(event: Event)
     {
         name!!.setText(event.name)
@@ -208,9 +216,12 @@ class EventDetailFragment() : Fragment()
         collapsingToolbar!!.setStatusBarScrimColor(trackColor)
     }
 
-    private fun updateContent(event: Event)
+    /**
+     * Adds all the content to the recyclerView
+     */
+    private fun updateContent(event: Event, speakers: ArrayList<UserAccount>?)
     {
-        var adapter = EventDetailAdapter(getResources().getColor(R.color.track_accent_pink))
+        var adapter = EventDetailAdapter(getActivity(), getResources().getColor(R.color.track_accent_pink))
 
         //Construct the time and venue string and add it to the adapter
         val startDateVal = Date(event.startDateLong!!)
@@ -219,19 +230,21 @@ class EventDetailFragment() : Fragment()
         val formatString = getResources().getString(R.string.event_venue_time);
         formatString.format(event.venue.name, timeFormat.format(startDateVal), timeFormat.format(endDateVal))
 
+        adapter.addSpace(getResources().getDimensionPixelSize(R.dimen.height_small))
         adapter.addHeader(formatString.format(event.venue.name, timeFormat.format(startDateVal), timeFormat.format(endDateVal)), R.drawable.ic_map)
 
         //Description text
-        val descriptionString = Html.fromHtml(TextHelper.findTagLinks(StringUtils.trimToEmpty(event.description)!!)).toString()
-        adapter.addBody(descriptionString)
+        adapter.addBody(event.description)
 
         //Track
-        adapter!!.addHeader("on the TEMP track", R.drawable.ic_action_train)
+        adapter.addHeader("on the TEMP track", R.drawable.ic_action_train)
 
-        adapter!!.addDivider()
+        adapter.addDivider()
 
-
-        adapter!!.addHeader("on the TEMP track", R.drawable.ic_action_train)
+        for(item: UserAccount in speakers as ArrayList)
+        {
+            adapter.addSpeaker(item)
+        }
 
         recycler!!.setAdapter(adapter)
     }
@@ -245,42 +258,14 @@ class EventDetailFragment() : Fragment()
         {
             0 ->
             {
-                trackColor = getResources().getColor(R.color.droidcon_blue)
+                trackColor = getResources().getColor(R.color.droidcon_pink)
                 fabColorList = getResources().getColorStateList(R.color.track_accent_pink)
             }
             else ->
             {
-                trackColor = getResources().getColor(R.color.droidcon_pink)
+                trackColor = getResources().getColor(R.color.droidcon_blue)
                 fabColorList = getResources().getColorStateList(R.color.track_accent_pink)
             }
-        }
-    }
-
-    inner class EventSpeakersAdapter(c: Context, speakers: List<UserAccount>) : ArrayAdapter<UserAccount>(c, android.R.layout.simple_list_item_1, speakers)
-    {
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View?
-        {
-            var view = if (convertView == null)LayoutInflater.from(getActivity()!!).inflate(R.layout.list_user_summary, null) else convertView
-            val avatarView = view!!.findView(R.id.profile_image) as ImageView
-            val userName = view!!.findView(R.id.name) as TextView
-
-            val userAccount = getItem(position)!!
-            if (!TextUtils.isEmpty(userAccount.avatarKey))
-            {
-                //Picasso.with(getActivity())!!.load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + userAccount.avatarKey)!!.into(avatarView)
-                avatarView.setImageResource(R.drawable.profile_placeholder)
-                avatarView.setVisibility(View.VISIBLE)
-            }
-            else
-            {
-                avatarView.setImageResource(R.drawable.profile_placeholder)
-                avatarView.setVisibility(View.VISIBLE)
-                //avatarView.setVisibility(View.GONE)
-            }
-
-            userName.setText(userAccount.name)
-
-            return view
         }
     }
 }
