@@ -65,10 +65,11 @@
             android:name=".WelcomeActivity" />
 
         <activity
-            android:name=".EditUserProfile"/>
+            android:name=".EditUserProfile"
+            />
 
-        <activity android:name=".SignInActivity"/>
-        
+        <activity android:name=".SignInActivity"
+                  />
         <meta-data android:name="com.crashlytics.ApiKey" android:value="90b5b9675372e1f2aff36d43ea5d6869040d37f3"/>
     </application>
 
