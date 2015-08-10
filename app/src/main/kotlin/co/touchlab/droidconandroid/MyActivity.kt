@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.text.TextUtils
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
@@ -56,10 +57,30 @@ public class MyActivity : AppCompatActivity()
 
         if(savedInstanceState == null)
         {
-            replaceContentWithFragment(ScheduleDataFragment.newInstance(true))
+            replaceContentWithFragment(ScheduleFragment.newInstance(true), ScheduleFragment.EXPLORE)
+        }
+        else
+        {
+            val fragment = getSupportFragmentManager().findFragmentById(R.id.container)
+            if(fragment != null)
+            {
+                val tag = fragment.getTag()
+                adjustToolBar(tag)
+            }
         }
 
         EventBusExt.getDefault().register(this)
+    }
+
+    private fun adjustToolBar(tag: String) {
+
+        if (TextUtils.equals(tag, ScheduleFragment.MY_SCHEDULE)) {
+            toolbar!!.setTitle(R.string.my_schedule)
+            toolbar!!.setBackgroundColor(getResources().getColor(R.color.blue_grey))
+        } else if (TextUtils.equals(tag, ScheduleFragment.EXPLORE)) {
+            toolbar!!.setTitle(R.string.app_name)
+            toolbar!!.setBackgroundColor(getResources().getColor(R.color.primary))
+        }
     }
 
     public fun onEventMainThread(command: UploadAvatarCommand) {
@@ -75,10 +96,10 @@ public class MyActivity : AppCompatActivity()
         EventBusExt.getDefault().unregister(this)
     }
 
-    private fun replaceContentWithFragment(fragment: Fragment) {
+    private fun replaceContentWithFragment(fragment: Fragment, tag: String) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container, fragment, ScheduleDataFragment.EXPLORE)
+                .replace(R.id.container, fragment, tag)
                 .commit()
     }
 
@@ -101,24 +122,26 @@ public class MyActivity : AppCompatActivity()
                 drawerLayout.closeDrawer(recyclerView)
 
                 var fragment: Fragment? = null
+                var tag: String? = null
 
                 when (titleRes) {
                     R.string.explore -> {
-                        fragment = ScheduleDataFragment.newInstance(true)
-                        toolbar!!.setTitle(R.string.app_name)
+                        fragment = ScheduleFragment.newInstance(true)
+                        tag = ScheduleFragment.EXPLORE
                     }
                     R.string.my_schedule -> {
-                        fragment = ScheduleDataFragment.newInstance(false)
-                        toolbar!!.setTitle(R.string.my_schedule)
+                        fragment = ScheduleFragment.newInstance(false)
+                        tag = ScheduleFragment.MY_SCHEDULE
+
                     }
                     R.string.social -> FindUserKot.startMe(this@MyActivity)
                     R.string.settings -> EditUserProfile.callMe(this@MyActivity)
                 }
 
                 if (fragment != null) {
-                    replaceContentWithFragment(fragment)
+                    replaceContentWithFragment(fragment, tag!!)
                     drawerAdapter!!.setSelectedPosition(position)
-
+                    adjustToolBar(tag)
                 }
             }
         })
@@ -139,8 +162,8 @@ public class MyActivity : AppCompatActivity()
         drawerItems.add("header_placeholder")
         drawerItems.add(NavigationItem(R.string.explore, R.drawable.ic_explore))
         drawerItems.add(NavigationItem(R.string.my_schedule, R.drawable.ic_myschedule))
-        drawerItems.add(NavigationItem(R.string.map, R.drawable.ic_map))
-        drawerItems.add(NavigationItem(R.string.social, R.drawable.ic_social))
+//        drawerItems.add(NavigationItem(R.string.map, R.drawable.ic_map))
+//        drawerItems.add(NavigationItem(R.string.social, R.drawable.ic_social))
         drawerItems.add("divider_placeholder")
         drawerItems.add(NavigationItem(R.string.settings, R.drawable.ic_settings))
         drawerItems.add(NavigationItem(R.string.about, R.drawable.ic_info))
