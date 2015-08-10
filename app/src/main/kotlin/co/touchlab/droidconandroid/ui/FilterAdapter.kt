@@ -23,7 +23,7 @@ class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private var dataSet: List<Any>
     private val filterClickListener: FilterClickListener
-    private val selectedTracks: ArrayList<Track>
+    private var selectedTracks: ArrayList<Track>
 
     constructor(events: List<Any>, filterClickListener: FilterClickListener) : super() {
         dataSet = events;
@@ -116,6 +116,11 @@ class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     fun getSelectedTracks(): ArrayList<Track> {
         return selectedTracks;
+    }
+
+    fun setSelectedTracks(tracks : ArrayList<Track>) {
+        selectedTracks = tracks
+        notifyDataSetChanged()
     }
 
 }

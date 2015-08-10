@@ -38,6 +38,7 @@ public class MyActivity : AppCompatActivity(), FilterInterface
     private var drawerAdapter: DrawerAdapter? = null
     private var drawerLayout: DrawerLayout? = null
     private var filterAdapter: FilterAdapter? = null
+    private val SELECTED_TRACKS = "tracks"
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -67,6 +68,14 @@ public class MyActivity : AppCompatActivity(), FilterInterface
         }
         else
         {
+            val filters = savedInstanceState.getStringArrayList(SELECTED_TRACKS)
+            val tracks = ArrayList<Track>()
+            for (trackServerName in filters) {
+                tracks.add(Track.findByServerName(trackServerName))
+            }
+
+            filterAdapter!!.setSelectedTracks(tracks)
+
             val fragment = getSupportFragmentManager().findFragmentById(R.id.container)
             if(fragment != null)
             {
@@ -89,7 +98,6 @@ public class MyActivity : AppCompatActivity(), FilterInterface
             toolbar!!.setBackgroundColor(getResources().getColor(R.color.primary))
             drawerAdapter!!.setSelectedPosition(1)
         }
-        filterAdapter!!.clearSelectedTracks()
     }
 
     public fun onEventMainThread(command: UploadAvatarCommand) {
@@ -105,9 +113,9 @@ public class MyActivity : AppCompatActivity(), FilterInterface
         EventBusExt.getDefault().unregister(this)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super<AppCompatActivity>.onSaveInstanceState(outState, outPersistentState)
-
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super<AppCompatActivity>.onSaveInstanceState(outState)
+        outState!!.putStringArrayList(SELECTED_TRACKS, getCurrentFilters())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -166,6 +174,7 @@ public class MyActivity : AppCompatActivity(), FilterInterface
                     replaceContentWithFragment(fragment, tag!!)
                     drawerAdapter!!.setSelectedPosition(position)
                     adjustToolBarAndDrawers(tag)
+                    filterAdapter!!.clearSelectedTracks()
                 }
             }
         })
@@ -193,8 +202,12 @@ public class MyActivity : AppCompatActivity(), FilterInterface
 
     }
 
-    override fun getCurrentFilters(): ArrayList<Track> {
-        return filterAdapter!!.getSelectedTracks()
+    override fun getCurrentFilters(): ArrayList<String> {
+        val filters = ArrayList<String>()
+        for (track in filterAdapter!!.getSelectedTracks()) {
+            filters.add(track.getServerName())
+        }
+        return filters
     }
 
     private fun getFilterItems(): List<Any> {
@@ -224,7 +237,7 @@ public class MyActivity : AppCompatActivity(), FilterInterface
 
 interface FilterInterface {
 
-    fun getCurrentFilters(): ArrayList<Track>
+    fun getCurrentFilters(): ArrayList<String>
 
 }
 

@@ -150,12 +150,12 @@ class EventDetailFragment() : Fragment()
         updateContent(event, eventDetailTask.speakers)
    }
 
-    public fun onEventMainThread([suppress("UNUSED_PARAMETER")] task: AddRsvpTaskKot)
+    public fun onEventMainThread(@suppress("UNUSED_PARAMETER") task: AddRsvpTaskKot)
     {
         startDetailRefresh()
     }
 
-    public fun onEventMainThread([suppress("UNUSED_PARAMETER")] task: RemoveRsvpTaskKot)
+    public fun onEventMainThread(@suppress("UNUSED_PARAMETER") task: RemoveRsvpTaskKot)
     {
         startDetailRefresh()
     }
