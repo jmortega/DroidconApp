@@ -45,7 +45,7 @@
         android:layout_width="@dimen/drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="right|end"
-        android:paddingTop="@dimen/height_tiny"
+        android:paddingTop="40dp"
         android:elevation="8dp"
         android:id="@+id/filter_wrapper"
         android:background="@color/white"

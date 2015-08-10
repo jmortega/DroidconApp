@@ -30,13 +30,12 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private var currentTracks: ArrayList<String> = ArrayList()
 
 
-//    constructor(events: List<Event>, all: Boolean, initialFilters: List<String>,  eventClickListener: EventClickListener) : super() {
-    constructor(events: List<Event>, all: Boolean, eventClickListener: EventClickListener) : super() {
+    constructor(events: List<Event>, all: Boolean, initialFilters: List<String>,  eventClickListener: EventClickListener) : super() {
         dataSet = events;
         filteredData = ArrayList(events);
         allEvents = all
         this.eventClickListener = eventClickListener
-//        this.currentTracks = ArrayList(initialFilters);
+        this.currentTracks = ArrayList(initialFilters);
         update(null)
     }
 
@@ -59,10 +58,6 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if(getItemViewType(position) == VIEW_TYPE_EVENT){
             val eventHolder = holder as EventViewHolder
             val event = filteredData.get(position)
-            if(position == 0)
-            {
-                Log.d("izzytest", "sigh " + event.endDateLong)
-            }
 
             eventHolder.title.setText(event.name)
             var timeBlock = ""

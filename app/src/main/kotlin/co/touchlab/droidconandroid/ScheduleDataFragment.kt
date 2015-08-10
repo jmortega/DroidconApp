@@ -77,8 +77,7 @@ class ScheduleDataFragment() : Fragment()
             }
             else
             {
-//                adapter = EventAdapter(data, allEvents, (getActivity() as FilterInterface).getCurrentFilters(), object : EventClickListener{
-                adapter = EventAdapter(data, allEvents, object : EventClickListener{
+                adapter = EventAdapter(data, allEvents, (getActivity() as FilterInterface).getCurrentFilters(), object : EventClickListener{
                     override fun onEventClick(event: Event) {
                         EventDetailActivity.callMe(getActivity()!!, event.id)
                     }
@@ -94,7 +93,6 @@ class ScheduleDataFragment() : Fragment()
     }
 
     fun filter(track: Track) {
-        Log.d("izzytest", "adapter is null: " + (adapter == null))
         if(adapter != null) {
             adapter!!.update(track)
         }
