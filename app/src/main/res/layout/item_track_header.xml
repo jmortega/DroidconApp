@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="@dimen/height_xlarge"
+    android:paddingRight="@dimen/padding_medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/padding_medium"
+    android:paddingBottom="@dimen/padding_medium"
+    android:fontFamily="sans-serif-medium"
+    android:textColor="@color/black"
+    tools:text="Tracks"/>

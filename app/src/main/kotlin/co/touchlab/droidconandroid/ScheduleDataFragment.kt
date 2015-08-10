@@ -6,10 +6,12 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import co.touchlab.droidconandroid.data.Event
+import co.touchlab.droidconandroid.data.Track
 import co.touchlab.droidconandroid.ui.EventAdapter
 import co.touchlab.droidconandroid.ui.EventClickListener
 import co.touchlab.droidconandroid.utils.Toaster
@@ -19,18 +21,22 @@ class ScheduleDataFragment() : Fragment()
     var eventList: RecyclerView? = null
     var adapter: EventAdapter? = null
     private var allEvents = true
+    private var day: Long? = null
+    private var position: Int? = null
 
     companion object
     {
         val ALL_EVENTS = "ALL_EVENTS"
         val DAY = "DAY"
+        val POSITION = "POSITION"
 
-        fun newInstance(all: Boolean, day: Long): ScheduleDataFragment
+        fun newInstance(all: Boolean, day: Long, position: Int): ScheduleDataFragment
         {
             val scheduleDataFragment = ScheduleDataFragment()
             val args = Bundle()
             args.putBoolean(ALL_EVENTS, all)
             args.putLong(DAY, day)
+            args.putInt(POSITION, position)
             scheduleDataFragment.setArguments(args)
             return scheduleDataFragment
         }
@@ -45,11 +51,14 @@ class ScheduleDataFragment() : Fragment()
         super.onActivityCreated(savedInstanceState)
 
         allEvents = getArguments()!!.getBoolean(ALL_EVENTS)
+        day = getArguments()!!.getLong(DAY)
+        position = getArguments()!!.getInt(POSITION)
 
         eventList = getView().findViewById(R.id.eventList) as RecyclerView
         eventList!!.setLayoutManager(LinearLayoutManager(getActivity()))
 
-        getLoaderManager()!!.initLoader(0, null, this.ScheduleDataLoaderCallbacks())
+        //http://stackoverflow.com/a/28884330
+        getParentFragment().getLoaderManager()!!.initLoader(position!!, null, this.ScheduleDataLoaderCallbacks())
 
     }
 
@@ -57,7 +66,7 @@ class ScheduleDataFragment() : Fragment()
     {
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<Event>>?
         {
-            return ScheduleDataLoader(getActivity()!!, allEvents, getArguments()!!.getLong(DAY))
+            return ScheduleDataLoader(getActivity()!!, allEvents, day!!)
         }
 
         override fun onLoadFinished(loader: Loader<List<Event>>?, data: List<Event>?)
@@ -68,6 +77,7 @@ class ScheduleDataFragment() : Fragment()
             }
             else
             {
+//                adapter = EventAdapter(data, allEvents, (getActivity() as FilterInterface).getCurrentFilters(), object : EventClickListener{
                 adapter = EventAdapter(data, allEvents, object : EventClickListener{
                     override fun onEventClick(event: Event) {
                         EventDetailActivity.callMe(getActivity()!!, event.id)
@@ -80,6 +90,13 @@ class ScheduleDataFragment() : Fragment()
         override fun onLoaderReset(loader: Loader<List<Event>>?)
         {
 
+        }
+    }
+
+    fun filter(track: Track) {
+        Log.d("izzytest", "adapter is null: " + (adapter == null))
+        if(adapter != null) {
+            adapter!!.update(track)
         }
     }
 

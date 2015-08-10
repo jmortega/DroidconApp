@@ -2,13 +2,16 @@ package co.touchlab.droidconandroid.ui
 
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import co.touchlab.droidconandroid.R
 import co.touchlab.droidconandroid.data.Event
+import co.touchlab.droidconandroid.data.Track
 import java.text.SimpleDateFormat
+import java.util.ArrayList
 import java.util.Date
 
 /**
@@ -20,18 +23,25 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     val VIEW_TYPE_EVENT: Int = 0
 
     private var dataSet: List<Event>
+    private var filteredData: ArrayList<Event>
     private val eventClickListener: EventClickListener
     private val timeFormat = SimpleDateFormat("h:mma")
     private val allEvents: Boolean
+    private var currentTracks: ArrayList<String> = ArrayList()
 
+
+//    constructor(events: List<Event>, all: Boolean, initialFilters: List<String>,  eventClickListener: EventClickListener) : super() {
     constructor(events: List<Event>, all: Boolean, eventClickListener: EventClickListener) : super() {
         dataSet = events;
+        filteredData = ArrayList(events);
         allEvents = all
         this.eventClickListener = eventClickListener
+//        this.currentTracks = ArrayList(initialFilters);
+        update(null)
     }
 
     override fun getItemCount(): Int {
-        return dataSet.size()
+        return filteredData.size()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
@@ -48,7 +58,11 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         val resources = context.getResources()
         if(getItemViewType(position) == VIEW_TYPE_EVENT){
             val eventHolder = holder as EventViewHolder
-            val event = dataSet.get(position)
+            val event = filteredData.get(position)
+            if(position == 0)
+            {
+                Log.d("izzytest", "sigh " + event.endDateLong)
+            }
 
             eventHolder.title.setText(event.name)
             var timeBlock = ""
@@ -94,6 +108,15 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             holder.locationTime.setText(locationTime)
+
+            val track = Track.findByServerName(event.category)
+            if(track != null) {
+                holder.track.setBackgroundColor(resources.getColor(track.getTextColorRes()))
+            }
+            else
+            {
+                holder.track.setBackgroundColor(resources.getColor(android.R.color.transparent))
+            }
         }
     }
 
@@ -101,8 +124,8 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (position == 0) {
             return true
         } else {
-            val prevEvent = dataSet.get(position - 1)
-            val event = dataSet.get(position)
+            val prevEvent = filteredData.get(position - 1)
+            val event = filteredData.get(position)
             val prevEventStart = prevEvent.startDateLong
             if(prevEventStart != null && (event.startDateLong != prevEventStart)) {
                 return true
@@ -131,6 +154,36 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             card = itemView.findViewById(R.id.card)
             rsvp = itemView.findViewById(R.id.rsvp)
         }
+    }
+
+    fun update(track: Track?) {
+        if(track != null)
+        {
+            val trackServerName = track.getServerName()
+            if(!currentTracks.contains(trackServerName))
+            {
+                currentTracks.add(trackServerName)
+            }
+            else
+            {
+                currentTracks.remove(trackServerName)
+            }
+        }
+
+        filteredData.clear()
+        if(currentTracks.isEmpty())
+        {
+            filteredData = ArrayList(dataSet)
+        } else {
+            for (event in dataSet) {
+                val category = event.category
+                if (!TextUtils.isEmpty(category) && currentTracks.contains(category)) {
+                    filteredData.add(event)
+                }
+            }
+        }
+
+        notifyDataSetChanged()
     }
 
 }

@@ -63,4 +63,11 @@
     <string name="event_venue_time" >%1$s, %2$s - %3$s</string>
     <string name="event_speaker_name" >Speaker: %1$s</string>
 
+    <!-- tracks-->
+    <string name="filter">Filter</string>
+    <string name="tracks">Tracks</string>
+    <string name="development">Development</string>
+    <string name="design">Design</string>
+    <string name="business">Business</string>
+
 </resources>
