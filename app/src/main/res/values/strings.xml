@@ -59,4 +59,11 @@
     <string name="error_email">Please enter a valid email address.</string>
     <string name="error_name">Don\'t forget your name!</string>
 
+    <!-- tracks-->
+    <string name="filter">Filter</string>
+    <string name="tracks">Tracks</string>
+    <string name="development">Development</string>
+    <string name="design">Design</string>
+    <string name="business">Business</string>
+
 </resources>

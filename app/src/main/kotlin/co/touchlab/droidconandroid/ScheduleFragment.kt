@@ -3,6 +3,7 @@ package co.touchlab.droidconandroid
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.text.TextUtils
@@ -11,6 +12,7 @@ import android.view
 import android.view.LayoutInflater
 import android.view.View
 import co.touchlab.droidconandroid.data.AppPrefs
+import co.touchlab.droidconandroid.data.Track
 import co.touchlab.droidconandroid.utils.TimeUtils
 import java.text.SimpleDateFormat
 import java.util.ArrayList
@@ -20,7 +22,7 @@ import java.util.Date
  *
  * Created by izzyoji :) on 8/5/15.
  */
-class ScheduleFragment() : Fragment()
+class ScheduleFragment : Fragment(), FilterableFragmentInterface
 {
 
     companion object
@@ -29,6 +31,9 @@ class ScheduleFragment() : Fragment()
 
         val EXPLORE = "EXPLORE"
         val MY_SCHEDULE = "MY_SCHEDULE"
+
+        private var pagerAdapter: ScheduleFragmentPagerAdapter? = null
+        val tabDateFormat = SimpleDateFormat("MMM dd")
 
         fun newInstance(all: Boolean): ScheduleFragment
         {
@@ -45,8 +50,10 @@ class ScheduleFragment() : Fragment()
         return inflater!!.inflate(R.layout.fragment_schedule, null)
     }
 
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        super<Fragment>.onActivityCreated(savedInstanceState)
 
         val pager = getView().findViewById(R.id.pager)!! as ViewPager
         val tabs = getView().findViewById(R.id.tabs)!! as TabLayout
@@ -72,25 +79,50 @@ class ScheduleFragment() : Fragment()
                 start += DateUtils.DAY_IN_MILLIS
             }
 
-            val tabDateFormat = SimpleDateFormat("MMM dd")
-
-            val pagerAdapter = object : FragmentPagerAdapter(getChildFragmentManager()!!) {
-                override fun getCount(): Int {
-                    return dates.size()
-                }
-
-                override fun getItem(position: Int): Fragment? {
-                    return ScheduleDataFragment.newInstance(getArguments().getBoolean(ALL_EVENTS), dates.get(position))
-                }
-
-                override fun getPageTitle(position: Int): CharSequence? {
-                    return tabDateFormat.format(Date(dates.get(position)))
-                }
-            }
+            pagerAdapter = ScheduleFragmentPagerAdapter(getChildFragmentManager(), dates, getArguments().getBoolean(ALL_EVENTS))
             pager.setAdapter(pagerAdapter);
             pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
             tabs.setTabsFromPagerAdapter(pagerAdapter)
             tabs.setOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(pager))
+        }
+
+    }
+
+    override fun applyFilters(track: Track) {
+        pagerAdapter!!.updateFrags(track)
+    }
+}
+
+class ScheduleFragmentPagerAdapter : FragmentPagerAdapter
+{
+    private var dates: List<Long>
+    private var allEvents: Boolean
+    private var fragmentManager: FragmentManager
+
+    constructor(fm: FragmentManager, dates: List<Long>, allEvents: Boolean) : super(fm) {
+        this.dates = dates;
+        this.allEvents = allEvents
+        this.fragmentManager = fm
+    }
+
+    override fun getCount(): Int {
+        return dates.size()
+    }
+
+    override fun getItem(position: Int): ScheduleDataFragment? {
+        return ScheduleDataFragment.newInstance(allEvents, dates.get(position), position)
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return ScheduleFragment.tabDateFormat.format(Date(dates.get(position)))
+    }
+
+    fun updateFrags(track: Track) {
+
+        for (fragment in fragmentManager.getFragments()) {
+            if(fragment != null) {
+                (fragment as ScheduleDataFragment).filter(track)
+            }
         }
 
     }
