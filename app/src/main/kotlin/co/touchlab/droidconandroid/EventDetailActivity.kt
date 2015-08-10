@@ -1,9 +1,8 @@
 package co.touchlab.droidconandroid
 
-import android.os.Bundle
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 
@@ -16,11 +15,11 @@ class EventDetailActivity : AppCompatActivity()
     {
         val EVENT_ID = "EVENT_ID"
         val TRACK_ID = "TRACK_ID"
-        fun callMe(a: Activity, id: Long, track: Int)
+        fun callMe(a: Activity, id: Long, category: String)
         {
             val i = Intent(a, javaClass<EventDetailActivity>())
             i.putExtra(EVENT_ID, id)
-            i.putExtra(TRACK_ID, track)
+            i.putExtra(TRACK_ID, category)
             a.startActivity(i)
         }
     }

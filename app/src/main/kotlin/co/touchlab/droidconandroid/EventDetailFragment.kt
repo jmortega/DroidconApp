@@ -1,41 +1,33 @@
 package co.touchlab.droidconandroid
 
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.os.Bundle
-import android.view.View
-import android.text.TextUtils
-import com.squareup.picasso.Picasso
-import android.text.Html
-import co.touchlab.droidconandroid.utils.TextHelper
-import co.touchlab.android.threading.tasks.TaskQueue
-import co.touchlab.droidconandroid.tasks.EventDetailLoadTask
-import org.apache.commons.lang3.StringUtils
-import java.text.SimpleDateFormat
-import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
-import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot
-import co.touchlab.droidconandroid.data.UserAccount
-import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
+import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.FragmentActivity
-import android.support.v4.widget.NestedScrollView
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.util.Log
-import android.view.MenuItem
-import android.widget.*
+import android.text.TextUtils
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.droidconandroid.data.Event
+import co.touchlab.droidconandroid.data.Track
+import co.touchlab.droidconandroid.data.UserAccount
+import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
+import co.touchlab.droidconandroid.tasks.EventDetailLoadTask
+import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot
 import com.wnafee.vector.compat.ResourcesCompat
-import java.util.*
+import java.text.SimpleDateFormat
+import java.util.ArrayList
+import java.util.Date
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -99,15 +91,15 @@ class EventDetailFragment() : Fragment()
      * Gets the track ID argument. This is to make sure we dont flash the incorrect colors
      * on things like the FAB and toolbar while waiting to load the event details
      */
-    private fun findTrackIdArg(): Int
+    private fun findTrackIdArg(): String
     {
-        var trackId = getArguments()?.getInt(TRACK_ID, -1)
-        if (trackId == null || trackId == -1)
+        var trackId = getArguments()?.getString(TRACK_ID)
+        if (trackId == null)
         {
-            trackId = getActivity()!!.getIntent()!!.getIntExtra(TRACK_ID, -1)
+            trackId = getActivity()!!.getIntent()!!.getStringExtra(TRACK_ID)
         }
 
-        if (trackId == -1)
+        if (trackId == null)
             throw IllegalArgumentException("Must set track id");
 
         return trackId
@@ -151,7 +143,7 @@ class EventDetailFragment() : Fragment()
 
         val event = eventDetailTask.event!!
 
-        updateTrackColor(0)
+        updateTrackColor(event.category)
         updateToolbar(event)
         updateFAB(event)
 
@@ -221,23 +213,30 @@ class EventDetailFragment() : Fragment()
      */
     private fun updateContent(event: Event, speakers: ArrayList<UserAccount>?)
     {
-        var adapter = EventDetailAdapter(getActivity(), getResources().getColor(R.color.track_accent_pink))
+        var adapter = EventDetailAdapter(getActivity(), trackColor)
+
+        adapter.addSpace(getResources().getDimensionPixelSize(R.dimen.height_small))
 
         //Construct the time and venue string and add it to the adapter
         val startDateVal = Date(event.startDateLong!!)
         val endDateVal = Date(event.endDateLong!!)
         val timeFormat = SimpleDateFormat("hh:mm a")
-        val formatString = getResources().getString(R.string.event_venue_time);
-        formatString.format(event.venue.name, timeFormat.format(startDateVal), timeFormat.format(endDateVal))
+        val venueFormatString = getResources().getString(R.string.event_venue_time);
 
-        adapter.addSpace(getResources().getDimensionPixelSize(R.dimen.height_small))
-        adapter.addHeader(formatString.format(event.venue.name, timeFormat.format(startDateVal), timeFormat.format(endDateVal)), R.drawable.ic_map)
+        adapter.addHeader(venueFormatString.format(event.venue.name, timeFormat.format(startDateVal), timeFormat.format(endDateVal)), R.drawable.ic_map)
 
         //Description text
-        adapter.addBody(event.description)
+        if (!TextUtils.isEmpty(event.description))
+            adapter.addBody(event.description)
 
         //Track
-        adapter.addHeader("on the TEMP track", R.drawable.ic_action_train)
+        if (!TextUtils.isEmpty(event.category))
+        {
+            var track = Track.findByServerName(event.category)
+            var trackName = getResources().getString(track.getDisplayNameRes())
+            val trackFormatString = getResources().getString(R.string.event_track);
+            adapter.addHeader(trackFormatString.format(trackName), R.drawable.ic_action_train)
+        }
 
         adapter.addDivider()
 
@@ -252,20 +251,16 @@ class EventDetailFragment() : Fragment()
     /**
      * Ensures that all view which are colored according to the track are updated
      */
-    private fun updateTrackColor(trackId: Int)
+    private fun updateTrackColor(category: String?)
     {
-        when (trackId)
-        {
-            0 ->
-            {
-                trackColor = getResources().getColor(R.color.droidcon_pink)
-                fabColorList = getResources().getColorStateList(R.color.track_accent_pink)
-            }
-            else ->
-            {
-                trackColor = getResources().getColor(R.color.droidcon_blue)
-                fabColorList = getResources().getColorStateList(R.color.track_accent_pink)
-            }
-        }
+        //Default to design
+        var track = Track.findByServerName("Design")
+
+        if (!TextUtils.isEmpty(category))
+            track = Track.findByServerName(category)
+
+
+        trackColor = getResources().getColor(track.getTextColorRes())
+        fabColorList = getResources().getColorStateList(track.getCheckBoxSelectorRes())
     }
 }
