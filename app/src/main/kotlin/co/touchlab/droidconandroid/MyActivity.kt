@@ -124,8 +124,13 @@ public class MyActivity : AppCompatActivity(), FilterInterface
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item!!.getItemId() == R.id.action_filter){
-            drawerLayout!!.openDrawer(findViewById(R.id.filter_wrapper))
+        when {
+            item!!.getItemId() == R.id.action_filter -> {
+                drawerLayout!!.openDrawer(findViewById(R.id.filter_wrapper))
+            }
+            item.getItemId() == R.id.action_search -> {
+                FindUserKot.startMe(this@MyActivity)
+            }
         }
         return super<AppCompatActivity>.onOptionsItemSelected(item)
     }

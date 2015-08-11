@@ -1,9 +1,11 @@
 package co.touchlab.droidconandroid
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.app.LoaderManager.LoaderCallbacks
@@ -26,7 +28,6 @@ import co.touchlab.droidconandroid.utils.CustomTarget
 import co.touchlab.droidconandroid.utils.PaletteTransformation
 import co.touchlab.droidconandroid.utils.Toaster
 import com.squareup.picasso.Picasso
-import com.wnafee.vector.MorphButton
 import com.wnafee.vector.compat.ResourcesCompat
 
 /**
@@ -281,6 +282,19 @@ class UserDetailFragment() : Fragment()
             websiteWrapper!!.setVisibility(View.VISIBLE)
         }
 
+        val addContact = getView().findView(R.id.addContact)
+        addContact.setOnClickListener{
+            // Creates a new Intent to insert a contact
+            val intent = Intent(ContactsContract.Intents.Insert.ACTION);
+            // Sets the MIME type to match the Contacts Provider
+            intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+            intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
+            intent.putExtra(ContactsContract.Intents.Insert.COMPANY, userAccount.company)
+            intent.putExtra(ContactsContract.Intents.Insert.NAME, userAccount.name)
+            intent.putExtra(ContactsContract.Intents.Insert.PHONETIC_NAME, userAccount.phoneticName)
+            startActivity(intent);
+        }
+
         val appPrefs = AppPrefs.getInstance(getActivity())
         if (userAccount.id.equals(appPrefs.getUserId()))
         {
@@ -288,7 +302,7 @@ class UserDetailFragment() : Fragment()
         }
         else
         {
-            followToggle!!.setVisibility(View.VISIBLE)
+//            followToggle!!.setVisibility(View.VISIBLE)
             if (userAccount.following)
             {
                 followToggle!!.setText(R.string.unfollow)
@@ -306,6 +320,19 @@ class UserDetailFragment() : Fragment()
                 }
             }
 
+            addContact.setVisibility(View.VISIBLE)
+            addContact.setOnClickListener{
+                // Creates a new Intent to insert a contact
+                val intent = Intent(ContactsContract.Intents.Insert.ACTION);
+                // Sets the MIME type to match the Contacts Provider
+                intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
+                intent.putExtra(ContactsContract.Intents.Insert.COMPANY, userAccount.company)
+                intent.putExtra(ContactsContract.Intents.Insert.NAME, userAccount.name)
+                intent.putExtra(ContactsContract.Intents.Insert.PHONETIC_NAME, userAccount.phoneticName)
+                startActivity(intent);
+            }
+
 
         }
     }
@@ -319,10 +346,10 @@ class UserDetailFragment() : Fragment()
         emailIcon!!.setImageDrawable(emailDrawable)
         val companyDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_work);
         companyDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        companyIcon!!.setImageDrawable(phoneDrawable)
+        companyIcon!!.setImageDrawable(companyDrawable)
         val websiteDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_website);
         websiteDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        websiteIcon!!.setImageDrawable(phoneDrawable)
+        websiteIcon!!.setImageDrawable(websiteDrawable)
     }
 
 }

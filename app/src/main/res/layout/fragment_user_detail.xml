@@ -85,6 +85,16 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:visibility="gone"/>
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/addContact"
+                    android:visibility="gone"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_addcontact"/>
+                
             </RelativeLayout>
         </FrameLayout>
 
