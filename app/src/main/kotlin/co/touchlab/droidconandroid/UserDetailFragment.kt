@@ -26,7 +26,6 @@ import co.touchlab.droidconandroid.utils.CustomTarget
 import co.touchlab.droidconandroid.utils.PaletteTransformation
 import co.touchlab.droidconandroid.utils.Toaster
 import com.squareup.picasso.Picasso
-import com.wnafee.vector.MorphButton
 import com.wnafee.vector.compat.ResourcesCompat
 
 /**
@@ -72,7 +71,14 @@ class UserDetailFragment() : Fragment()
 
             return f
         }
+
+        interface FinishListener
+        {
+            fun onFragmentFinished()
+        }
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -175,7 +181,8 @@ class UserDetailFragment() : Fragment()
 
         var close = view.findView(R.id.close);
         close.setOnClickListener{
-            (getActivity() as FindUserKot).closeFragment()
+        if (getActivity() is FinishListener)
+            (getActivity() as FinishListener).onFragmentFinished()
         }
 
         getLoaderManager()!!.initLoader(0, null, this.UDLoaderCallbacks())

@@ -260,7 +260,7 @@ class EventDetailFragment() : Fragment()
             var track = Track.findByServerName(event.category)
             var trackName = getResources().getString(track.getDisplayNameRes())
             val trackFormatString = getResources().getString(R.string.event_track);
-            adapter.addHeader(trackFormatString.format(trackName), R.drawable.ic_action_train)
+            adapter.addHeader(trackFormatString.format(trackName), R.drawable.ic_track)
         }
 
         adapter.addDivider()
