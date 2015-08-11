@@ -2,16 +2,11 @@ package co.touchlab.droidconandroid
 
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
-import android.content.res.Resources
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.text.Html
-import android.text.Layout
 import android.text.TextUtils
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -19,12 +14,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import co.touchlab.droidconandroid.data.UserAccount
-import co.touchlab.droidconandroid.utils.TextHelper
 import com.squareup.picasso.Picasso
 import com.wnafee.vector.compat.ResourcesCompat
-import de.hdodenhof.circleimageview.CircleImageView
 import org.apache.commons.lang3.StringUtils
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Created by samuelhill on 8/7/15.
@@ -32,8 +25,6 @@ import java.util.*
 
 class EventDetailAdapter(val context: Context, val trackColor: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
-    val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
-
     //dataset
     private var data = ArrayList<Detail>()
 
@@ -146,8 +137,10 @@ class EventDetailAdapter(val context: Context, val trackColor: Int) : RecyclerVi
 
                 if (!TextUtils.isEmpty(user.avatar))
                 {
-                    //Picasso.with(context).load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + user.avatar).into(avatarView)
-                    Picasso.with(context).load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + "0ed32568-ce43-4eac-9d6d-59f129d36145").into(avatarView)
+                    Picasso.with(context).load(user.avatar)
+                            .noFade()
+                            .placeholder(R.drawable.profile_placeholder)
+                            .into(avatarView)
                 }
 
                 val formatString = context.getResources().getString(R.string.event_speaker_name);
@@ -204,13 +197,13 @@ class EventDetailAdapter(val context: Context, val trackColor: Int) : RecyclerVi
 
     inner class SpeakerVH(val item: View): RecyclerView.ViewHolder(item)
     {
-        public var image: CircleImageView? = null
+        public var image: ImageView? = null
         public var name: TextView? = null
         public var bio: TextView? = null
 
         init
         {
-            image = item.findViewById(R.id.profile_image) as CircleImageView
+            image = item.findViewById(R.id.profile_image) as ImageView
             name = item.findViewById(R.id.name) as TextView
             bio = item.findViewById(R.id.bio) as TextView
         }

@@ -201,7 +201,32 @@ class EventDetailFragment() : Fragment()
     private fun updateToolbar(event: Event)
     {
         name!!.setText(event.name)
-        backdrop!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.welcome_1))
+
+        //Track
+        //TODO: Use track drawables
+        var backdropRes = R.drawable.welcome_0
+        if (!TextUtils.isEmpty(event.category))
+        {
+            var track = Track.findByServerName(event.category)
+            when (track)
+            {
+                Track.DEVELOPMENT ->
+                {
+                    backdropRes = R.drawable.welcome_0
+                }
+
+                Track.DESIGN ->
+                {
+                    backdropRes = R.drawable.welcome_1
+                }
+                Track.BUSINESS ->
+                {
+                    backdropRes = R.drawable.welcome_2
+                }
+            }
+        }
+
+        backdrop!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), backdropRes))
 
         //Toolbar Colors
         collapsingToolbar!!.setContentScrimColor(trackColor)
