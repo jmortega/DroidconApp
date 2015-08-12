@@ -2,13 +2,14 @@ package co.touchlab.droidconandroid.ui
 
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import co.touchlab.droidconandroid.R
+import co.touchlab.droidconandroid.data.Block
 import co.touchlab.droidconandroid.data.Event
+import co.touchlab.droidconandroid.data.ScheduleBlock
 import co.touchlab.droidconandroid.data.Track
 import java.text.SimpleDateFormat
 import java.util.ArrayList
@@ -21,16 +22,17 @@ import java.util.Date
 class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     val VIEW_TYPE_EVENT: Int = 0
+    val VIEW_TYPE_BLOCK: Int = 1
 
-    private var dataSet: List<Event>
-    private var filteredData: ArrayList<Event>
+    private var dataSet: List<ScheduleBlock>
+    private var filteredData: ArrayList<ScheduleBlock>
     private val eventClickListener: EventClickListener
     private val timeFormat = SimpleDateFormat("h:mma")
     private val allEvents: Boolean
     private var currentTracks: ArrayList<String> = ArrayList()
 
 
-    constructor(events: List<Event>, all: Boolean, initialFilters: List<String>,  eventClickListener: EventClickListener) : super() {
+    constructor(events: List<ScheduleBlock>, all: Boolean, initialFilters: List<String>,  eventClickListener: EventClickListener) : super() {
         dataSet = events;
         filteredData = ArrayList(events);
         allEvents = all
@@ -48,6 +50,9 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == VIEW_TYPE_EVENT) {
             v = LayoutInflater.from(parent!!.getContext()).inflate(R.layout.item_event, parent, false)
             return EventViewHolder(v)
+        } else if (viewType == VIEW_TYPE_BLOCK) {
+            v = LayoutInflater.from(parent!!.getContext()).inflate(R.layout.item_block, parent, false)
+            return BlockViewHolder(v)
         }
         throw UnsupportedOperationException()
     }
@@ -56,10 +61,10 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         val context = holder!!.itemView.getContext()
         val resources = context.getResources()
         if(getItemViewType(position) == VIEW_TYPE_EVENT){
-            val eventHolder = holder as EventViewHolder
-            val event = filteredData.get(position)
+            holder as EventViewHolder
+            val event = filteredData.get(position) as Event
 
-            eventHolder.title.setText(event.name)
+            holder.title.setText(event.name)
             var timeBlock = ""
             if(event.startDateLong != null && isFirstForTime(position))
             {
@@ -68,8 +73,6 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             holder.time.setText(timeBlock.toLowerCase())
-
-            holder.track.setBackgroundColor(resources.getColor(R.color.droidcon_blue))
 
             holder.card.setOnClickListener{
                 eventClickListener.onEventClick(event)
@@ -110,8 +113,22 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
             else
             {
-                holder.track.setBackgroundColor(resources.getColor(android.R.color.transparent))
+                holder.track.setBackgroundColor(resources.getColor(R.color.droidcon_blue))
             }
+        } else if (getItemViewType(position) == VIEW_TYPE_BLOCK) {
+            val block = filteredData.get(position) as Block
+
+            holder as BlockViewHolder
+            holder.title.setText(block.name)
+            var timeBlock = ""
+            if(block.startDateLong != null)
+            {
+                val startDate = Date(block.startDateLong!!)
+                timeBlock = timeFormat.format(startDate)
+            }
+
+            holder.time.setText(timeBlock.toLowerCase())
+
         }
     }
 
@@ -121,8 +138,8 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else {
             val prevEvent = filteredData.get(position - 1)
             val event = filteredData.get(position)
-            val prevEventStart = prevEvent.startDateLong
-            if(prevEventStart != null && (event.startDateLong != prevEventStart)) {
+            val prevEventStart = prevEvent.getStartLong()
+            if(prevEventStart != null && (event.getStartLong() != prevEventStart)) {
                 return true
             }
         }
@@ -130,25 +147,11 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     override fun getItemViewType(position: Int): Int {
+        if(dataSet.get(position) is Event)
             return VIEW_TYPE_EVENT
-    }
-
-    public class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        public val title: TextView
-        public val time: TextView
-        public val locationTime: TextView
-        public val track: View
-        public val card: View
-        public val rsvp: View
-
-        init {
-            title = itemView.findViewById(R.id.title) as TextView
-            time = itemView.findViewById(R.id.time) as TextView
-            locationTime = itemView.findViewById(R.id.location_time) as TextView
-            track = itemView.findViewById(R.id.track)
-            card = itemView.findViewById(R.id.card)
-            rsvp = itemView.findViewById(R.id.rsvp)
-        }
+        else if(dataSet.get(position) is Block )
+            return VIEW_TYPE_BLOCK
+        throw UnsupportedOperationException()
     }
 
     fun update(track: Track?) {
@@ -170,15 +173,52 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         {
             filteredData = ArrayList(dataSet)
         } else {
-            for (event in dataSet) {
-                val category = event.category
-                if (!TextUtils.isEmpty(category) && currentTracks.contains(category)) {
-                    filteredData.add(event)
+            for (item in dataSet) {
+                if(item is Block) {
+                    filteredData.add(item)
+                } else {
+                    val event = item as Event
+                    val category = event.category
+                    if (!TextUtils.isEmpty(category) && currentTracks.contains(category)) {
+                        filteredData.add(item)
+                    }
                 }
             }
         }
 
         notifyDataSetChanged()
+    }
+
+    public class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        public val title: TextView
+        public val time: TextView
+        public val locationTime: TextView
+        public val track: View
+        public val card: View
+        public val rsvp: View
+
+        init {
+            title = itemView.findViewById(R.id.title) as TextView
+            time = itemView.findViewById(R.id.time) as TextView
+            locationTime = itemView.findViewById(R.id.location_time) as TextView
+            track = itemView.findViewById(R.id.track)
+            card = itemView.findViewById(R.id.card)
+            rsvp = itemView.findViewById(R.id.rsvp)
+        }
+    }
+
+    public class BlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        public val title: TextView
+        public val time: TextView
+        public val locationTime: TextView
+        public val card: View
+
+        init {
+            title = itemView.findViewById(R.id.title) as TextView
+            time = itemView.findViewById(R.id.time) as TextView
+            locationTime = itemView.findViewById(R.id.location_time) as TextView
+            card = itemView.findViewById(R.id.card)
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package co.touchlab.droidconandroid.data;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -11,7 +12,7 @@ import java.util.Collection;
  * Created by kgalligan on 6/28/14.
  */
 @DatabaseTable
-public class Event
+public class Event implements ScheduleBlock
 {
     @DatabaseField(id = true)
     public long id;
@@ -54,4 +55,23 @@ public class Event
     {
         return rsvpUuid != null;
     }
+
+    @Override
+    public boolean isBlock()
+    {
+        return false;
+    }
+
+    @Override
+    public Long getStartLong()
+    {
+        return startDateLong;
+    }
+
+    @Override
+    public Long getEndLong()
+    {
+        return endDateLong;
+    }
+
 }

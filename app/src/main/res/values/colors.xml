@@ -49,4 +49,5 @@
 
     <color name="silver">#d0d8dc</color>
     <color name="blue_grey">#607d8b</color>
+    <color name="bg">#eceff1</color>
 </resources>
