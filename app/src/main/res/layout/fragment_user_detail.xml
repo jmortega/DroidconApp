@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent" android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:orientation="vertical"
             android:background="@color/white"
             tools:context="co.touchlab.droidconandroid.FindUser"
@@ -97,14 +98,14 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.wnafee.vector.MorphButton
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:id="@+id/phone_icon"
                 style="@style/ProfileIcons"
-                tools:src="@drawable/ic_phone"/>
+                app:vc_startDrawable="@drawable/ic_phone"/>
 
             <TextView
                 android:id="@+id/phone"
@@ -124,12 +125,12 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.wnafee.vector.MorphButton
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 android:id="@+id/email_icon"
                 style="@style/ProfileIcons"
-                tools:src="@drawable/ic_email"/>
+                app:vc_startDrawable="@drawable/ic_email"/>
 
             <TextView
                 android:id="@+id/email"
@@ -149,12 +150,12 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.wnafee.vector.MorphButton
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
                 android:id="@+id/company_icon"
-                tools:src="@drawable/ic_work"/>
+                app:vc_startDrawable="@drawable/ic_work"/>
 
             <TextView
                 android:id="@+id/company2"
@@ -174,12 +175,12 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.wnafee.vector.MorphButton
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
                 android:id="@+id/website_icon"
-                tools:src="@drawable/ic_website"/>
+                app:vc_startDrawable="@drawable/ic_website"/>
 
             <TextView
                 android:id="@+id/website"
@@ -199,11 +200,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.wnafee.vector.MorphButton
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
-                android:src="@drawable/ic_twitter"/>
+                app:vc_startDrawable="@drawable/ic_twitter"/>
 
             <TextView
                 android:id="@+id/twitter"
@@ -223,11 +224,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.wnafee.vector.MorphButton
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
-                android:src="@drawable/ic_gplus"/>
+                app:vc_startDrawable="@drawable/ic_gplus"/>
 
             <TextView
                 android:id="@+id/gPlus"

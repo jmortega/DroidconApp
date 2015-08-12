@@ -119,6 +119,7 @@ class EventDetailFragment() : Fragment()
         name = view.findViewById(R.id.name) as TextView
         backdrop = view.findViewById(R.id.backdrop) as ImageView
         fab = view.findViewById(R.id.register) as FloatingActionButton
+        fab!!.hide()
         collapsingToolbar = view.findViewById(R.id.collapsingToolbar) as CollapsingToolbarLayout
         recycler = view.findViewById(R.id.recycler) as RecyclerView
 
@@ -185,8 +186,6 @@ class EventDetailFragment() : Fragment()
             } else {
                 TaskQueue.loadQueueDefault(getActivity()).execute(AddRsvpTaskKot(getActivity()!!, event.id))
             }
-            //Chage this if we have a tablet situation
-            getActivity()!!.finish()
         }
 
         var p = fab!!.getLayoutParams() as CoordinatorLayout.LayoutParams

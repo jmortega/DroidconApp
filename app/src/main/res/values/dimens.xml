@@ -42,5 +42,6 @@
     <dimen name="event_top_spacing">51dp</dimen>
     <dimen name="event_speaker_image">40dp</dimen>
     <dimen name="event_entry_icon">26dp</dimen>
+    <dimen name="event_fab_margin">0dp</dimen>
 
 </resources>
