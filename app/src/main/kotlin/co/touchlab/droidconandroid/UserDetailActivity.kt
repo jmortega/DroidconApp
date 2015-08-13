@@ -2,6 +2,8 @@ package co.touchlab.droidconandroid
 
 import android.app.Activity
 import android.content.Intent
+import android.nfc.NdefMessage
+import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
@@ -29,5 +31,26 @@ class UserDetailActivity : AppCompatActivity(), UserDetailFragment.Companion.Fin
 
     override fun onFragmentFinished() {
         finish()
+    }
+
+    override fun onResume() {
+        super<AppCompatActivity>.onResume();
+        // Check to see that the Activity started due to an Android Beam
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+            processIntent(getIntent());
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        // onResume gets called after this to handle the intent
+        setIntent(intent);
+    }
+
+    fun processIntent(intent: Intent) {
+        var rawMsgs = intent.getParcelableArrayExtra(
+                NfcAdapter.EXTRA_NDEF_MESSAGES);
+        // only one message sent during the beam
+        var msg = rawMsgs[0] as NdefMessage
+        // record 0 contains the MIME type, record 1 is the AAR, if present
     }
 }

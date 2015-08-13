@@ -2,6 +2,10 @@ package co.touchlab.droidconandroid
 
 import android.content.Context
 import android.content.Intent
+import android.nfc.NdefMessage
+import android.nfc.NdefRecord
+import android.nfc.NfcAdapter
+import android.nfc.NfcEvent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
@@ -22,9 +26,8 @@ import co.touchlab.droidconandroid.ui.*
 import com.wnafee.vector.compat.ResourcesCompat
 import java.util.ArrayList
 
-public class MyActivity : AppCompatActivity(), FilterInterface
+public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.CreateNdefMessageCallback
 {
-
     public companion object
     {
         public fun startMe(c : Context)
@@ -61,6 +64,13 @@ public class MyActivity : AppCompatActivity(), FilterInterface
         toolbar = findViewById(R.id.toolbar) as Toolbar;
         setSupportActionBar(toolbar);
         setUpDrawers()
+
+        var nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        if (nfcAdapter != null)
+        {
+            nfcAdapter.setNdefPushMessageCallback(this,this)
+        }
+
 
         if(savedInstanceState == null)
         {
@@ -234,6 +244,14 @@ public class MyActivity : AppCompatActivity(), FilterInterface
         drawerItems.add(NavigationItem(R.string.settings, R.drawable.ic_settings))
         drawerItems.add(NavigationItem(R.string.about, R.drawable.ic_info))
         return drawerItems;
+    }
+
+    override fun createNdefMessage(event: NfcEvent?): NdefMessage?
+    {
+        var text = ("USERID");
+        var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", text.toByteArray())
+                   ,NdefRecord.createApplicationRecord("co.touchlab.droidconandroid")))
+        return msg;
     }
 }
 
