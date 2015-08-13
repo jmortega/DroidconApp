@@ -1,7 +1,5 @@
 package co.touchlab.droidconandroid.network;
 
-import co.touchlab.android.superbus.errorcontrol.PermanentException;
-import co.touchlab.android.superbus.errorcontrol.TransientException;
 import co.touchlab.droidconandroid.network.dao.UserInfoResponse;
 import retrofit.http.GET;
 import retrofit.http.Path;
@@ -12,5 +10,5 @@ import retrofit.http.Path;
 public interface SingleUserInfoRequest
 {
     @GET("/dataTest/findUserById/{userId}")
-    UserInfoResponse getUserInfo(@Path("userId")Long userId)throws Exception;
+    UserInfoResponse getUserInfo(@Path("userId")Long userId) throws Exception;
 }

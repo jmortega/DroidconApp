@@ -79,7 +79,7 @@ class ScheduleDataFragment() : Fragment()
             {
                 adapter = EventAdapter(data, allEvents, (getActivity() as FilterInterface).getCurrentFilters(), object : EventClickListener{
                     override fun onEventClick(event: Event) {
-                        EventDetailActivity.callMe(getActivity()!!, event.id)
+                        EventDetailActivity.callMe(getActivity()!!, event.id, event.category)
                     }
                 })
                 eventList!!.setAdapter(adapter!!)

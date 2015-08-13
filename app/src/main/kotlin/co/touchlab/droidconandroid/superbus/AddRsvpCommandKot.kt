@@ -1,48 +1,40 @@
 package co.touchlab.droidconandroid.superbus
 
-import co.touchlab.android.superbus.CheckedCommand
-import co.touchlab.android.superbus.errorcontrol.PermanentException
-import co.touchlab.android.superbus.Command
 import android.content.Context
-import co.touchlab.droidconandroid.network.DataHelper
-import co.touchlab.droidconandroid.data.AppPrefs
 import android.util.Log
+import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask
+import co.touchlab.android.threading.tasks.persisted.PersistedTask
 import co.touchlab.droidconandroid.network.AddRsvpRequest
+import co.touchlab.droidconandroid.network.DataHelper
+import com.crashlytics.android.Crashlytics
 
 /**
  * Created by kgalligan on 7/20/14.
  */
-class AddRsvpCommandKot(var eventId : Long? = null, var rsvpUuid : String? = null) : CheckedCommand()
-{
-    override fun logSummary(): String
-    {
-        return "AddRsvp - " + eventId
-    }
-
-    override fun same(command: Command): Boolean
-    {
-        return false
-    }
-
-    override fun callCommand(context: Context)
-    {
+class AddRsvpCommandKot(var eventId: Long? = null, var rsvpUuid: String? = null) : RetrofitPersistedTask() {
+    override fun runNetwork(context: Context?) {
         val restAdapter = DataHelper.makeRequestAdapter(context)
         val addRsvpRequest = restAdapter!!.create(javaClass<AddRsvpRequest>())
 
-        if(eventId != null  && rsvpUuid != null)
-        {
+        if (eventId != null && rsvpUuid != null) {
             val basicIdResult = addRsvpRequest!!.addRsvp(eventId!!, rsvpUuid!!)
             Log.w("asdf", "Result id: " + basicIdResult!!.id)
-        }
-        else
-        {
-            throw PermanentException("Some value is null: "+ eventId +"/"+ rsvpUuid)
+        } else {
+            throw IllegalArgumentException("Some value is null: " + eventId + "/" + rsvpUuid)
         }
     }
 
-    override fun handlePermanentError(context: Context, exception: PermanentException): Boolean
-    {
-        Log.w("asdf", "Whoops", exception);
+    override fun logSummary(): String {
+        return "AddRsvp - " + eventId
+    }
+
+    override fun same(command: PersistedTask): Boolean {
+        return false
+    }
+
+    override fun handleError(context: Context?, e: Throwable?): Boolean {
+        Log.w("asdf", "Whoops", e);
+        Crashlytics.logException(e);
         return true;
     }
 }

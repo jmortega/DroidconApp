@@ -3,7 +3,6 @@ package co.touchlab.droidconandroid.tasks
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
-import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
 import co.touchlab.droidconandroid.data.UserAuthHelper
@@ -14,6 +13,7 @@ import co.touchlab.droidconandroid.network.dao.LoginResult
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.UploadCoverCommand
+import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 import com.google.android.gms.auth.GoogleAuthUtil
 import org.apache.commons.lang3.StringUtils
 
@@ -62,10 +62,10 @@ class GoogleLoginTask(val email: String, val name: String?, val imageURL: String
 
         handleLoginResult(context, loginResult)
         if (!TextUtils.isEmpty(imageURL))
-            CommandBusHelper.submitCommandSync(context, UploadAvatarCommand(imageURL!!))
+            PersistedTaskQueueFactory.getInstance(context).execute(UploadAvatarCommand(imageURL!!))
 
         if (!TextUtils.isEmpty(coverURL))
-            CommandBusHelper.submitCommandSync(context, UploadCoverCommand(coverURL!!))
+            PersistedTaskQueueFactory.getInstance(context).execute(UploadCoverCommand(coverURL!!))
 
         EventBusExt.getDefault()!!.post(this);
     }
@@ -82,6 +82,6 @@ abstract class AbstractLoginTask : Task()
         val userAccount = UserAuthHelper.processLoginResonse(context!!, loginResult!!)
         firstLogin = StringUtils.isEmpty(userAccount.profile) && StringUtils.isEmpty(userAccount.company)
 
-        CommandBusHelper.submitCommandSync(context, RefreshScheduleDataKot())
+        PersistedTaskQueueFactory.getInstance(context).execute(RefreshScheduleDataKot())
     }
 }

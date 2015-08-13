@@ -3,7 +3,7 @@ package co.touchlab.droidconandroid.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
+import co.touchlab.droidconandroid.data.staff.EventAttendee;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
@@ -76,18 +76,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
                 TableUtils.getCreateTableStatements(connectionSource, mTableClass);
                 TableUtils.createTable(connectionSource, mTableClass);
             }
-
-            CommandPersistenceProvider.createTables(new ClearSQLiteDatabase(sqLiteDatabase));
-        }
-        catch (StorageException e)
-        {
-            throw new RuntimeException(e);
         }
         catch (SQLException e)
         {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
@@ -107,17 +100,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
             }
         }
 
-        try
-        {
-            CommandPersistenceProvider.dropTables(new ClearSQLiteDatabase(sqLiteDatabase));
-        }
-        catch (StorageException e)
-        {
-            throw new RuntimeException(e);
-        }
-
         onCreate(sqLiteDatabase, connectionSource);
-
     }
 
     @NotNull

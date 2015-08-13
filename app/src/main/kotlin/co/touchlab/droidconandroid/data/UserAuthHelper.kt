@@ -2,9 +2,9 @@ package co.touchlab.droidconandroid.data
 
 import android.content.Context
 import android.text.TextUtils
-import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import co.touchlab.droidconandroid.network.dao.LoginResult
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
+import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 
 /**
  * Created by kgalligan on 8/4/14.
@@ -26,7 +26,7 @@ class UserAuthHelper
 
             saveDrawerAppPrefs(c, newDbUser)
 
-            CommandBusHelper.submitCommandSync(c, RefreshScheduleDataKot())
+            PersistedTaskQueueFactory.getInstance(c).execute(RefreshScheduleDataKot())
 
             return newDbUser
         }

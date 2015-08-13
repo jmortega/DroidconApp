@@ -1,16 +1,15 @@
 package co.touchlab.droidconandroid.ui
 
-import android.content.res.Resources
+import android.os.Build
 import android.support.v7.widget.AppCompatCheckBox
 import android.support.v7.widget.RecyclerView
-import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import co.touchlab.droidconandroid.R
 import co.touchlab.droidconandroid.data.Track
-import java.util.*
+import java.util.ArrayList
 
 /**
  *
@@ -70,8 +69,14 @@ class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.track.setTextColor(resources.getColor(R.color.text_gray))
             }
 
-            holder.checkBox.setButtonTintList(resources.getColorStateList(track.getCheckBoxSelectorRes()));
-            holder.checkBox.setBackgroundTintList(resources.getColorStateList(track.getTextColorRes()));
+            //Only color the actual text boxes on lollipop+ couldnt find a good way to do so on
+            //earlier devices without rolling out own assets
+            if (Build.VERSION.SDK_INT >= 21)
+            {
+                holder.checkBox.setButtonTintList(resources.getColorStateList(track.getCheckBoxSelectorRes()));
+                holder.checkBox.setBackgroundTintList(resources.getColorStateList(track.getTextColorRes()));
+            }
+
             holder.itemView.setOnClickListener{
                 if(!holder.checkBox.isChecked()) {
                     selectedTracks.add(track)
