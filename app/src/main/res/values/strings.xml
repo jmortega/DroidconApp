@@ -13,6 +13,7 @@
     <string name="google_error">Cannot login with Google. Please contact support.</string>
     <string name="network_error">Network problems...</string>
     <string name="error_user_not_found">User not found</string>
+    <string name="error_unknown">Unknown error.  Sorry?</string>
     <string name="title_activity_find_user">FindUser</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>

@@ -2,12 +2,14 @@ package co.touchlab.droidconandroid.network;
 
 import android.content.Context;
 import android.text.TextUtils;
-import co.touchlab.android.superbus.http.RetrofitBusErrorHandler;
-import co.touchlab.droidconandroid.R;
-import co.touchlab.droidconandroid.data.AppPrefs;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import org.jetbrains.annotations.NotNull;
+
+import co.touchlab.droidconandroid.R;
+import co.touchlab.droidconandroid.data.AppPrefs;
 import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;

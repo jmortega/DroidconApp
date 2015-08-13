@@ -3,11 +3,11 @@ package co.touchlab.droidconandroid.tasks
 import android.content.Context
 import co.touchlab.droidconandroid.data.Event
 import java.util.UUID
-import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import java.util.concurrent.Callable
 import co.touchlab.droidconandroid.superbus.AddRsvpCommandKot
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -39,7 +39,7 @@ open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
                     val uuid = UUID.randomUUID().toString()
                     event.rsvpUuid = uuid
                     dao.update(event)
-                    CommandBusHelper.submitCommandSync(context, AddRsvpCommandKot(eventId, uuid))
+                    PersistedTaskQueueFactory.getInstance(context).execute(AddRsvpCommandKot(eventId, uuid))
                 }
 
                 return null
