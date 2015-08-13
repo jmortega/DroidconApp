@@ -3,7 +3,6 @@ package co.touchlab.droidconandroid
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -20,6 +19,7 @@ import co.touchlab.droidconandroid.data.Track
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.UploadCoverCommand
 import co.touchlab.droidconandroid.ui.*
+import com.wnafee.vector.compat.ResourcesCompat
 import java.util.ArrayList
 
 public class MyActivity : AppCompatActivity(), FilterInterface
@@ -120,6 +120,8 @@ public class MyActivity : AppCompatActivity(), FilterInterface
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.home, menu)
+        var filter = menu!!.findItem(R.id.action_filter)
+        filter.setIcon(ResourcesCompat.getDrawable(this, R.drawable.ic_filter))
         return super<AppCompatActivity>.onCreateOptionsMenu(menu)
     }
 

@@ -185,8 +185,6 @@ class EventDetailFragment() : Fragment()
             } else {
                 TaskQueue.loadQueueDefault(getActivity()).execute(AddRsvpTaskKot(getActivity()!!, event.id))
             }
-            //Chage this if we have a tablet situation
-            getActivity()!!.finish()
         }
 
         var p = fab!!.getLayoutParams() as CoordinatorLayout.LayoutParams

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools"
-
-    app:vc_width="72dp"
-    app:vc_height="72dp"
-    app:vc_viewportWidth="72"
-    app:vc_viewportHeight="72"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:targetApi="lollipop"
+        app:vc_viewportWidth="72"
+        app:vc_viewportHeight="72"
         app:vc_tint="@color/social_icons"
-
         android:tint="@color/social_icons"
-    android:width="72dp"
-    android:height="72dp"
-    android:viewportWidth="72"
-    android:viewportHeight="72">
+        android:width="72dp"
+        android:height="72dp"
+        android:viewportWidth="72"
+        android:viewportHeight="72">
 
     <path
         app:vc_fillColor="#000000" android:fillColor="#000000"
