@@ -1,22 +1,19 @@
 package co.touchlab.droidconandroid.superbus
 
-import co.touchlab.android.superbus.CheckedCommand
-import co.touchlab.droidconandroid.network.DataHelper
-import co.touchlab.droidconandroid.network.RefreshScheduleDataRequest
 import android.content.Context
-import co.touchlab.android.superbus.errorcontrol.PermanentException
-import co.touchlab.android.superbus.Command
-import co.touchlab.droidconandroid.data.DatabaseHelper
-import java.text.SimpleDateFormat
-import co.touchlab.droidconandroid.BuildConfig
 import android.database.SQLException
 import android.util.Log
-import java.text.ParseException
-import co.touchlab.droidconandroid.data.UserAccount
-import co.touchlab.droidconandroid.data.EventSpeaker
-import java.util.concurrent.Callable
+import co.touchlab.android.superbus.CheckedCommand
+import co.touchlab.android.superbus.Command
+import co.touchlab.android.superbus.errorcontrol.PermanentException
 import co.touchlab.android.threading.eventbus.EventBusExt
-import co.touchlab.droidconandroid.data.UserAuthHelper
+import co.touchlab.droidconandroid.BuildConfig
+import co.touchlab.droidconandroid.data.*
+import co.touchlab.droidconandroid.network.DataHelper
+import co.touchlab.droidconandroid.network.RefreshScheduleDataRequest
+import co.touchlab.droidconandroid.utils.TimeUtils
+import java.text.ParseException
+import java.util.concurrent.Callable
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -52,9 +49,11 @@ open class RefreshScheduleDataKot : CheckedCommand()
                 val venueDao = databaseHelper.getVenueDao()
                 val userAccountDao = databaseHelper.getUserAccountDao()
                 val eventSpeakerDao = databaseHelper.getEventSpeakerDao()
-                val dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mma")
 
                 val venues = convention.venues
+
+                AppPrefs.getInstance(context).setConventionStartDate(convention.startDate)
+                AppPrefs.getInstance(context).setConventionEndDate(convention.endDate)
 
                 try
                 {
@@ -65,8 +64,8 @@ open class RefreshScheduleDataKot : CheckedCommand()
                         {
                             val dbEvent = eventDao.queryForId(event.id)
                             event.venue = venue
-                            event.startDateLong = dateFormat.parse(event.startDate)!!.getTime()
-                            event.endDateLong = dateFormat.parse(event.endDate)!!.getTime()
+                            event.startDateLong = TimeUtils.DATE_FORMAT.parse(event.startDate)!!.getTime()
+                            event.endDateLong = TimeUtils.DATE_FORMAT.parse(event.endDate)!!.getTime()
 
                             if (dbEvent != null)
                                 event.rsvpUuid = dbEvent.rsvpUuid
