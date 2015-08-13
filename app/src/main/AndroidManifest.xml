@@ -32,16 +32,6 @@
 
         </activity>
 
-        <service
-            android:name="co.touchlab.android.superbus.SuperbusService"
-            android:exported="false" />
-
-        <receiver android:name="co.touchlab.android.superbus.network.ConnectionChangeReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".EmailLoginActivity"
             android:label="Email Login" />
@@ -70,6 +60,10 @@
 
         <activity android:name=".SignInActivity"
                   />
+
+        <service android:name="co.touchlab.android.threading.tasks.helper.KeepAliveService"
+                 android:exported="true"/>
+
         <meta-data android:name="com.crashlytics.ApiKey" android:value="90b5b9675372e1f2aff36d43ea5d6869040d37f3"/>
     </application>
 

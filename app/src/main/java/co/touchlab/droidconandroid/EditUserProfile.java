@@ -35,7 +35,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import co.touchlab.android.superbus.appsupport.CommandBusHelper;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.AppPrefs;
@@ -44,6 +43,7 @@ import co.touchlab.droidconandroid.superbus.QuickClearAvatarTask;
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand;
 import co.touchlab.droidconandroid.tasks.GrabUserProfile;
 import co.touchlab.droidconandroid.tasks.UpdateUserProfileTask;
+import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory;
 import co.touchlab.droidconandroid.utils.Toaster;
 import co.touchlab.profilephotoeditor.BitmapUtils;
 import co.touchlab.profilephotoeditor.CameraUtils;
@@ -382,7 +382,7 @@ public class EditUserProfile extends StickyTaskManagerActivity
         TaskQueue.loadQueueDefault(this).execute(
                 new QuickClearAvatarTask(AppPrefs.getInstance(this).getUserId()));
         refreshProfile();
-        CommandBusHelper.submitCommandAsync(this, new UploadAvatarCommand(path));
+        PersistedTaskQueueFactory.getInstance(this).execute(new UploadAvatarCommand(path));
         Toaster.showMessage(this, "Photo updating.  May take a bit...");
     }
 

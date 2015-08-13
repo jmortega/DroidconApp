@@ -1,7 +1,5 @@
 package co.touchlab.droidconandroid.network;
 
-import co.touchlab.android.superbus.errorcontrol.PermanentException;
-import co.touchlab.android.superbus.errorcontrol.TransientException;
 import co.touchlab.droidconandroid.network.dao.LoginResult;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -14,5 +12,5 @@ public interface EmailLoginRequest
 {
     @FormUrlEncoded
     @POST("/deviceAuth/loginWithEmail")
-    LoginResult emailLogin(@Field("email") String email, @Field("password") String password, @Field("name") String name) throws TransientException, PermanentException;
+    LoginResult emailLogin(@Field("email") String email, @Field("password") String password, @Field("name") String name) throws Exception;
 }

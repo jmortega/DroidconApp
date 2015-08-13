@@ -2,14 +2,14 @@ package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
 import android.util.Log
+import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask
+import co.touchlab.android.threading.tasks.persisted.PersistedTask
 import co.touchlab.droidconandroid.data.AppPrefs
-import co.touchlab.android.superbus.appsupport.CommandBusHelper
-import co.touchlab.android.superbus.CheckedCommand
-import co.touchlab.android.superbus.errorcontrol.PermanentException
-import co.touchlab.android.superbus.Command
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.UpdateUserProfile
+import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
+import com.crashlytics.android.Crashlytics
 
 /**
  * Created by kgalligan on 8/3/14.
@@ -54,30 +54,31 @@ class UpdateUserProfileTask(c: Context, val name: String?,
 
                 AppPrefs.getInstance(context).setName(name)
                 AppPrefs.getInstance(context).setEmail(email)
-                CommandBusHelper.submitCommandSync(context, UpdateUserProfileCommand())
+                PersistedTaskQueueFactory.getInstance(context).execute(UpdateUserProfileCommand())
             }
         }
     }
 
 }
 
-class UpdateUserProfileCommand() : CheckedCommand()
+class UpdateUserProfileCommand() : RetrofitPersistedTask()
 {
-    override fun handlePermanentError(context: Context, exception: PermanentException): Boolean
-    {
-        Log.w("asdf", "Whoops", exception);
+    override fun handleError(context: Context?, e: Throwable?): Boolean {
+        Log.w("asdf", "Whoops", e);
+        Crashlytics.logException(e)
         return true;
     }
+
     override fun logSummary(): String?
     {
         return "";
     }
-    override fun same(command: Command): Boolean
+
+    override fun same(command: PersistedTask): Boolean
     {
         return command is UpdateUserProfileCommand
     }
-    override fun callCommand(context: Context)
-    {
+    override fun runNetwork(context: Context?) {
         val appPrefs = AppPrefs.getInstance(context)
         if (appPrefs.isLoggedIn())
         {
@@ -103,7 +104,7 @@ class UpdateUserProfileCommand() : CheckedCommand()
             }
             else
             {
-                throw PermanentException("User update failed")
+                throw RuntimeException("User update failed")
             }
         }
 
