@@ -3,7 +3,7 @@ package co.touchlab.droidconandroid.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import co.touchlab.droidconandroid.data.staff.EventAttendee;
+
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
@@ -15,9 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
-import co.touchlab.android.superbus.errorcontrol.StorageException;
-import co.touchlab.android.superbus.storage.CommandPersistenceProvider;
-import co.touchlab.android.superbus.storage.sqlite.ClearSQLiteDatabase;
 import co.touchlab.droidconandroid.data.staff.EventAttendee;
 
 /**
