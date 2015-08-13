@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
+import co.touchlab.droidconandroid.BuildConfig;
 import co.touchlab.droidconandroid.R;
 import co.touchlab.droidconandroid.data.AppPrefs;
 import retrofit.ErrorHandler;
@@ -55,7 +56,7 @@ public class DataHelper
                 .setRequestInterceptor(requestInterceptor)
                 .setConverter(gsonConverter)
                 .setLogLevel(RestAdapter.LogLevel.FULL).setLog(new AndroidLog("DroidconApp"))
-                .setEndpoint(context.getString(R.string.base_url));
+                .setEndpoint(BuildConfig.BASE_URL);
 
         if (errorHandler != null)
             builder.setErrorHandler(errorHandler);

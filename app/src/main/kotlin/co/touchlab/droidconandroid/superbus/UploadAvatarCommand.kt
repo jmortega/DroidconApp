@@ -6,6 +6,7 @@ import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
 import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask
 import co.touchlab.android.threading.tasks.persisted.PersistedTask
+import co.touchlab.droidconandroid.BuildConfig
 import co.touchlab.droidconandroid.R
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.DatabaseHelper
@@ -44,7 +45,7 @@ open class UploadAvatarCommand(val imageURL: String? = null) : RetrofitPersisted
         }
 
         val uuid = AppPrefs.getInstance(context).getUserUuid()
-        val postClient = BasicHttpClient(context!!.getString(R.string.base_url))
+        val postClient = BasicHttpClient(BuildConfig.BASE_URL)
         postClient.addHeader("uuid", uuid);
         val uploadResponse = postClient.post("dataTest/uploadAvatar", "image/jpeg", body)
 //        postClient.checkAndThrowError()

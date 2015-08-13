@@ -14,6 +14,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'crashlytics'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def conventionid = properties.getProperty('conventionid')
+def baseurl = properties.getProperty('baseurl')
+
 repositories {
     maven { url 'http://download.crashlytics.com/maven' }
     flatDir {
@@ -33,7 +38,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField "int", "CONVENTION_ID", "50"
+        buildConfigField "int", "CONVENTION_ID", "$conventionid"
+        buildConfigField "String", "BASE_URL", "\"$baseurl\""
     }
 
     signingConfigs {
