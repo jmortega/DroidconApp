@@ -119,7 +119,6 @@ class EventDetailFragment() : Fragment()
         name = view.findViewById(R.id.name) as TextView
         backdrop = view.findViewById(R.id.backdrop) as ImageView
         fab = view.findViewById(R.id.register) as FloatingActionButton
-        fab!!.hide()
         collapsingToolbar = view.findViewById(R.id.collapsingToolbar) as CollapsingToolbarLayout
         recycler = view.findViewById(R.id.recycler) as RecyclerView
 

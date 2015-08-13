@@ -69,6 +69,8 @@ class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.track.setTextColor(resources.getColor(R.color.text_gray))
             }
 
+            //Only color the actual text boxes on lollipop+ couldnt find a good way to do so on
+            //earlier devices without rolling out own assets
             if (Build.VERSION.SDK_INT >= 21)
             {
                 holder.checkBox.setButtonTintList(resources.getColorStateList(track.getCheckBoxSelectorRes()));

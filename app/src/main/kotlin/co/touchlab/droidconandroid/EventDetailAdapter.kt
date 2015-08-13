@@ -111,7 +111,7 @@ class EventDetailAdapter(val context: Context, val trackColor: Int) : RecyclerVi
                 var headerVH = holder as TextVH
                 var iconRes = (data.get(position) as TextDetail).icon
                 var drawable = ResourcesCompat.getDrawable(context, iconRes)
-                drawable!!.setColorFilter(PorterDuffColorFilter(trackColor, PorterDuff.Mode.SRC_IN))
+                drawable.setColorFilter(PorterDuffColorFilter(trackColor, PorterDuff.Mode.SRC_IN))
                 headerVH.image!!.setImageDrawable(drawable)
 
                 headerVH.text!!.setText((data.get(position) as TextDetail).text)

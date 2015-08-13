@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/event_fab_margin"
-        app:layout_anchorGravity="bottom|left"
+        app:layout_anchorGravity="bottom"
         app:fabSize="mini"
         app:borderWidth="0dp"
         android:visibility="gone"/>
