@@ -24,6 +24,7 @@ import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.UploadCoverCommand
 import co.touchlab.droidconandroid.ui.*
 import com.wnafee.vector.compat.ResourcesCompat
+import java.nio.ByteBuffer
 import java.util.ArrayList
 
 public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.CreateNdefMessageCallback
@@ -248,8 +249,9 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
 
     override fun createNdefMessage(event: NfcEvent?): NdefMessage?
     {
-        var text = ("USERID");
-        var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", text.toByteArray())
+        val appPrefs = AppPrefs.getInstance(this)
+        var id = ByteBuffer.allocate(java.lang.Long.SIZE / java.lang.Byte.SIZE).putLong(appPrefs.getUserId()).array()
+        var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", id)
                    ,NdefRecord.createApplicationRecord("co.touchlab.droidconandroid")))
         return msg;
     }

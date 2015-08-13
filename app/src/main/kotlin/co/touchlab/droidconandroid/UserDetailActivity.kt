@@ -6,6 +6,7 @@ import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import java.nio.ByteBuffer
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -26,10 +27,21 @@ class UserDetailActivity : AppCompatActivity(), UserDetailFragment.Companion.Fin
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super<AppCompatActivity>.onCreate(savedInstanceState)
+
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+            processIntent(getIntent());
+        }
+
         setContentView(R.layout.activity_user_detail)
     }
 
-    override fun onFragmentFinished() {
+    override fun onFragmentFinished()
+    {
+        if (isTaskRoot())
+        {
+            MyActivity.startMe(this)
+        }
+
         finish()
     }
 
@@ -42,15 +54,22 @@ class UserDetailActivity : AppCompatActivity(), UserDetailFragment.Companion.Fin
     }
 
     override fun onNewIntent(intent: Intent) {
-        // onResume gets called after this to handle the intent
         setIntent(intent);
     }
 
     fun processIntent(intent: Intent) {
         var rawMsgs = intent.getParcelableArrayExtra(
                 NfcAdapter.EXTRA_NDEF_MESSAGES);
-        // only one message sent during the beam
+
         var msg = rawMsgs[0] as NdefMessage
-        // record 0 contains the MIME type, record 1 is the AAR, if present
+
+        var newIntent = Intent()
+        var buf = ByteBuffer.wrap(msg.getRecords()[0].getPayload())
+        newIntent.putExtra(USER_ID, buf.getLong())
+        setIntent(newIntent)
+    }
+
+    override fun onBackPressed() {
+        onFragmentFinished()
     }
 }
