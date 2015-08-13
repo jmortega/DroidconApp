@@ -38,5 +38,6 @@
     <dimen name="text_huge">48sp</dimen>
     <dimen name="text_xhuge">64sp</dimen>
     <dimen name="social_icon">30dp</dimen>
+    <dimen name="rsvp_icon">11dp</dimen>
 
 </resources>

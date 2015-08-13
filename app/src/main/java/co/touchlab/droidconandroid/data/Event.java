@@ -56,6 +56,17 @@ public class Event implements ScheduleBlock
         return rsvpUuid != null;
     }
 
+    public boolean isPast()
+    {
+        return endDateLong != null && System.currentTimeMillis() > endDateLong ;
+    }
+
+    public boolean isNow()
+    {
+        return startDateLong != null && endDateLong != null && System
+                .currentTimeMillis() < endDateLong && System.currentTimeMillis() > startDateLong;
+    }
+
     @Override
     public boolean isBlock()
     {

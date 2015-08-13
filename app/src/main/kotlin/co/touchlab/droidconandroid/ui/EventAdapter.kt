@@ -5,12 +5,14 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import co.touchlab.droidconandroid.R
 import co.touchlab.droidconandroid.data.Block
 import co.touchlab.droidconandroid.data.Event
 import co.touchlab.droidconandroid.data.ScheduleBlock
 import co.touchlab.droidconandroid.data.Track
+import com.wnafee.vector.compat.ResourcesCompat
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Date
@@ -23,6 +25,7 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     val VIEW_TYPE_EVENT: Int = 0
     val VIEW_TYPE_BLOCK: Int = 1
+    val VIEW_TYPE_PAST_EVENT: Int = 2
 
     private var dataSet: List<ScheduleBlock>
     private var filteredData: ArrayList<ScheduleBlock>
@@ -49,10 +52,10 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         val v: View
         if (viewType == VIEW_TYPE_EVENT) {
             v = LayoutInflater.from(parent!!.getContext()).inflate(R.layout.item_event, parent, false)
-            return EventViewHolder(v)
-        } else if (viewType == VIEW_TYPE_BLOCK) {
+            return ScheduleBlockViewHolder(v)
+        } else if (viewType == VIEW_TYPE_BLOCK || viewType == VIEW_TYPE_PAST_EVENT) {
             v = LayoutInflater.from(parent!!.getContext()).inflate(R.layout.item_block, parent, false)
-            return BlockViewHolder(v)
+            return ScheduleBlockViewHolder(v)
         }
         throw UnsupportedOperationException()
     }
@@ -60,76 +63,81 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         val context = holder!!.itemView.getContext()
         val resources = context.getResources()
-        if(getItemViewType(position) == VIEW_TYPE_EVENT){
-            holder as EventViewHolder
+        holder as ScheduleBlockViewHolder
+        if(getItemViewType(position) == VIEW_TYPE_EVENT || getItemViewType(position) == VIEW_TYPE_PAST_EVENT){
+
             val event = filteredData.get(position) as Event
 
             holder.title.setText(event.name)
-            var timeBlock = ""
-            if(event.startDateLong != null && isFirstForTime(position))
-            {
-                val startDate = Date(event.startDateLong!!)
-                timeBlock = timeFormat.format(startDate)
-            }
 
-            holder.time.setText(timeBlock.toLowerCase())
+            holder.time.setText(getTimeBlock(event, position))
 
             holder.card.setOnClickListener{
                 eventClickListener.onEventClick(event)
             }
 
-            if (allEvents && !TextUtils.isEmpty(event.rsvpUuid)) {
+            if (!TextUtils.isEmpty(event.rsvpUuid)) {
                 holder.rsvp.setVisibility(View.VISIBLE)
+                if(event.isNow())
+                    holder.rsvp.setImageDrawable(ResourcesCompat.getDrawable(context, R.drawable.ic_play))
+                else if(allEvents)
+                    holder.rsvp.setImageDrawable(ResourcesCompat.getDrawable(context, R.drawable.ic_action_tick))
+                else
+                    holder.rsvp.setVisibility(View.GONE)
             } else {
                 holder.rsvp.setVisibility(View.GONE)
             }
 
-            var locationTime = event.venue.name
-
-            if(event.startDateLong != null && event.endDateLong != null)
-            {
-                val startDate = Date(event.startDateLong!!)
-                val endDate = Date(event.endDateLong!!)
-
-                var formattedStart = timeFormat.format(startDate).toLowerCase()
-                val formattedEnd = timeFormat.format(endDate).toLowerCase()
-
-                val startMarker = formattedStart.substring(Math.max(formattedStart.length() - 2, 0))
-                val endMarker = formattedEnd.substring(Math.max(formattedEnd.length() - 2, 0))
-
-                if(TextUtils.equals(startMarker, endMarker))
-                {
-                    formattedStart = formattedStart.substring(0, Math.max(formattedStart.length() - 2, 0))
-                }
-
-                locationTime += " " + formattedStart + " - " + formattedEnd
-            }
-
-            holder.locationTime.setText(locationTime)
+            holder.locationTime.setText("${event.venue.name} ${getDetailedTime(event)}")
 
             val track = Track.findByServerName(event.category)
-            if(track != null) {
+            if(track != null && !event.isPast()) {
                 holder.track.setBackgroundColor(resources.getColor(track.getTextColorRes()))
             }
             else
             {
-                holder.track.setBackgroundColor(resources.getColor(R.color.droidcon_blue))
+                holder.track.setBackgroundColor(resources.getColor(android.R.color.transparent))
             }
         } else if (getItemViewType(position) == VIEW_TYPE_BLOCK) {
             val block = filteredData.get(position) as Block
 
-            holder as BlockViewHolder
             holder.title.setText(block.name)
-            var timeBlock = ""
-            if(block.startDateLong != null)
-            {
-                val startDate = Date(block.startDateLong!!)
-                timeBlock = timeFormat.format(startDate)
-            }
-
-            holder.time.setText(timeBlock.toLowerCase())
+            holder.time.setText(getTimeBlock(block, position))
+            holder.locationTime.setText(getDetailedTime(block))
+            holder.rsvp.setVisibility(View.GONE)
 
         }
+    }
+
+    private fun getTimeBlock(scheduleBlock: ScheduleBlock, position: Int): String {
+        var timeBlock = ""
+        if (scheduleBlock.getStartLong() != null && isFirstForTime(position)) {
+            val startDate = Date(scheduleBlock.getStartLong())
+            timeBlock = timeFormat.format(startDate).toLowerCase()
+        }
+        return timeBlock
+    }
+
+    private fun getDetailedTime(scheduleBlock: ScheduleBlock): String? {
+        var time = ""
+
+        if (scheduleBlock.getStartLong() != null && scheduleBlock.getEndLong() != null) {
+            val startDate = Date(scheduleBlock.getStartLong()!!)
+            val endDate = Date(scheduleBlock.getEndLong()!!)
+
+            var formattedStart = timeFormat.format(startDate).toLowerCase()
+            val formattedEnd = timeFormat.format(endDate).toLowerCase()
+
+            val startMarker = formattedStart.substring(Math.max(formattedStart.length() - 2, 0))
+            val endMarker = formattedEnd.substring(Math.max(formattedEnd.length() - 2, 0))
+
+            if (TextUtils.equals(startMarker, endMarker)) {
+                formattedStart = formattedStart.substring(0, Math.max(formattedStart.length() - 2, 0))
+            }
+
+            time = formattedStart + " - " + formattedEnd
+        }
+        return time
     }
 
     private fun isFirstForTime(position: Int): Boolean {
@@ -147,10 +155,15 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(dataSet.get(position) is Event)
+        val item = filteredData.get(position)
+        if (item is Event) {
+            if (item.isPast()) {
+                return VIEW_TYPE_PAST_EVENT
+            }
             return VIEW_TYPE_EVENT
-        else if(dataSet.get(position) is Block )
+        } else if (item is Block ) {
             return VIEW_TYPE_BLOCK
+        }
         throw UnsupportedOperationException()
     }
 
@@ -189,13 +202,13 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged()
     }
 
-    public class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    public class ScheduleBlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         public val title: TextView
         public val time: TextView
         public val locationTime: TextView
         public val track: View
         public val card: View
-        public val rsvp: View
+        public val rsvp: ImageView
 
         init {
             title = itemView.findViewById(R.id.title) as TextView
@@ -203,21 +216,7 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             locationTime = itemView.findViewById(R.id.location_time) as TextView
             track = itemView.findViewById(R.id.track)
             card = itemView.findViewById(R.id.card)
-            rsvp = itemView.findViewById(R.id.rsvp)
-        }
-    }
-
-    public class BlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        public val title: TextView
-        public val time: TextView
-        public val locationTime: TextView
-        public val card: View
-
-        init {
-            title = itemView.findViewById(R.id.title) as TextView
-            time = itemView.findViewById(R.id.time) as TextView
-            locationTime = itemView.findViewById(R.id.location_time) as TextView
-            card = itemView.findViewById(R.id.card)
+            rsvp = itemView.findViewById(R.id.rsvp) as ImageView
         }
     }
 
