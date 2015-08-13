@@ -1,9 +1,5 @@
 package co.touchlab.droidconandroid.network;
 
-import co.touchlab.android.superbus.errorcontrol.PermanentException;
-import co.touchlab.android.superbus.errorcontrol.TransientException;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
 import retrofit.http.POST;
 import retrofit.http.Path;
 
@@ -13,5 +9,5 @@ import retrofit.http.Path;
 public interface RemoveRsvpRequest
 {
     @POST("/dataTest/unRsvpEvent/{eventId}")
-    BasicIdResult removeRsvp(@Path("eventId") Long eventId) throws TransientException, PermanentException;
+    BasicIdResult removeRsvp(@Path("eventId") Long eventId) throws Exception;
 }

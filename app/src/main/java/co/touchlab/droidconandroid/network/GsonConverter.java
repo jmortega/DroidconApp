@@ -1,17 +1,25 @@
 package co.touchlab.droidconandroid.network;
 
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+
 import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+
 import retrofit.converter.ConversionException;
 import retrofit.converter.Converter;
 import retrofit.mime.MimeUtil;
 import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
-
-import java.io.*;
-import java.lang.reflect.Type;
 
 /**
  * Created by kgalligan on 7/20/14.
