@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
-import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import co.touchlab.android.threading.eventbus.EventBusExt
@@ -23,7 +21,7 @@ import org.apache.commons.lang3.StringUtils
 /**
  * Created by kgalligan on 7/26/14.
  */
-public class FindUserKot : AppCompatActivity()
+public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.FinishListener
 {
     companion object
     {
@@ -47,7 +45,7 @@ public class FindUserKot : AppCompatActivity()
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
-        super.onCreate(savedInstanceState)
+        super<AppCompatActivity>.onCreate(savedInstanceState)
 
         stickyTaskManager = StickyTaskManager(savedInstanceState)
 
@@ -76,7 +74,7 @@ public class FindUserKot : AppCompatActivity()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        super<AppCompatActivity>.onDestroy()
         EventBusExt.getDefault().unregister(this)
     }
 
@@ -113,7 +111,7 @@ public class FindUserKot : AppCompatActivity()
 
     override fun onSaveInstanceState(outState: Bundle)
     {
-        super.onSaveInstanceState(outState)
+        super<AppCompatActivity>.onSaveInstanceState(outState)
         stickyTaskManager!!.onSaveInstanceState(outState)
     }
 
@@ -135,7 +133,8 @@ public class FindUserKot : AppCompatActivity()
         }
     }
 
-    fun closeFragment() {
+    override fun onFragmentFinished()
+    {
         getSupportFragmentManager().popBackStack()
     }
 }

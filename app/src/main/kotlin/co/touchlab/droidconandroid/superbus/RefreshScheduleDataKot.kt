@@ -7,12 +7,10 @@ import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask
 import co.touchlab.android.threading.tasks.persisted.PersistedTask
 import co.touchlab.droidconandroid.BuildConfig
-import co.touchlab.droidconandroid.data.DatabaseHelper
-import co.touchlab.droidconandroid.data.EventSpeaker
-import co.touchlab.droidconandroid.data.UserAccount
-import co.touchlab.droidconandroid.data.UserAuthHelper
+import co.touchlab.droidconandroid.data.*
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.RefreshScheduleDataRequest
+import co.touchlab.droidconandroid.utils.TimeUtils
 import com.crashlytics.android.Crashlytics
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -46,18 +44,22 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
                 val venueDao = databaseHelper.getVenueDao()
                 val userAccountDao = databaseHelper.getUserAccountDao()
                 val eventSpeakerDao = databaseHelper.getEventSpeakerDao()
-                val dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mma")
 
                 val venues = convention.venues
 
-                try {
-                    for (venue in venues) {
+                AppPrefs.getInstance(context).setConventionStartDate(convention.startDate)
+                AppPrefs.getInstance(context).setConventionEndDate(convention.endDate)
+
+                try
+                {
+                    for (venue in venues)
+                    {
                         venueDao.createOrUpdate(venue)
                         for (event in venue.events.iterator()) {
                             val dbEvent = eventDao.queryForId(event.id)
                             event.venue = venue
-                            event.startDateLong = dateFormat.parse(event.startDate)!!.getTime()
-                            event.endDateLong = dateFormat.parse(event.endDate)!!.getTime()
+                            event.startDateLong = TimeUtils.DATE_FORMAT.parse(event.startDate)!!.getTime()
+                            event.endDateLong = TimeUtils.DATE_FORMAT.parse(event.endDate)!!.getTime()
 
                             if (dbEvent != null)
                                 event.rsvpUuid = dbEvent.rsvpUuid

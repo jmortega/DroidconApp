@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorAccent">@color/accent_pink</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowBackground">@color/white</item>
@@ -28,7 +28,7 @@
     <style name="ActionBar" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/primary</item>
         <item name="theme">@style/ActionBar.ThemeOverlay</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
     </style>
 
     <style name="ActionBar.ThemeOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
@@ -40,6 +40,29 @@
         <item name="android:layout_marginBottom">@dimen/padding_small</item>
         <item name="android:layout_marginLeft">@dimen/padding_xxlarge</item>
         <item name="android:layout_marginRight">@dimen/padding_xxlarge</item>
+    </style>
+
+    <style name="TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+    </style>
+
+    <style name="track_checkbox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:paddingTop">@dimen/padding_wedge</item>
+        <item name="android:paddingBottom">@dimen/padding_wedge</item>
+        <item name="android:layout_marginRight">@dimen/padding_large</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/text_xlarge</item>
+    </style>
+
+    <style name="track">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:paddingLeft">@dimen/height_xlarge</item>
+        <item name="android:textColor">@color/text_gray</item>
     </style>
 
 </resources>

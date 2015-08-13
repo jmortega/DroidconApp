@@ -59,5 +59,18 @@
     <string name="error_phone">Please enter a valid phone number.</string>
     <string name="error_email">Please enter a valid email address.</string>
     <string name="error_name">Don\'t forget your name!</string>
+    
+    <!-- Event Detail -->
+    <string name="event_venue_time" >%1$s, %2$s - %3$s</string>
+    <string name="event_speaker_name" >Speaker: %1$s</string>
+    <string name="event_track" >on the %1$s track</string>
+
+    <!-- tracks-->
+    <string name="filter">Filter</string>
+    <string name="tracks">Tracks</string>
+    <string name="development">Development</string>
+    <string name="design">Design</string>
+    <string name="business">Business</string>
+    <string name="action_filter">Filters</string>
 
 </resources>
