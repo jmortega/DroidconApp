@@ -1,6 +1,7 @@
 package co.touchlab.droidconandroid
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -11,8 +12,10 @@ import android.text.format.DateUtils
 import android.view
 import android.view.LayoutInflater
 import android.view.View
+import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.Track
+import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.droidconandroid.utils.TimeUtils
 import java.text.SimpleDateFormat
 import java.util.ArrayList
@@ -50,42 +53,59 @@ class ScheduleFragment : Fragment(), FilterableFragmentInterface
         return inflater!!.inflate(R.layout.fragment_schedule, null)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super<Fragment>.onCreate(savedInstanceState)
+        EventBusExt.getDefault().register(this)
+    }
 
+    override fun onDestroy() {
+        super<Fragment>.onDestroy()
+        EventBusExt.getDefault().unregister(this)
+    }
+
+    public fun onEventMainThread(eventDetailTask: RefreshScheduleDataKot)
+    {
+        Handler().post(RefreshRunnable())
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super<Fragment>.onActivityCreated(savedInstanceState)
 
-        val pager = getView().findViewById(R.id.pager)!! as ViewPager
-        val tabs = getView().findViewById(R.id.tabs)!! as TabLayout
-        val tabWrapper = getView().findViewById(R.id.tabs_wrapper)
-        if(getArguments().getBoolean(ALL_EVENTS)) {
-            tabWrapper.setBackgroundColor(getResources().getColor(R.color.primary))
-        } else {
-            tabWrapper.setBackgroundColor(getResources().getColor(R.color.blue_grey))
-        }
+        Handler().post(RefreshRunnable())
+    }
 
-        val dates: ArrayList<Long> = ArrayList<Long>()
-        val startString : String? = AppPrefs.getInstance(getActivity()).getConventionStartDate()
-        val endString : String? = AppPrefs.getInstance(getActivity()).getConventionEndDate()
-
-        if(!TextUtils.isEmpty(startString) && !TextUtils.isEmpty(endString))
-        {
-            var start: Long = TimeUtils.sanitize(TimeUtils.DATE_FORMAT.parse(startString))
-            val end: Long = TimeUtils.sanitize(TimeUtils.DATE_FORMAT.parse(endString))
-
-            while(start <= end)
-            {
-                dates.add(start)
-                start += DateUtils.DAY_IN_MILLIS
+    inner class RefreshRunnable(): Runnable
+    {
+        override fun run() {
+            val pager = getView().findViewById(R.id.pager)!! as ViewPager
+            val tabs = getView().findViewById(R.id.tabs)!! as TabLayout
+            val tabWrapper = getView().findViewById(R.id.tabs_wrapper)
+            if (getArguments().getBoolean(ALL_EVENTS)) {
+                tabWrapper.setBackgroundColor(getResources().getColor(R.color.primary))
+            } else {
+                tabWrapper.setBackgroundColor(getResources().getColor(R.color.blue_grey))
             }
 
-            pagerAdapter = ScheduleFragmentPagerAdapter(getChildFragmentManager(), dates, getArguments().getBoolean(ALL_EVENTS))
-            pager.setAdapter(pagerAdapter);
-            pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
-            tabs.setTabsFromPagerAdapter(pagerAdapter)
-            tabs.setOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(pager))
-        }
+            val dates: ArrayList<Long> = ArrayList<Long>()
+            val startString: String? = AppPrefs.getInstance(getActivity()).getConventionStartDate()
+            val endString: String? = AppPrefs.getInstance(getActivity()).getConventionEndDate()
 
+            if (!TextUtils.isEmpty(startString) && !TextUtils.isEmpty(endString)) {
+                var start: Long = TimeUtils.sanitize(TimeUtils.DATE_FORMAT.parse(startString))
+                val end: Long = TimeUtils.sanitize(TimeUtils.DATE_FORMAT.parse(endString))
+
+                while (start <= end) {
+                    dates.add(start)
+                    start += DateUtils.DAY_IN_MILLIS
+                }
+
+                pagerAdapter = ScheduleFragmentPagerAdapter(getChildFragmentManager(), dates, getArguments().getBoolean(ALL_EVENTS))
+                pager.setAdapter(pagerAdapter);
+                pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
+                tabs.setTabsFromPagerAdapter(pagerAdapter)
+                tabs.setOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(pager))
+            }
+        }
     }
 
     override fun applyFilters(track: Track) {
