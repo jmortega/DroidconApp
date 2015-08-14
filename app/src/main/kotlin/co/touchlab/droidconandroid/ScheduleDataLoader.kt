@@ -5,6 +5,7 @@ import android.text.format.DateUtils
 import co.touchlab.android.threading.loaders.AbstractEventBusLoader
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.data.Event
+import co.touchlab.droidconandroid.data.ScheduleBlock
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
 import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot
@@ -15,12 +16,14 @@ import java.util.Comparator
 /**
  * Created by kgalligan on 8/1/14.
  */
-class ScheduleDataLoader(c: Context, val all: Boolean, val day: Long) : AbstractEventBusLoader<List<Event>>(c)
+class ScheduleDataLoader(c: Context, val all: Boolean, val day: Long) : AbstractEventBusLoader<List<ScheduleBlock>>(c)
 {
-    override fun findContent(): List<Event>?
+    override fun findContent(): List<ScheduleBlock>?
     {
-        val dao = DatabaseHelper.getInstance(getContext()).getEventDao()
-        val baseQuery = dao.queryBuilder().where().between("startDateLong", day, day + DateUtils.DAY_IN_MILLIS)
+        val databaseHelper = DatabaseHelper.getInstance(getContext())
+        val eventDao = databaseHelper.getEventDao()
+        val blockDao = databaseHelper.getBlockDao()
+        val baseQuery = eventDao.queryBuilder().where().between("startDateLong", day, day + DateUtils.DAY_IN_MILLIS)
         val events = if(all)
         {
             baseQuery.query()!!
@@ -30,23 +33,25 @@ class ScheduleDataLoader(c: Context, val all: Boolean, val day: Long) : Abstract
             baseQuery.and().isNotNull("rsvpUuid")!!.query()!!
         }
 
-        Collections.sort(events, object : Comparator<Event>
-        {
-            override fun compare(lhs: Event, rhs: Event): Int
-            {
-//                if (lhs.venue.id != rhs.venue.id)
-//                {
-//                    return lhs.venue.name!!.compareTo(rhs.venue.name!!)
-//                }
+        val blocks = blockDao.queryBuilder().where().between("startDateLong", day, day + DateUtils.DAY_IN_MILLIS).query()
 
-                if (lhs.startDateLong == rhs.startDateLong)
+        val eventsAndBlocks = ArrayList<ScheduleBlock>()
+
+        eventsAndBlocks.addAll(events)
+        eventsAndBlocks.addAll(blocks)
+
+        Collections.sort(eventsAndBlocks, object : Comparator<ScheduleBlock>
+        {
+            override fun compare(lhs: ScheduleBlock, rhs: ScheduleBlock): Int
+            {
+                if (lhs.getStartLong() == rhs.getStartLong())
                     return 0
 
-                return lhs.startDateLong!!.compareTo(rhs.startDateLong!!)
+                return lhs.getStartLong()!!.compareTo(rhs.getStartLong()!!)
             }
         })
 
-        return ArrayList(events)
+        return eventsAndBlocks
     }
 
     override fun handleError(e: Exception?): Boolean

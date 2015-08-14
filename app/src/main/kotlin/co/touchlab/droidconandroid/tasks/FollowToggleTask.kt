@@ -2,10 +2,10 @@ package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
 import co.touchlab.android.threading.tasks.TaskQueue
-import co.touchlab.android.superbus.appsupport.CommandBusHelper
 import co.touchlab.droidconandroid.superbus.FollowCommand
 import co.touchlab.droidconandroid.superbus.UnfollowCommand
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -32,12 +32,12 @@ class FollowToggleTask(c: Context, val otherId: Long) : DatabaseTaskKot(c)
         {
             if (userAccount.following)
             {
-                CommandBusHelper.submitCommandSync(context, UnfollowCommand(otherId))
+                PersistedTaskQueueFactory.getInstance(context).execute(UnfollowCommand(otherId))
                 userAccount.following = false
             }
             else
             {
-                CommandBusHelper.submitCommandSync(context, FollowCommand(otherId))
+                PersistedTaskQueueFactory.getInstance(context).execute(FollowCommand(otherId))
                 userAccount.following = true
             }
             dao.createOrUpdate(userAccount)
