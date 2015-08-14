@@ -42,14 +42,15 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
             override fun call(): Void? {
                 val eventDao = databaseHelper.getEventDao()
                 val venueDao = databaseHelper.getVenueDao()
+                val blockDao = databaseHelper.getBlockDao()
                 val userAccountDao = databaseHelper.getUserAccountDao()
                 val eventSpeakerDao = databaseHelper.getEventSpeakerDao()
-
-                val venues = convention.venues
 
                 AppPrefs.getInstance(context).setConventionStartDate(convention.startDate)
                 AppPrefs.getInstance(context).setConventionEndDate(convention.endDate)
 
+                val venues = convention.venues
+                val blocks = convention.blocks
                 try
                 {
                     for (venue in venues)
@@ -77,7 +78,7 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
                                         userAccount = UserAccount()
                                     }
 
-                                    UserAuthHelper.userAccountToDb(ua, userAccount!!)
+                                    UserAuthHelper.userAccountToDb(ua, userAccount)
 
                                     userAccountDao.createOrUpdate(userAccount)
 
@@ -85,10 +86,10 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
                                             .where()!!
                                             .eq("event_id", event.id)!!
                                             .and()!!
-                                            .eq("userAccount_id", userAccount!!.id)!!
+                                            .eq("userAccount_id", userAccount.id)!!
                                             .query()!!
 
-                                    var eventSpeaker = if (resultList.size == 0) EventSpeaker() else resultList[0]
+                                    var eventSpeaker = if (resultList.size() == 0) EventSpeaker() else resultList[0]
 
                                     eventSpeaker.event = event
                                     eventSpeaker.userAccount = userAccount
@@ -99,6 +100,15 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
                             }
                         }
                     }
+
+                    for (block in blocks)
+                    {
+                        block.startDateLong = TimeUtils.DATE_FORMAT.parse(block.startDate)!!.getTime()
+                        block.endDateLong = TimeUtils.DATE_FORMAT.parse(block.endDate)!!.getTime()
+
+                        blockDao.createOrUpdate(block)
+                    }
+
                 } catch (e: SQLException) {
                     throw RuntimeException(e)
                 } catch (e: ParseException) {

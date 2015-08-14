@@ -6,11 +6,11 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import co.touchlab.droidconandroid.data.Event
+import co.touchlab.droidconandroid.data.ScheduleBlock
 import co.touchlab.droidconandroid.data.Track
 import co.touchlab.droidconandroid.ui.EventAdapter
 import co.touchlab.droidconandroid.ui.EventClickListener
@@ -62,14 +62,14 @@ class ScheduleDataFragment() : Fragment()
 
     }
 
-    inner class ScheduleDataLoaderCallbacks() : LoaderManager.LoaderCallbacks<List<Event>>
+    inner class ScheduleDataLoaderCallbacks() : LoaderManager.LoaderCallbacks<List<ScheduleBlock>>
     {
-        override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<Event>>?
+        override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<ScheduleBlock>>?
         {
             return ScheduleDataLoader(getActivity()!!, allEvents, day!!)
         }
 
-        override fun onLoadFinished(loader: Loader<List<Event>>?, data: List<Event>?)
+        override fun onLoadFinished(loader: Loader<List<ScheduleBlock>>?, data: List<ScheduleBlock>?)
         {
             if (data == null)
             {
@@ -86,7 +86,7 @@ class ScheduleDataFragment() : Fragment()
             }
 
         }
-        override fun onLoaderReset(loader: Loader<List<Event>>?)
+        override fun onLoaderReset(loader: Loader<List<ScheduleBlock>>?)
         {
 
         }

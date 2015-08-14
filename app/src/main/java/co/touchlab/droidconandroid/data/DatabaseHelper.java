@@ -3,16 +3,19 @@ package co.touchlab.droidconandroid.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import co.touchlab.droidconandroid.data.staff.EventAttendee;
+
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
+
+import co.touchlab.droidconandroid.data.staff.EventAttendee;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -52,6 +55,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     private final Class[] tableClasses = new Class[]{
             Venue.class
             , Event.class
+            , Block.class
             , Invite.class
             , UserAccount.class
             , EventAttendee.class
@@ -141,6 +145,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
         try
         {
             return (Dao<EventSpeaker, Long>) getDao(EventSpeaker.class);
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @NotNull
+    public Dao<Block, Long> getBlockDao()
+    {
+        try
+        {
+            return (Dao<Block, Long>) getDao(Block.class);
         }
         catch (SQLException e)
         {

@@ -10,6 +10,7 @@
     <color name="droidcon_pink">#e63e97</color>
     <color name="droidcon_blue">#46c8f2</color>
     <color name="orange">#ef6541</color>
+    <color name="red">#f1582c</color>
 
     <color name="black_95">#F2000000</color>
     <color name="black_90">#E6000000</color>
@@ -49,5 +50,6 @@
 
     <color name="silver">#d0d8dc</color>
     <color name="blue_grey">#607d8b</color>
+    <color name="bg">#eceff1</color>
     <color name="divider_grey">#979797</color>
 </resources>
