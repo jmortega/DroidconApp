@@ -9,6 +9,7 @@ import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.data.DatabaseHelper;
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot;
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -19,7 +20,7 @@ public class DroidconApplication extends Application
     public void onCreate()
     {
         super.onCreate();
-        Crashlytics.start(this);
+        Fabric.with(this, new Crashlytics());
         if(AppPrefs.getInstance(this).isLoggedIn())
             PersistedTaskQueueFactory.getInstance(this).execute(new RefreshScheduleDataKot());
     }
