@@ -12,6 +12,7 @@ import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.RefreshScheduleDataRequest
 import co.touchlab.droidconandroid.utils.TimeUtils
 import com.crashlytics.android.Crashlytics
+import org.apache.commons.lang3.StringUtils
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.concurrent.Callable
@@ -59,6 +60,8 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
                         for (event in venue.events.iterator()) {
                             val dbEvent = eventDao.queryForId(event.id)
                             event.venue = venue
+                            if(StringUtils.isEmpty(event.startDate) || StringUtils.isEmpty(event.endDate))
+                                continue
                             event.startDateLong = TimeUtils.DATE_FORMAT.parse(event.startDate)!!.getTime()
                             event.endDateLong = TimeUtils.DATE_FORMAT.parse(event.endDate)!!.getTime()
 
