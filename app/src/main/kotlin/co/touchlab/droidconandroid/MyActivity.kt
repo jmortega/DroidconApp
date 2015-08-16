@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.Track
@@ -42,6 +43,8 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
     private var drawerAdapter: DrawerAdapter? = null
     private var drawerLayout: DrawerLayout? = null
     private var filterAdapter: FilterAdapter? = null
+    private var filterDrawer: View? = null
+    private var navigationRecycler: RecyclerView? = null
     private val SELECTED_TRACKS = "tracks"
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -97,6 +100,16 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
         }
 
         EventBusExt.getDefault().register(this)
+    }
+
+    override fun onBackPressed() {
+        if (drawerLayout!!.isDrawerOpen(filterDrawer)) {
+            drawerLayout!!.closeDrawer(filterDrawer)
+        } else if (drawerLayout!!.isDrawerOpen(navigationRecycler)) {
+            drawerLayout!!.closeDrawer(navigationRecycler)
+        } else {
+            super<AppCompatActivity>.onBackPressed()
+        }
     }
 
     private fun adjustToolBarAndDrawers(tag: String) {
@@ -162,10 +175,10 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
         getSupportActionBar().setHomeButtonEnabled(true);
         drawerToggle.syncState();
 
-        var recyclerView = findView(R.id.drawer_list) as RecyclerView
+        navigationRecycler = findView(R.id.drawer_list) as RecyclerView
         drawerAdapter = DrawerAdapter(getDrawerItems(), object : DrawerClickListener {
             override fun onNavigationItemClick(position: Int, titleRes: Int) {
-                drawerLayout!!.closeDrawer(recyclerView)
+                drawerLayout!!.closeDrawer(navigationRecycler)
 
                 var fragment: Fragment? = null
                 var tag: String? = null
@@ -192,11 +205,13 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
                 }
             }
         })
-        recyclerView.setAdapter(drawerAdapter)
+        navigationRecycler!!.setAdapter(drawerAdapter)
 
-        recyclerView.setLayoutManager(LinearLayoutManager(this))
+        navigationRecycler!!.setLayoutManager(LinearLayoutManager(this))
 
-        var filterRecycler = findView(R.id.filter) as RecyclerView
+        filterDrawer = findViewById(R.id.filter_wrapper)
+
+        var filterRecycler = filterDrawer!!.findView(R.id.filter) as RecyclerView
         filterRecycler.setLayoutManager(LinearLayoutManager(this))
 
         filterAdapter = FilterAdapter(getFilterItems(), object : FilterClickListener {
@@ -211,7 +226,7 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
         filterRecycler.setAdapter(filterAdapter)
 
         findViewById(R.id.back).setOnClickListener{
-            drawerLayout!!.closeDrawer(findViewById(R.id.filter_wrapper))
+            drawerLayout!!.closeDrawer(filterDrawer)
         }
 
     }
