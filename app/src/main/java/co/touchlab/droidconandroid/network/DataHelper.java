@@ -5,16 +5,19 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.OkHttpClient;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.TimeUnit;
+
 import co.touchlab.droidconandroid.BuildConfig;
-import co.touchlab.droidconandroid.R;
 import co.touchlab.droidconandroid.data.AppPrefs;
 import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.AndroidLog;
+import retrofit.client.OkClient;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -52,11 +55,16 @@ public class DataHelper
         Gson gson = new GsonBuilder().create();
         GsonConverter gsonConverter = new GsonConverter(gson);
 
+        final OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setReadTimeout(60, TimeUnit.SECONDS);
+        okHttpClient.setConnectTimeout(60, TimeUnit.SECONDS);
+
         RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setRequestInterceptor(requestInterceptor)
                 .setConverter(gsonConverter)
                 .setLogLevel(RestAdapter.LogLevel.FULL).setLog(new AndroidLog("DroidconApp"))
-                .setEndpoint(BuildConfig.BASE_URL);
+                .setEndpoint(BuildConfig.BASE_URL)
+                .setClient(new OkClient(okHttpClient));
 
         if (errorHandler != null)
             builder.setErrorHandler(errorHandler);
