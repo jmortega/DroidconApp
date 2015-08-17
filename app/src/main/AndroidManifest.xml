@@ -57,6 +57,7 @@
 
         <activity
             android:name=".EditUserProfile"
+            android:windowSoftInputMode="adjustPan"
             />
 
         <activity android:name=".SignInActivity"
