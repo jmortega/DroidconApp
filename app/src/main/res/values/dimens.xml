@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="drawer_width">280dp</dimen>
     <dimen name="drawer_header_height">172dp</dimen>
-    <dimen name="status_bar_height">25dip</dimen>
+    <dimen name="status_bar_height">0dip</dimen>
 
     <dimen name="padding_micro">2dp</dimen>
     <dimen name="padding_tiny">4dp</dimen>
@@ -38,5 +38,11 @@
     <dimen name="text_huge">48sp</dimen>
     <dimen name="text_xhuge">64sp</dimen>
     <dimen name="social_icon">30dp</dimen>
+    <dimen name="rsvp_icon">11dp</dimen>
+
+    <dimen name="event_top_spacing">51dp</dimen>
+    <dimen name="event_speaker_image">40dp</dimen>
+    <dimen name="event_entry_icon">26dp</dimen>
+    <dimen name="event_fab_margin">0dp</dimen>
 
 </resources>

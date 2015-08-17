@@ -1,7 +1,5 @@
 package co.touchlab.droidconandroid.network;
 
-import co.touchlab.android.superbus.errorcontrol.PermanentException;
-import co.touchlab.android.superbus.errorcontrol.TransientException;
 import retrofit.client.Response;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -14,5 +12,5 @@ public interface UnfollowRequest
 {
     @FormUrlEncoded
     @POST("/dataTest/unfollow")
-    Response unfollow(@Field("otherId") Long otherId) throws TransientException, PermanentException;
+    Response unfollow(@Field("otherId") Long otherId) throws Exception;
 }

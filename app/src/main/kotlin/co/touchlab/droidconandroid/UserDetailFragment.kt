@@ -38,10 +38,10 @@ class UserDetailFragment() : Fragment()
     private var avatar: ImageView? = null
     private var name: TextView? = null
     private var phone: TextView? = null
-    private var phoneIcon: ImageView? = null
+    private var phoneIcon: MorphButton? = null
     private var phoneWrapper: View? = null
     private var email: TextView? = null
-    private var emailIcon: ImageView? = null
+    private var emailIcon: MorphButton? = null
     private var emailWrapper: View? = null
     private var company: TextView? = null
     private var twitter: TextView? = null
@@ -49,10 +49,10 @@ class UserDetailFragment() : Fragment()
     private var gPlus: TextView? = null
     private var gPlusWrapper: View? = null
     private var website: TextView? = null
-    private var websiteIcon: ImageView? = null
+    private var websiteIcon: MorphButton? = null
     private var websiteWrapper: View? = null
     private var company2: TextView? = null
-    private var companyIcon: ImageView? = null
+    private var companyIcon: MorphButton? = null
     private var companyWrapper: View? = null
     private var followToggle: Button? = null
     private var header: ImageView? = null
@@ -73,7 +73,14 @@ class UserDetailFragment() : Fragment()
 
             return f
         }
+
+        interface FinishListener
+        {
+            fun onFragmentFinished()
+        }
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,10 +162,10 @@ class UserDetailFragment() : Fragment()
         avatar = view.findView(R.id.profile_image) as ImageView
         name = view.findView(R.id.name) as TextView
         phone = view.findView(R.id.phone) as TextView
-        phoneIcon = view.findView(R.id.phone_icon) as ImageView
+        phoneIcon = view.findView(R.id.phone_icon) as MorphButton
         phoneWrapper = view.findView(R.id.phone_wrapper)
         email = view.findView(R.id.email) as TextView
-        emailIcon = view.findView(R.id.email_icon) as ImageView
+        emailIcon = view.findView(R.id.email_icon) as MorphButton
         emailWrapper = view.findView(R.id.email_wrapper)
         company = view.findView(R.id.company) as TextView
         twitter = view.findView(R.id.twitter) as TextView
@@ -166,17 +173,18 @@ class UserDetailFragment() : Fragment()
         gPlus = view.findView(R.id.gPlus) as TextView
         gPlusWrapper = view.findViewById(R.id.gPlus_wrapper)
         website = view.findView(R.id.website) as TextView
-        websiteIcon = view.findView(R.id.website_icon) as ImageView
+        websiteIcon = view.findView(R.id.website_icon) as MorphButton
         websiteWrapper = view.findView(R.id.website_wrapper)
         company2 = view.findView(R.id.company2) as TextView
-        companyIcon = view.findView(R.id.company_icon) as ImageView
+        companyIcon = view.findView(R.id.company_icon) as MorphButton
         companyWrapper = view.findView(R.id.company_wrapper)
         followToggle = view.findView(R.id.followToggle) as Button
         header = view.findView(R.id.header) as ImageView
 
         var close = view.findView(R.id.close);
         close.setOnClickListener{
-            (getActivity() as FindUserKot).closeFragment()
+        if (getActivity() is FinishListener)
+            (getActivity() as FinishListener).onFragmentFinished()
         }
 
         getLoaderManager()!!.initLoader(0, null, this.UDLoaderCallbacks())
@@ -320,19 +328,6 @@ class UserDetailFragment() : Fragment()
                 }
             }
 
-            addContact.setVisibility(View.VISIBLE)
-            addContact.setOnClickListener{
-                // Creates a new Intent to insert a contact
-                val intent = Intent(ContactsContract.Intents.Insert.ACTION);
-                // Sets the MIME type to match the Contacts Provider
-                intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-                intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
-                intent.putExtra(ContactsContract.Intents.Insert.COMPANY, userAccount.company)
-                intent.putExtra(ContactsContract.Intents.Insert.NAME, userAccount.name)
-                intent.putExtra(ContactsContract.Intents.Insert.PHONETIC_NAME, userAccount.phoneticName)
-                startActivity(intent);
-            }
-
 
         }
     }
@@ -340,16 +335,16 @@ class UserDetailFragment() : Fragment()
     private fun makeIconsPretty(darkVibrantColor: Int) {
         val phoneDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_phone);
         phoneDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        phoneIcon!!.setImageDrawable(phoneDrawable)
+        phoneIcon!!.setStartDrawable(phoneDrawable)
         val emailDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_email);
         emailDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        emailIcon!!.setImageDrawable(emailDrawable)
+        emailIcon!!.setStartDrawable(emailDrawable)
         val companyDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_work);
         companyDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        companyIcon!!.setImageDrawable(companyDrawable)
+        companyIcon!!.setStartDrawable(companyDrawable)
         val websiteDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_website);
         websiteDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        websiteIcon!!.setImageDrawable(websiteDrawable)
+        websiteIcon!!.setStartDrawable(websiteDrawable)
     }
 
 }

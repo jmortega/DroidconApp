@@ -1,7 +1,6 @@
 package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
-import co.touchlab.android.superbus.errorcontrol.PermanentException
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
 import co.touchlab.droidconandroid.R
@@ -13,6 +12,7 @@ import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.FindUserRequest
 import co.touchlab.droidconandroid.network.SingleUserInfoRequest
 import co.touchlab.droidconandroid.network.dao.UserInfoResponse
+import com.crashlytics.android.Crashlytics
 import retrofit.RetrofitError
 import java.net.HttpURLConnection
 
@@ -46,10 +46,16 @@ class FindUserByIdTask(val id: Long) : AbstractFindUserTask()
             } catch(e: RetrofitError) {
                 if(e.getResponse().getStatus() == HttpURLConnection.HTTP_NOT_FOUND) {
                     errorStringCode = R.string.error_user_not_found
-                    return null
                 }
-                throw RuntimeException(e)
+                else if(e.isNetworkError()){
+                    errorStringCode = R.string.network_error
+                }
+                else {
+                    throw RuntimeException(e)
+                }
             }
+
+            return null
         })
     }
 }
@@ -93,6 +99,8 @@ abstract class AbstractFindUserTask() : Task()
     }
 
     override fun handleError(context: Context?, e: Throwable?): Boolean {
+        Crashlytics.logException(e)
+        errorStringCode = R.string.error_unknown
         return false
     }
 
@@ -105,27 +113,21 @@ abstract class AbstractFindUserTask() : Task()
             EventBusExt.getDefault()!!.post(this)
         }
 
-        try
+        val response = loadRequest()
+        if(response != null)
         {
-            val response = loadRequest()
-            if(response != null)
-            {
-                val updatedUser = saveUserResponse(context, user, response)
+            val updatedUser = saveUserResponse(context, user, response)
 
-                if (updatedUser == null)
-                {
+            if (updatedUser == null)
+            {
 //                    cancelPost()
-                }
-                else
-                {
-                    this.user = updatedUser
-                }
+            }
+            else
+            {
+                this.user = updatedUser
             }
         }
-        catch(e: PermanentException)
-        {
-            errorStringCode = R.string.error_user_not_found
-        }
+
     }
 
 }

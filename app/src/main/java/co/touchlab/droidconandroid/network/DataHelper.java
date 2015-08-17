@@ -2,12 +2,15 @@ package co.touchlab.droidconandroid.network;
 
 import android.content.Context;
 import android.text.TextUtils;
-import co.touchlab.android.superbus.http.RetrofitBusErrorHandler;
-import co.touchlab.droidconandroid.R;
-import co.touchlab.droidconandroid.data.AppPrefs;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import org.jetbrains.annotations.NotNull;
+
+import co.touchlab.droidconandroid.BuildConfig;
+import co.touchlab.droidconandroid.R;
+import co.touchlab.droidconandroid.data.AppPrefs;
 import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -53,7 +56,7 @@ public class DataHelper
                 .setRequestInterceptor(requestInterceptor)
                 .setConverter(gsonConverter)
                 .setLogLevel(RestAdapter.LogLevel.FULL).setLog(new AndroidLog("DroidconApp"))
-                .setEndpoint(context.getString(R.string.base_url));
+                .setEndpoint(BuildConfig.BASE_URL);
 
         if (errorHandler != null)
             builder.setErrorHandler(errorHandler);

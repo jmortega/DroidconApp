@@ -2,8 +2,11 @@ package co.touchlab.droidconandroid
 
 import android.content.Context
 import android.content.Intent
+import android.nfc.NdefMessage
+import android.nfc.NdefRecord
+import android.nfc.NfcAdapter
+import android.nfc.NfcEvent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -14,17 +17,19 @@ import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.Track
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.UploadCoverCommand
 import co.touchlab.droidconandroid.ui.*
+import com.wnafee.vector.compat.ResourcesCompat
+import java.nio.ByteBuffer
 import java.util.ArrayList
 
-public class MyActivity : AppCompatActivity(), FilterInterface
+public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.CreateNdefMessageCallback
 {
-
     public companion object
     {
         public fun startMe(c : Context)
@@ -38,22 +43,25 @@ public class MyActivity : AppCompatActivity(), FilterInterface
     private var drawerAdapter: DrawerAdapter? = null
     private var drawerLayout: DrawerLayout? = null
     private var filterAdapter: FilterAdapter? = null
+    private var filterDrawer: View? = null
+    private var navigationRecycler: RecyclerView? = null
     private val SELECTED_TRACKS = "tracks"
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super<AppCompatActivity>.onCreate(savedInstanceState)
 
-
         if (!AppPrefs.getInstance(this).getHasSeenWelcome())
         {
             startActivity(WelcomeActivity.getLaunchIntent(this@MyActivity))
             finish()
+            return
         }
         else if (!AppPrefs.getInstance(this).isLoggedIn())
         {
             startActivity(SignInActivity.getLaunchIntent(this@MyActivity))
             finish()
+            return
         }
 
         setContentView(R.layout.activity_my)
@@ -61,6 +69,13 @@ public class MyActivity : AppCompatActivity(), FilterInterface
         toolbar = findViewById(R.id.toolbar) as Toolbar;
         setSupportActionBar(toolbar);
         setUpDrawers()
+
+        var nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        if (nfcAdapter != null)
+        {
+            nfcAdapter.setNdefPushMessageCallback(this,this)
+        }
+
 
         if(savedInstanceState == null)
         {
@@ -85,6 +100,16 @@ public class MyActivity : AppCompatActivity(), FilterInterface
         }
 
         EventBusExt.getDefault().register(this)
+    }
+
+    override fun onBackPressed() {
+        if (drawerLayout!!.isDrawerOpen(filterDrawer)) {
+            drawerLayout!!.closeDrawer(filterDrawer)
+        } else if (drawerLayout!!.isDrawerOpen(navigationRecycler)) {
+            drawerLayout!!.closeDrawer(navigationRecycler)
+        } else {
+            super<AppCompatActivity>.onBackPressed()
+        }
     }
 
     private fun adjustToolBarAndDrawers(tag: String) {
@@ -120,6 +145,8 @@ public class MyActivity : AppCompatActivity(), FilterInterface
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.home, menu)
+        var filter = menu!!.findItem(R.id.action_filter)
+        filter.setIcon(ResourcesCompat.getDrawable(this, R.drawable.ic_filter))
         return super<AppCompatActivity>.onCreateOptionsMenu(menu)
     }
 
@@ -153,10 +180,10 @@ public class MyActivity : AppCompatActivity(), FilterInterface
         getSupportActionBar().setHomeButtonEnabled(true);
         drawerToggle.syncState();
 
-        var recyclerView = findView(R.id.drawer_list) as RecyclerView
+        navigationRecycler = findView(R.id.drawer_list) as RecyclerView
         drawerAdapter = DrawerAdapter(getDrawerItems(), object : DrawerClickListener {
             override fun onNavigationItemClick(position: Int, titleRes: Int) {
-                drawerLayout!!.closeDrawer(recyclerView)
+                drawerLayout!!.closeDrawer(navigationRecycler)
 
                 var fragment: Fragment? = null
                 var tag: String? = null
@@ -183,11 +210,13 @@ public class MyActivity : AppCompatActivity(), FilterInterface
                 }
             }
         })
-        recyclerView.setAdapter(drawerAdapter)
+        navigationRecycler!!.setAdapter(drawerAdapter)
 
-        recyclerView.setLayoutManager(LinearLayoutManager(this))
+        navigationRecycler!!.setLayoutManager(LinearLayoutManager(this))
 
-        var filterRecycler = findView(R.id.filter) as RecyclerView
+        filterDrawer = findViewById(R.id.filter_wrapper)
+
+        var filterRecycler = filterDrawer!!.findView(R.id.filter) as RecyclerView
         filterRecycler.setLayoutManager(LinearLayoutManager(this))
 
         filterAdapter = FilterAdapter(getFilterItems(), object : FilterClickListener {
@@ -202,7 +231,7 @@ public class MyActivity : AppCompatActivity(), FilterInterface
         filterRecycler.setAdapter(filterAdapter)
 
         findViewById(R.id.back).setOnClickListener{
-            drawerLayout!!.closeDrawer(findViewById(R.id.filter_wrapper))
+            drawerLayout!!.closeDrawer(filterDrawer)
         }
 
     }
@@ -237,6 +266,15 @@ public class MyActivity : AppCompatActivity(), FilterInterface
         drawerItems.add(NavigationItem(R.string.settings, R.drawable.ic_settings))
         drawerItems.add(NavigationItem(R.string.about, R.drawable.ic_info))
         return drawerItems;
+    }
+
+    override fun createNdefMessage(event: NfcEvent?): NdefMessage?
+    {
+        val appPrefs = AppPrefs.getInstance(this)
+        var id = ByteBuffer.allocate(java.lang.Long.SIZE / java.lang.Byte.SIZE).putLong(appPrefs.getUserId()).array()
+        var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", id)
+                   ,NdefRecord.createApplicationRecord("co.touchlab.droidconandroid")))
+        return msg;
     }
 }
 
