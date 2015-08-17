@@ -91,16 +91,13 @@ class EventDetailFragment() : Fragment()
      * Gets the track ID argument. This is to make sure we dont flash the incorrect colors
      * on things like the FAB and toolbar while waiting to load the event details
      */
-    private fun findTrackIdArg(): String
+    private fun findTrackIdArg(): String?
     {
         var trackId = getArguments()?.getString(TRACK_ID)
         if (trackId == null)
         {
             trackId = getActivity()!!.getIntent()!!.getStringExtra(TRACK_ID)
         }
-
-        if (trackId == null)
-            throw IllegalArgumentException("Must set track id");
 
         return trackId
     }
