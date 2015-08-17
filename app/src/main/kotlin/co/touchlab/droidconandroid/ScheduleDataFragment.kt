@@ -77,12 +77,19 @@ class ScheduleDataFragment() : Fragment()
             }
             else
             {
-                adapter = EventAdapter(data, allEvents, (getActivity() as FilterInterface).getCurrentFilters(), object : EventClickListener{
-                    override fun onEventClick(event: Event) {
-                        EventDetailActivity.callMe(getActivity()!!, event.id, event.category)
-                    }
-                })
-                eventList!!.setAdapter(adapter!!)
+                if (eventList!!.getAdapter() == null)
+                {
+                    adapter = EventAdapter(data, allEvents, (getActivity() as FilterInterface).getCurrentFilters(), object : EventClickListener {
+                        override fun onEventClick(event: Event) {
+                            EventDetailActivity.callMe(getActivity()!!, event.id, event.category)
+                        }
+                    })
+                    eventList!!.setAdapter(adapter!!)
+                }
+                else
+                {
+                    (eventList!!.getAdapter() as EventAdapter).updateEvents(data)
+                }
             }
 
         }

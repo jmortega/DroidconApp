@@ -202,6 +202,13 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged()
     }
 
+    fun updateEvents(data: List<ScheduleBlock>)
+    {
+        dataSet = data
+        filteredData = ArrayList(data)
+        update(null)
+    }
+
     public class ScheduleBlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         public val title: TextView
         public val time: TextView
