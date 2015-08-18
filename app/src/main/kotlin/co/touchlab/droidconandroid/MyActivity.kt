@@ -145,8 +145,10 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.home, menu)
-        var filter = menu!!.findItem(R.id.action_filter)
+        val filter = menu!!.findItem(R.id.action_filter)
         filter.setIcon(ResourcesCompat.getDrawable(this, R.drawable.ic_filter))
+        val search = menu.findItem(R.id.action_search)
+        search.setIcon(ResourcesCompat.getDrawable(this, R.drawable.ic_search))
         return super<AppCompatActivity>.onCreateOptionsMenu(menu)
     }
 

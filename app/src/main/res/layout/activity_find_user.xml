@@ -15,12 +15,15 @@
             android:id="@+id/userCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:maxLength="4"
             android:layout_toLeftOf="@+id/findUser"/>
         <Button
             android:id="@+id/startScanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userCode"
+            android:visibility="gone"
             android:text="Scan"/>
         <Button
             android:id="@+id/findUser"

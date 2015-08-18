@@ -38,21 +38,23 @@ class UserDetailFragment() : Fragment()
     private var avatar: ImageView? = null
     private var name: TextView? = null
     private var phone: TextView? = null
-    private var phoneIcon: MorphButton? = null
+    private var phoneIcon: ImageView? = null
     private var phoneWrapper: View? = null
     private var email: TextView? = null
-    private var emailIcon: MorphButton? = null
+    private var emailIcon: ImageView? = null
     private var emailWrapper: View? = null
     private var company: TextView? = null
     private var twitter: TextView? = null
+    private var twitterIcon: ImageView? = null
     private var twitterWrapper: View? = null
     private var gPlus: TextView? = null
+    private var gPlusIcon: ImageView? = null
     private var gPlusWrapper: View? = null
     private var website: TextView? = null
-    private var websiteIcon: MorphButton? = null
+    private var websiteIcon: ImageView? = null
     private var websiteWrapper: View? = null
     private var company2: TextView? = null
-    private var companyIcon: MorphButton? = null
+    private var companyIcon: ImageView? = null
     private var companyWrapper: View? = null
     private var followToggle: Button? = null
     private var header: ImageView? = null
@@ -162,21 +164,23 @@ class UserDetailFragment() : Fragment()
         avatar = view.findView(R.id.profile_image) as ImageView
         name = view.findView(R.id.name) as TextView
         phone = view.findView(R.id.phone) as TextView
-        phoneIcon = view.findView(R.id.phone_icon) as MorphButton
+        phoneIcon = view.findView(R.id.phone_icon) as ImageView
         phoneWrapper = view.findView(R.id.phone_wrapper)
         email = view.findView(R.id.email) as TextView
-        emailIcon = view.findView(R.id.email_icon) as MorphButton
+        emailIcon = view.findView(R.id.email_icon) as ImageView
         emailWrapper = view.findView(R.id.email_wrapper)
         company = view.findView(R.id.company) as TextView
         twitter = view.findView(R.id.twitter) as TextView
+        twitterIcon = view.findView(R.id.twitter_icon) as ImageView
         twitterWrapper = view.findView(R.id.wrapper_twitter)
         gPlus = view.findView(R.id.gPlus) as TextView
+        gPlusIcon = view.findView(R.id.gPlus_icon) as ImageView
         gPlusWrapper = view.findViewById(R.id.gPlus_wrapper)
         website = view.findView(R.id.website) as TextView
-        websiteIcon = view.findView(R.id.website_icon) as MorphButton
+        websiteIcon = view.findView(R.id.website_icon) as ImageView
         websiteWrapper = view.findView(R.id.website_wrapper)
         company2 = view.findView(R.id.company2) as TextView
-        companyIcon = view.findView(R.id.company_icon) as MorphButton
+        companyIcon = view.findView(R.id.company_icon) as ImageView
         companyWrapper = view.findView(R.id.company_wrapper)
         followToggle = view.findView(R.id.followToggle) as Button
         header = view.findView(R.id.header) as ImageView
@@ -290,7 +294,7 @@ class UserDetailFragment() : Fragment()
             websiteWrapper!!.setVisibility(View.VISIBLE)
         }
 
-        val addContact = getView().findView(R.id.addContact)
+        val addContact = getView().findView(R.id.addContact) as ImageView
         addContact.setOnClickListener{
             // Creates a new Intent to insert a contact
             val intent = Intent(ContactsContract.Intents.Insert.ACTION);
@@ -311,6 +315,8 @@ class UserDetailFragment() : Fragment()
         else
         {
 //            followToggle!!.setVisibility(View.VISIBLE)
+            addContact.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_addcontact))
+            addContact.setVisibility(View.VISIBLE)
             if (userAccount.following)
             {
                 followToggle!!.setText(R.string.unfollow)
@@ -335,16 +341,19 @@ class UserDetailFragment() : Fragment()
     private fun makeIconsPretty(darkVibrantColor: Int) {
         val phoneDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_phone);
         phoneDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        phoneIcon!!.setStartDrawable(phoneDrawable)
+        phoneIcon!!.setImageDrawable(phoneDrawable)
         val emailDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_email);
         emailDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        emailIcon!!.setStartDrawable(emailDrawable)
+        emailIcon!!.setImageDrawable(emailDrawable)
         val companyDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_work);
         companyDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        companyIcon!!.setStartDrawable(companyDrawable)
+        companyIcon!!.setImageDrawable(companyDrawable)
         val websiteDrawable = ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_website);
         websiteDrawable.setColorFilter(PorterDuffColorFilter(darkVibrantColor, PorterDuff.Mode.SRC_IN))
-        websiteIcon!!.setStartDrawable(websiteDrawable)
+        websiteIcon!!.setImageDrawable(websiteDrawable)
+
+        twitterIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_twitter))
+        gPlusIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_gplus))
     }
 
 }
