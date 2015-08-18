@@ -58,7 +58,7 @@ class EventDetailAdapter(val context: Context, val trackColor: Int) : RecyclerVi
 
     public fun addSpeaker(speaker: UserAccount)
     {
-        data.add(SpeakerDetail(TYPE_SPEAKER, speaker.avatarKey, speaker.name, speaker.profile, speaker.id))
+        data.add(SpeakerDetail(TYPE_SPEAKER, speaker.avatarImageUrl(), speaker.name, speaker.profile, speaker.id))
     }
 
     //=================== Adapter Overrides ===================
@@ -176,7 +176,7 @@ class EventDetailAdapter(val context: Context, val trackColor: Int) : RecyclerVi
 
     inner data class TextDetail(type: Int, val text: String, val icon: Int): Detail(type)
 
-    inner data class SpeakerDetail(type: Int, val avatar: String, val name: String, val bio: String, val id: Long): Detail(type)
+    inner data class SpeakerDetail(type: Int, val avatar: String?, val name: String, val bio: String?, val id: Long): Detail(type)
 
     inner data class SpaceDetail(type: Int, val size: Int): Detail(type)
 

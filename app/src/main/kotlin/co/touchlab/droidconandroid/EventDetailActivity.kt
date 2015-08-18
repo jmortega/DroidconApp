@@ -15,7 +15,7 @@ class EventDetailActivity : AppCompatActivity()
     {
         val EVENT_ID = "EVENT_ID"
         val TRACK_ID = "TRACK_ID"
-        fun callMe(a: Activity, id: Long, category: String)
+        fun callMe(a: Activity, id: Long, category: String?)
         {
             val i = Intent(a, javaClass<EventDetailActivity>())
             i.putExtra(EVENT_ID, id)

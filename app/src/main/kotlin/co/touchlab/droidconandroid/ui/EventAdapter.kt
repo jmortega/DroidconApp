@@ -88,7 +88,7 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.rsvp.setVisibility(View.GONE)
             }
 
-            holder.locationTime.setText("${event.venue.name} ${getDetailedTime(event)}")
+            holder.locationTime.setText("${event.allSpeakersString()}")
 
             val track = Track.findByServerName(event.category)
             if(track != null && !event.isPast()) {
@@ -200,6 +200,13 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         notifyDataSetChanged()
+    }
+
+    fun updateEvents(data: List<ScheduleBlock>)
+    {
+        dataSet = data
+        filteredData = ArrayList(data)
+        update(null)
     }
 
     public class ScheduleBlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

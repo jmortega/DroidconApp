@@ -23,7 +23,8 @@ import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
-import co.touchlab.droidconandroid.tasks.FollowToggleTask
+import co.touchlab.droidconandroid.tasks.FindUserByIdTask
+import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.utils.CustomTarget
 import co.touchlab.droidconandroid.utils.PaletteTransformation
 import co.touchlab.droidconandroid.utils.Toaster
@@ -56,7 +57,6 @@ class UserDetailFragment() : Fragment()
     private var company2: TextView? = null
     private var companyIcon: ImageView? = null
     private var companyWrapper: View? = null
-    private var followToggle: Button? = null
     private var header: ImageView? = null
 
     companion object
@@ -82,11 +82,10 @@ class UserDetailFragment() : Fragment()
         }
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBusExt.getDefault().register(this)
+        Queues.networkQueue(getActivity()).execute(FindUserByIdTask(findUserIdArg()))
     }
 
     override fun onDestroy() {
@@ -106,55 +105,6 @@ class UserDetailFragment() : Fragment()
             throw IllegalArgumentException("Must set user id");
 
         return userId!!
-    }
-
-    private fun refreshUserData()
-    {
-//        bsyncTaskManager!!.post(getActivity(), FindUserByIdTask(findUserIdArg()))
-    }
-
-    class LambdaLoaderCallbacks<D>(
-            val create: (id: Int, args: Bundle?)  -> Loader<D>,
-            val finish: (loader: Loader<D>?, data: D?) -> Unit): LoaderManager.LoaderCallbacks<D>
-    {
-        override fun onCreateLoader(id: Int, args: Bundle?): Loader<D>?
-        {
-            return create(id, args)
-        }
-
-        override fun onLoadFinished(loader: Loader<D>?, data: D?)
-        {
-            finish(loader, data)
-        }
-
-        override fun onLoaderReset(loader: Loader<D>?)
-        {
-            //Ehh
-        }
-
-    }
-
-    inner class UDLoaderCallbacks() : LoaderCallbacks<DoubleTapResult<UserAccount, Int>>
-    {
-        override fun onCreateLoader(id: Int, args: Bundle?): Loader<DoubleTapResult<UserAccount, Int>>?
-        {
-            return UserDetailLoader(getActivity()!!, findUserIdArg())
-        }
-        override fun onLoadFinished(loader: Loader<DoubleTapResult<UserAccount, Int>>?, data: DoubleTapResult<UserAccount, Int>?)
-        {
-            val status = data!!.getStatus()
-            when(status)
-            {
-                Status.Data -> showUserData(data!!.getResult()!!)
-                Status.NoData -> Toaster.showMessage(getActivity(), "NoData")
-                Status.Waiting -> Toaster.showMessage(getActivity(), "Waiting")
-                Status.Error -> Toaster.showMessage(getActivity(), "Error")
-            }
-        }
-        override fun onLoaderReset(loader: Loader<DoubleTapResult<UserAccount, Int>>?)
-        {
-
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -182,7 +132,6 @@ class UserDetailFragment() : Fragment()
         company2 = view.findView(R.id.company2) as TextView
         companyIcon = view.findView(R.id.company_icon) as ImageView
         companyWrapper = view.findView(R.id.company_wrapper)
-        followToggle = view.findView(R.id.followToggle) as Button
         header = view.findView(R.id.header) as ImageView
 
         var close = view.findView(R.id.close);
@@ -190,13 +139,6 @@ class UserDetailFragment() : Fragment()
         if (getActivity() is FinishListener)
             (getActivity() as FinishListener).onFragmentFinished()
         }
-
-        getLoaderManager()!!.initLoader(0, null, this.UDLoaderCallbacks())
-
-//                getLoaderManager()!!.initLoader(0, null, LambdaLoaderCallbacks<UserAccount>(
-//                {id, args -> UserDetailLoader(getActivity()!!, findUserIdArg())},
-//                {loader, data -> if(data != null)showUserData(data)}
-//        ))
 
         return view
     }
@@ -216,11 +158,11 @@ class UserDetailFragment() : Fragment()
 
     private fun showUserData(userAccount: UserAccount)
     {
-        val avatarKey = userAccount.avatarKey
+        val avatarKey = userAccount.avatarImageUrl()
         if (!TextUtils.isEmpty(avatarKey)) {
 
             Picasso.with(getActivity())!!
-                    .load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey)
+                    .load(avatarKey)
                     .into(avatar)
 
         }
@@ -269,7 +211,7 @@ class UserDetailFragment() : Fragment()
 
         if(!TextUtils.isEmpty(userAccount.email)) {
             email!!.setText(userAccount.email)
-            emailWrapper!!.setVisibility(View.VISIBLE)
+//            emailWrapper!!.setVisibility(View.VISIBLE)
         }
 
         if(!TextUtils.isEmpty(userAccount.company)) {
@@ -293,48 +235,25 @@ class UserDetailFragment() : Fragment()
             website!!.setText(userAccount.website)
             websiteWrapper!!.setVisibility(View.VISIBLE)
         }
-
-        val addContact = getView().findView(R.id.addContact) as ImageView
-        addContact.setOnClickListener{
-            // Creates a new Intent to insert a contact
-            val intent = Intent(ContactsContract.Intents.Insert.ACTION);
-            // Sets the MIME type to match the Contacts Provider
-            intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-            intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
-            intent.putExtra(ContactsContract.Intents.Insert.COMPANY, userAccount.company)
-            intent.putExtra(ContactsContract.Intents.Insert.NAME, userAccount.name)
-            intent.putExtra(ContactsContract.Intents.Insert.PHONETIC_NAME, userAccount.phoneticName)
-            startActivity(intent);
-        }
+        
 
         val appPrefs = AppPrefs.getInstance(getActivity())
-        if (userAccount.id.equals(appPrefs.getUserId()))
+        if (!userAccount.id.equals(appPrefs.getUserId()))
         {
-            followToggle!!.setVisibility(View.GONE)
-        }
-        else
-        {
-//            followToggle!!.setVisibility(View.VISIBLE)
+            val addContact = getView().findView(R.id.addContact) as ImageView
+            addContact.setOnClickListener{
+                // Creates a new Intent to insert a contact
+                val intent = Intent(ContactsContract.Intents.Insert.ACTION);
+                // Sets the MIME type to match the Contacts Provider
+                intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
+                intent.putExtra(ContactsContract.Intents.Insert.COMPANY, userAccount.company)
+                intent.putExtra(ContactsContract.Intents.Insert.NAME, userAccount.name)
+                intent.putExtra(ContactsContract.Intents.Insert.PHONETIC_NAME, userAccount.phoneticName)
+                startActivity(intent);
+            }
             addContact.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_addcontact))
             addContact.setVisibility(View.VISIBLE)
-            if (userAccount.following)
-            {
-                followToggle!!.setText(R.string.unfollow)
-                followToggle!!.setOnClickListener { v ->
-                    FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
-                    refreshUserData()
-                }
-            }
-            else
-            {
-                followToggle!!.setText(R.string.follow)
-                followToggle!!.setOnClickListener { v ->
-                    FollowToggleTask.createTask(getActivity()!!, userAccount.id!!)
-                    refreshUserData()
-                }
-            }
-
-
         }
     }
 
