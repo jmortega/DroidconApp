@@ -79,13 +79,6 @@
 
                 </LinearLayout>
 
-
-                <Button
-                    android:id="@+id/followToggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:visibility="gone"/>
             </RelativeLayout>
         </FrameLayout>
 

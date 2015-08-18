@@ -274,13 +274,15 @@ class EventDetailFragment() : Fragment()
     private fun updateTrackColor(category: String?)
     {
         //Default to design
-        var track = Track.findByServerName("Design")
+        var track = null as Track?
 
         if (!TextUtils.isEmpty(category))
             track = Track.findByServerName(category)
 
+        if(track == null)
+            track = Track.findByServerName("Design")
 
-        trackColor = getResources().getColor(track.getTextColorRes())
+        trackColor = getResources().getColor(track!!.getTextColorRes())
         fabColorList = getResources().getColorStateList(track.getCheckBoxSelectorRes())
     }
 }

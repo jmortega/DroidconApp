@@ -1,5 +1,7 @@
 package co.touchlab.droidconandroid.data;
 
+import android.text.TextUtils;
+
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -13,6 +15,8 @@ import java.util.List;
 @DatabaseTable
 public class UserAccount
 {
+    public static final String HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES = "https://s3.amazonaws.com/droidconimages/";
+
     @DatabaseField(id = true)
     public Long id;
 
@@ -60,7 +64,16 @@ public class UserAccount
 
     @DatabaseField
     public String coverKey;
-    
+
+    public String avatarImageUrl()
+    {
+        if(TextUtils.isEmpty(avatarKey))
+            return null;
+        else if(avatarKey.startsWith("http"))
+            return avatarKey;
+        else
+            return HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey;
+    }
 
     @Override
     public boolean equals(Object o)
