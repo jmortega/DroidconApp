@@ -40,7 +40,8 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".FindUserKot" />
+            android:name=".FindUserKot"
+            android:label="@string/action_search"/>
         <activity
             android:name=".UserDetailActivity"
             android:label="User Detail">

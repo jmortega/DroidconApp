@@ -1,25 +1,21 @@
 package co.touchlab.droidconandroid
 
+import android.app.SearchManager
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.support.v4.app.Fragment
-import android.support.v4.app.LoaderManager
-import android.support.v4.app.LoaderManager.LoaderCallbacks
-import android.support.v4.content.Loader
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import co.touchlab.android.threading.eventbus.EventBusExt
-import co.touchlab.android.threading.loaders.networked.DoubleTapResult
-import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
@@ -63,6 +59,8 @@ class UserDetailFragment() : Fragment()
     {
         val TAG: String = UserDetailFragment.javaClass.getSimpleName()
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
+        val TWITTER_PREFIX: String = "http://www.twitter.com/"
+        val PHONE_PREFIX: String = "tel:"
         val USER_ID = "USER_ID"
 
         fun createFragment(id: Long): UserDetailFragment
@@ -206,6 +204,13 @@ class UserDetailFragment() : Fragment()
 
         if(!TextUtils.isEmpty(userAccount.phone)) {
             phone!!.setText(userAccount.phone)
+            phoneWrapper!!.setOnClickListener {
+                val intent = Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(PHONE_PREFIX + userAccount.phone));
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
             phoneWrapper!!.setVisibility(View.VISIBLE)
         }
 
@@ -218,11 +223,20 @@ class UserDetailFragment() : Fragment()
             company!!.setText(userAccount.company)
             company2!!.setText(userAccount.company)
             companyWrapper!!.setVisibility(View.VISIBLE)
+            companyWrapper!!.setOnClickListener{
+                val intent = Intent(Intent.ACTION_WEB_SEARCH);
+                val keyword= userAccount.company;
+                intent.putExtra(SearchManager.QUERY, keyword);
+                startActivity(intent);
+            }
             company!!.setVisibility(View.VISIBLE)
         }
 
         if(!TextUtils.isEmpty(userAccount.twitter)) {
             twitter!!.setText("@${userAccount.twitter}")
+            twitterWrapper!!.setOnClickListener {
+                openLink(Uri.parse(TWITTER_PREFIX + userAccount.twitter))
+            }
             twitterWrapper!!.setVisibility(View.VISIBLE)
         }
 
@@ -233,6 +247,16 @@ class UserDetailFragment() : Fragment()
 
         if(!TextUtils.isEmpty(userAccount.website)) {
             website!!.setText(userAccount.website)
+            websiteWrapper!!.setOnClickListener{
+                var url = userAccount.website
+                if (!url.startsWith("www.") && !url.startsWith("http://")) {
+                    url = "www." + url;
+                }
+                if (!url.startsWith("http://")) {
+                    url = "http://" + url;
+                }
+                openLink(Uri.parse(url))
+            }
             websiteWrapper!!.setVisibility(View.VISIBLE)
         }
         
@@ -254,6 +278,13 @@ class UserDetailFragment() : Fragment()
             }
             addContact.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_addcontact))
             addContact.setVisibility(View.VISIBLE)
+        }
+    }
+
+    private fun openLink(webpage: Uri?) {
+        val intent = Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null){
+            startActivity(intent);
         }
     }
 

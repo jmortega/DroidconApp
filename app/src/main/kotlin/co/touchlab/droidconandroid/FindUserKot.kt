@@ -6,11 +6,11 @@ import android.graphics.Point
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.text.TextUtils
-import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.SearchView
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.tasks.sticky.StickyTaskManager
@@ -52,23 +52,22 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
         stickyTaskManager = StickyTaskManager(savedInstanceState)
 
         setContentView(R.layout.activity_find_user)
-        userCode = findViewById(R.id.userCode) as EditText
+        val toolbar = findViewById(R.id.toolbar) as Toolbar;
+        setSupportActionBar(toolbar);
 
-        userCode!!.setOnEditorActionListener(fun(textView, actionId, event): Boolean {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                handleSearch()
-                return true;
+        val searchView = findViewById(R.id.search) as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
             }
-            return false;
-        })
 
-        findView(R.id.findUser).setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
-                handleSearch()
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!TextUtils.isEmpty(query)) {
+                    TaskQueue.loadQueueDefault(this@FindUserKot).execute(FindUserTaskKot(query!!))
+                }
+                return false
             }
         })
-
-        findView(R.id.startScanner).setOnClickListener { v -> startScan() }
 
         EventBusExt.getDefault().register(this)
     }
