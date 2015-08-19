@@ -1,7 +1,6 @@
 package co.touchlab.droidconandroid.data
 
 import android.content.Context
-import android.text.TextUtils
 import co.touchlab.droidconandroid.network.dao.LoginResult
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
@@ -44,11 +43,11 @@ class UserAuthHelper
             dbUa.website = ua.website
             dbUa.following = ua.following
             dbUa.gPlus = ua.gPlus
-            dbUa.nickname = ua.nickname
-            dbUa.phoneticName = ua.phoneticName
             dbUa.phone = ua.phone
             dbUa.email = ua.email
             dbUa.coverKey = ua.coverKey
+            dbUa.facebook = ua.facebook
+            dbUa.emailPublic = ua.emailPublic
         }
 
          fun saveDrawerAppPrefs(context: Context, user: UserAccount) {

@@ -194,7 +194,7 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
 
                     }
                     R.string.social -> FindUserKot.startMe(this@MyActivity)
-                    R.string.settings -> EditUserProfile.callMe(this@MyActivity)
+                    R.string.profile -> EditUserProfile.callMe(this@MyActivity)
                 }
 
                 if (fragment != null) {
@@ -258,7 +258,7 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
 //        drawerItems.add(NavigationItem(R.string.map, R.drawable.ic_map))
 //        drawerItems.add(NavigationItem(R.string.social, R.drawable.ic_social))
         drawerItems.add("divider_placeholder")
-        drawerItems.add(NavigationItem(R.string.settings, R.drawable.ic_settings))
+        drawerItems.add(NavigationItem(R.string.profile, R.drawable.ic_settings))
         drawerItems.add(NavigationItem(R.string.about, R.drawable.ic_info))
         return drawerItems;
     }

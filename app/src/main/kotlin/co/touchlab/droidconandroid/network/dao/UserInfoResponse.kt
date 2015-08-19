@@ -10,6 +10,7 @@ data class LoginResult(var uuid: String, var userId: Long, var user: UserAccount
 data class UserAccount(var id: Long, var name: String, var profile: String,
                        var avatarKey: String, var userCode: String, var company: String,
                        var twitter: String, var linkedIn: String, var website: String, var phoneticName: String,
-                       var nickname: String, var email: String, var phone: String, var gPlus: String, var coverKey: String, var following: Boolean)
+                       var nickname: String, var email: String, var phone: String, var gPlus: String,
+                       var coverKey: String, var facebook:String, var emailPublic:Boolean, var following: Boolean)
 
 data class EventInfo(var id: Long, var name: String, var description: String)

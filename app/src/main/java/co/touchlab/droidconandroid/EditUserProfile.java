@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,14 +56,16 @@ public class EditUserProfile extends StickyTaskManagerActivity
     private EditText  name;
     private TextView  userCode;
     private EditText  company;
+    private EditText  facebook;
     private EditText  twitter;
+    private EditText  linkedIn;
+    private EditText  gPlus;
     private EditText  website;
-    private EditText  phoneticName;
-    private EditText  nickname;
     private EditText  phone;
     private EditText  email;
-    private EditText  gPlus;
+    private EditText  bio;
     private ImageView myPic;
+    private CheckBox  shareEmail;
 
     public static void callMe(Context c)
     {
@@ -88,17 +91,18 @@ public class EditUserProfile extends StickyTaskManagerActivity
 
         name = (EditText) findViewById(R.id.name);
         email = (EditText) findViewById(R.id.email);
-        gPlus = (EditText) findViewById(R.id.gPlus);
         userCode = (TextView) findViewById(R.id.myUserCode);
         company = (EditText) findViewById(R.id.company);
+        facebook = (EditText) findViewById(R.id.facebook);
         twitter = (EditText) findViewById(R.id.twitter);
+        linkedIn = (EditText) findViewById(R.id.linkedIn);
+        gPlus = (EditText) findViewById(R.id.gPlus);
         website = (EditText) findViewById(R.id.website);
         phone = (EditText) findViewById(R.id.phone);
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        phoneticName = (EditText) findViewById(R.id.phonetic_name);
-        gPlus = (EditText) findViewById(R.id.gPlus);
-        nickname = (EditText) findViewById(R.id.nickname);
+        bio = (EditText) findViewById(R.id.bio);
         myPic = (ImageView) findViewById(R.id.profile_image);
+        shareEmail = (CheckBox) findViewById(R.id.public_email);
 
         EventBusExt.getDefault().register(this);
     }
@@ -119,6 +123,14 @@ public class EditUserProfile extends StickyTaskManagerActivity
         String phoneString = getStringFromEditText(phone);
         String emailString = getStringFromEditText(email);
         String nameString = getStringFromEditText(name);
+        String twitterString = getStringFromEditText(twitter);
+
+        while(twitterString.startsWith("@"))
+        {
+            twitterString = twitterString.substring(1);
+            twitter.setText(twitterString);
+        }
+
         if(TextUtils.isEmpty(nameString))
         {
             Toast.makeText(this, R.string.error_name, Toast.LENGTH_SHORT).show();
@@ -158,15 +170,17 @@ public class EditUserProfile extends StickyTaskManagerActivity
     private void saveProfile()
     {
         TaskQueue.loadQueueDefault(this).execute(
-                new UpdateUserProfileTask(this, getStringFromEditText(name), null,
+                new UpdateUserProfileTask(this, getStringFromEditText(name),
+                                          getStringFromEditText(bio),
                                           getStringFromEditText(company),
-                                          getStringFromEditText(twitter), null,
+                                          getStringFromEditText(twitter),
+                                          getStringFromEditText(linkedIn),
                                           getStringFromEditText(website),
-                                          getStringFromEditText(phoneticName),
-                                          getStringFromEditText(nickname),
+                                          getStringFromEditText(facebook),
                                           getStringFromEditText(phone),
                                           getStringFromEditText(email),
-                                          getStringFromEditText(gPlus)));
+                                          getStringFromEditText(gPlus),
+                                          shareEmail.isChecked()));
         finish();
     }
 
@@ -189,15 +203,19 @@ public class EditUserProfile extends StickyTaskManagerActivity
         if(StringUtils.isEmpty(userCode.getText()))
         {
             name.setText(ua.name);
-            nickname.setText(ua.nickname);
             email.setText(ua.email);
             phone.setText(ua.phone);
-            phoneticName.setText(ua.phoneticName);
-            gPlus.setText(ua.gPlus);
             company.setText(ua.company);
+            facebook.setText(ua.facebook == null ? "" : ua.facebook);
             twitter.setText(ua.twitter);
+            linkedIn.setText(ua.linkedIn);
+            gPlus.setText(ua.gPlus);
             website.setText(ua.website);
             userCode.setText(ua.userCode);
+            bio.setText(ua.profile);
+            shareEmail.setChecked(ua.emailPublic == null
+                                          ? false
+                                          : ua.emailPublic);
         }
 
         if (!TextUtils.isEmpty(ua.avatarKey))

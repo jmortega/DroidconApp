@@ -5,20 +5,13 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.LoaderManager
-import android.support.v4.app.LoaderManager.LoaderCallbacks
-import android.support.v4.content.Loader
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import co.touchlab.android.threading.eventbus.EventBusExt
-import co.touchlab.android.threading.loaders.networked.DoubleTapResult
-import co.touchlab.android.threading.loaders.networked.DoubleTapResult.Status
-import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import co.touchlab.droidconandroid.tasks.FindUserByIdTask
@@ -44,8 +37,12 @@ class UserDetailFragment() : Fragment()
     private var emailIcon: MorphButton? = null
     private var emailWrapper: View? = null
     private var company: TextView? = null
+    private var facebook: TextView? = null
+    private var facebookWrapper: View? = null
     private var twitter: TextView? = null
     private var twitterWrapper: View? = null
+    private var linkedIn: TextView? = null
+    private var linkedInWrapper: View? = null
     private var gPlus: TextView? = null
     private var gPlusWrapper: View? = null
     private var website: TextView? = null
@@ -117,8 +114,12 @@ class UserDetailFragment() : Fragment()
         emailIcon = view.findView(R.id.email_icon) as MorphButton
         emailWrapper = view.findView(R.id.email_wrapper)
         company = view.findView(R.id.company) as TextView
+        facebook = view.findView(R.id.facebook) as TextView
+        facebookWrapper = view.findView(R.id.wrapper_facebook)
         twitter = view.findView(R.id.twitter) as TextView
         twitterWrapper = view.findView(R.id.wrapper_twitter)
+        linkedIn = view.findView(R.id.linkedIn) as TextView
+        linkedInWrapper = view.findView(R.id.wrapper_linkedIn)
         gPlus = view.findView(R.id.gPlus) as TextView
         gPlusWrapper = view.findViewById(R.id.gPlus_wrapper)
         website = view.findView(R.id.website) as TextView
@@ -190,12 +191,7 @@ class UserDetailFragment() : Fragment()
             makeIconsPretty(iconsDefaultColor)
         }
 
-        if(!TextUtils.isEmpty(userAccount.phoneticName))
-        {
-            name!!.setText("${userAccount.name} (${userAccount.phoneticName})")
-        }
-        else
-        {
+        if(!TextUtils.isEmpty(userAccount.phone)) {
             name!!.setText(userAccount.name)
         }
 
@@ -204,9 +200,9 @@ class UserDetailFragment() : Fragment()
             phoneWrapper!!.setVisibility(View.VISIBLE)
         }
 
-        if(!TextUtils.isEmpty(userAccount.email)) {
+        if(!TextUtils.isEmpty(userAccount.email) && userAccount.emailPublic != null && userAccount.emailPublic) {
             email!!.setText(userAccount.email)
-//            emailWrapper!!.setVisibility(View.VISIBLE)
+            emailWrapper!!.setVisibility(View.VISIBLE)
         }
 
         if(!TextUtils.isEmpty(userAccount.company)) {
@@ -216,9 +212,19 @@ class UserDetailFragment() : Fragment()
             company!!.setVisibility(View.VISIBLE)
         }
 
+        if(!TextUtils.isEmpty(userAccount.facebook)) {
+            facebook!!.setText(userAccount.facebook)
+            facebookWrapper!!.setVisibility(View.VISIBLE)
+        }
+
         if(!TextUtils.isEmpty(userAccount.twitter)) {
             twitter!!.setText("@${userAccount.twitter}")
             twitterWrapper!!.setVisibility(View.VISIBLE)
+        }
+
+        if(!TextUtils.isEmpty(userAccount.linkedIn)) {
+            linkedIn!!.setText(userAccount.linkedIn)
+            linkedInWrapper!!.setVisibility(View.VISIBLE)
         }
 
         if(!TextUtils.isEmpty(userAccount.gPlus)) {

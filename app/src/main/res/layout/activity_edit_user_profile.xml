@@ -29,7 +29,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="@dimen/padding_xxlarge"
+            android:paddingRight="@dimen/profile_right_padding"
             android:paddingTop="@dimen/padding_medium"
             android:orientation="vertical">
 
@@ -47,37 +47,41 @@
                 android:layout_height="@dimen/social_icon"
                 android:layout_marginLeft="@dimen/height_xlarge"
                 android:layout_marginTop="@dimen/height_xlarge"
-                app:vc_startDrawable="@drawable/ic_edit"/>
-
+                app:vc_startDrawable="@drawable/ic_edit"
+                app:vc_endDrawable="@drawable/ic_edit"/>
 
             <EditText
                 android:id="@+id/name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_small"
                 android:layout_toRightOf="@+id/profile_image"
                 android:inputType="textPersonName"
                 android:hint="@string/hint_name"
                 android:textSize="@dimen/text_xxxlarge"/>
 
             <EditText
-                android:id="@+id/phonetic_name"
-                style="@style/SignInEditText"
+                android:id="@+id/email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/name"
                 android:layout_below="@+id/name"
-                android:inputType="textPhonetic"
-                android:hint="@string/hint_phonetic_name"/>
+                android:inputType="textEmailAddress"
+                android:enabled="false"
+                android:focusable="false"
+                style="@style/SignInEditText"
+                android:hint="@string/hint_email"/>
 
-            <EditText
-                android:id="@+id/nickname"
+            <TextView
+                android:id="@+id/contactInfo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/name"
-                android:layout_below="@+id/phonetic_name"
-                style="@style/SignInEditText"
-                android:hint="@string/hint_nickname"/>
+                android:layout_below="@id/profile_image"
+                android:layout_marginLeft="@dimen/profile_header"
+                android:layout_marginTop="@dimen/profile_header_vertical_margin"
+                android:layout_marginBottom="@dimen/profile_header_vertical_margin"
+                android:text="@string/contact"
+                android:textColor="@color/primary"/>
+
 
             <FrameLayout android:layout_width="match_parent"
                          android:layout_height="wrap_content"
@@ -90,10 +94,10 @@
                     android:layout_height="@dimen/social_icon"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
-                    app:vc_startDrawable="@drawable/ic_phone"/>
+                    app:vc_startDrawable="@drawable/ic_phone"
+                    app:vc_endDrawable="@drawable/ic_phone"/>
 
             </FrameLayout>
-
 
             <EditText
                 android:id="@+id/phone"
@@ -101,35 +105,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/name"
-                android:layout_below="@+id/nickname"
+                android:layout_below="@+id/contactInfo"
                 style="@style/SignInEditText"
                 android:hint="@string/hint_phone"/>
 
-
-            <FrameLayout android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:layout_alignBottom="@+id/email"
-                         android:layout_alignTop="@+id/email"
-                         android:layout_toLeftOf="@+id/email">
-
-                <com.wnafee.vector.MorphButton
-                    android:layout_width="@dimen/social_icon"
-                    android:layout_height="@dimen/social_icon"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    app:vc_startDrawable="@drawable/ic_email"/>
-
-            </FrameLayout>
-
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/name"
-                android:layout_below="@+id/phone"
-                android:inputType="textEmailAddress"
-                style="@style/SignInEditText"
-                android:hint="@string/hint_email"/>
 
             <FrameLayout android:layout_width="match_parent"
                          android:layout_height="wrap_content"
@@ -141,7 +120,8 @@
                     android:layout_width="@dimen/social_icon"
                     android:layout_height="@dimen/social_icon"
                     android:layout_gravity="center"
-                    app:vc_startDrawable="@drawable/ic_work"/>
+                    app:vc_startDrawable="@drawable/ic_work"
+                    app:vc_endDrawable="@drawable/ic_work"/>
 
             </FrameLayout>
 
@@ -151,7 +131,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/name"
-                android:layout_below="@+id/email"
+                android:layout_below="@+id/phone"
                 style="@style/SignInEditText"
                 android:hint="@string/hint_company"/>
 
@@ -165,7 +145,8 @@
                     android:layout_width="@dimen/social_icon"
                     android:layout_height="@dimen/social_icon"
                     android:layout_gravity="center"
-                    app:vc_startDrawable="@drawable/ic_website"/>
+                    app:vc_startDrawable="@drawable/ic_website"
+                    app:vc_endDrawable="@drawable/ic_website"/>
 
             </FrameLayout>
 
@@ -178,6 +159,42 @@
                 style="@style/SignInEditText"
                 android:hint="@string/hint_website"/>
 
+            <TextView
+                android:id="@+id/social"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/website"
+                android:layout_marginLeft="@dimen/profile_header"
+                android:layout_marginTop="@dimen/profile_header_vertical_margin"
+                android:layout_marginBottom="@dimen/profile_header_vertical_margin"
+                android:text="@string/social"
+                android:textColor="@color/primary"/>
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@+id/facebook"
+                         android:layout_alignTop="@+id/facebook"
+                         android:layout_toLeftOf="@+id/facebook">
+
+                <com.wnafee.vector.MorphButton
+                    android:layout_width="@dimen/social_icon"
+                    android:layout_height="@dimen/social_icon"
+                    android:layout_gravity="center"
+                    app:vc_startDrawable="@drawable/ic_facebook"
+                    app:vc_endDrawable="@drawable/ic_facebook"/>
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/facebook"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/social"
+                style="@style/SignInEditText"
+                android:inputType="text"
+                android:hint="@string/hint_facebook"/>
+
             <FrameLayout android:layout_width="match_parent"
                          android:layout_height="wrap_content"
                          android:layout_alignBottom="@+id/twitter"
@@ -188,32 +205,34 @@
                     android:layout_width="@dimen/social_icon"
                     android:layout_height="@dimen/social_icon"
                     android:layout_gravity="center"
-                    app:vc_startDrawable="@drawable/ic_twitter"/>
+                    app:vc_startDrawable="@drawable/ic_twitter"
+                    app:vc_endDrawable="@drawable/ic_twitter"/>
 
             </FrameLayout>
+
 
             <EditText
                 android:id="@+id/twitter"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/name"
-                android:layout_below="@+id/website"
+                android:layout_below="@+id/facebook"
                 style="@style/SignInEditText"
                 android:inputType="text"
                 android:hint="@string/hint_twitter"/>
 
-
             <FrameLayout android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:layout_alignBottom="@+id/gPlus"
-                         android:layout_alignTop="@+id/gPlus"
-                         android:layout_toLeftOf="@+id/gPlus">
+              android:layout_height="wrap_content"
+              android:layout_alignBottom="@+id/gPlus"
+              android:layout_alignTop="@+id/gPlus"
+              android:layout_toLeftOf="@+id/gPlus">
 
                 <com.wnafee.vector.MorphButton
                     android:layout_width="@dimen/social_icon"
                     android:layout_height="@dimen/social_icon"
                     android:layout_gravity="center"
-                    app:vc_startDrawable="@drawable/ic_gplus"/>
+                    app:vc_startDrawable="@drawable/ic_gplus"
+                    app:vc_endDrawable="@drawable/ic_gplus"/>
 
             </FrameLayout>
 
@@ -227,6 +246,98 @@
                 style="@style/SignInEditText"
                 android:hint="Profile"/>
 
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@+id/linkedIn"
+                         android:layout_alignTop="@+id/linkedIn"
+                         android:layout_toLeftOf="@+id/linkedIn">
+
+            <com.wnafee.vector.MorphButton
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                android:layout_gravity="center"
+                app:vc_startDrawable="@drawable/ic_linkedin"
+                app:vc_endDrawable="@drawable/ic_linkedin"/>
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/linkedIn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/name"
+                android:layout_below="@+id/gPlus"
+                style="@style/SignInEditText"
+                android:inputType="text"
+                android:hint="@string/hint_linkedIn"/>
+
+            <TextView
+                android:id="@+id/privacy"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linkedIn"
+                android:layout_marginLeft="@dimen/profile_header"
+                android:layout_marginTop="@dimen/profile_header_vertical_margin"
+                android:layout_marginBottom="@dimen/profile_header_vertical_margin"
+                android:text="@string/privacy"
+                android:textColor="@color/primary"/>
+
+            <TextView
+                android:id="@+id/public_email_label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/profile_header"
+                android:layout_marginTop="@dimen/profile_header_vertical_margin"
+                android:layout_marginBottom="@dimen/profile_header_vertical_margin"
+                android:layout_below="@id/privacy"
+                android:textSize="@dimen/text_small"
+                android:text="@string/public_email"/>
+
+            <CheckBox
+                android:id="@+id/public_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/name"
+                android:layout_alignTop="@id/public_email_label"/>
+
+            <TextView
+                android:id="@+id/bioLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/public_email"
+                android:layout_marginLeft="@dimen/profile_header"
+                android:layout_marginTop="@dimen/profile_header_vertical_margin"
+                android:layout_marginBottom="@dimen/profile_header_vertical_margin"
+                android:text="@string/hint_bio"
+                android:textColor="@color/primary"/>
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignTop="@+id/bio"
+                         android:layout_toLeftOf="@id/bio">
+
+                <com.wnafee.vector.MorphButton
+                    android:layout_width="@dimen/social_icon"
+                    android:layout_height="@dimen/social_icon"
+                    android:layout_gravity="center"
+                    app:vc_startDrawable="@drawable/ic_bio"
+                    app:vc_endDrawable="@drawable/ic_bio"/>
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/bio"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:maxLines="6"
+                android:gravity="top|left"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_alignLeft="@id/name"
+                android:layout_below="@id/bioLabel"
+                android:scrollbars="vertical"
+                android:hint="@string/hint_bio"/>
 
             <TextView
                 android:id="@+id/myUserCode"

@@ -20,11 +20,11 @@ class UpdateUserProfileTask(c: Context, val name: String?,
                             val twitter: String?,
                             val linkedIn: String?,
                             val website: String?,
-                            val phoneticName: String?,
-                            val nickname: String?,
+                            val facebook: String?,
                             val phone: String?,
                             val email: String?,
-                            val gPlus: String?) : DatabaseTaskKot(c)
+                            val gPlus: String?,
+                            val shareEmail: Boolean) : DatabaseTaskKot(c)
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {
         return false
@@ -45,11 +45,11 @@ class UpdateUserProfileTask(c: Context, val name: String?,
                 userAccount.twitter = twitter
                 userAccount.linkedIn = linkedIn
                 userAccount.website = website
-                userAccount.phoneticName = phoneticName
-                userAccount.nickname = nickname
+                userAccount.facebook = facebook
                 userAccount.phone = phone
                 userAccount.email = email
                 userAccount.gPlus = gPlus
+                userAccount.emailPublic = shareEmail
                 dao.createOrUpdate(userAccount)
 
                 AppPrefs.getInstance(context).setName(name)
@@ -95,11 +95,13 @@ class UpdateUserProfileCommand() : RetrofitPersistedTask()
                         userAccount.twitter,
                         userAccount.linkedIn,
                         userAccount.website,
-                        userAccount.phoneticName,
-                        userAccount.nickname,
+                        null,
+                        null,
                         userAccount.phone,
                         userAccount.email,
-                        userAccount.gPlus
+                        userAccount.gPlus,
+                        userAccount.facebook,
+                        userAccount.emailPublic
                 )
             }
             else
