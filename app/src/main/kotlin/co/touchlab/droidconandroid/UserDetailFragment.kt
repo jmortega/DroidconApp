@@ -67,6 +67,8 @@ class UserDetailFragment() : Fragment()
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
         val TWITTER_PREFIX: String = "http://www.twitter.com/"
         val GPLUS_PREFIX: String = "http://www.google.com/+"
+        val LINKEDIN_PREFIX: String = "http://www.linkedin.com/in/"
+        val FACEBOOK_PREFIX: String = "http://www.facebook.com/"
         val PHONE_PREFIX: String = "tel:"
         val USER_ID = "USER_ID"
 
@@ -224,6 +226,12 @@ class UserDetailFragment() : Fragment()
 
         if(!TextUtils.isEmpty(userAccount.email) && userAccount.emailPublic != null && userAccount.emailPublic) {
             email!!.setText(userAccount.email)
+
+            emailWrapper!!.setOnClickListener {
+                val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", userAccount.email, null));
+                startActivity(emailIntent);
+            }
             emailWrapper!!.setVisibility(View.VISIBLE)
         }
 
@@ -240,8 +248,12 @@ class UserDetailFragment() : Fragment()
             company!!.setVisibility(View.VISIBLE)
         }
 
-        if(!TextUtils.isEmpty(userAccount.facebook)) {
-            facebook!!.setText(userAccount.facebook)
+        var facebookAccount = userAccount.facebook
+        if(!TextUtils.isEmpty(facebookAccount)) {
+            facebook!!.setText(facebookAccount)
+            facebookWrapper!!.setOnClickListener {
+                openLink(Uri.parse(FACEBOOK_PREFIX + facebookAccount))
+            }
             facebookWrapper!!.setVisibility(View.VISIBLE)
         }
 
@@ -255,8 +267,12 @@ class UserDetailFragment() : Fragment()
             twitterWrapper!!.setVisibility(View.VISIBLE)
         }
 
-        if(!TextUtils.isEmpty(userAccount.linkedIn)) {
-            linkedIn!!.setText(userAccount.linkedIn)
+        var linkedInAccount = userAccount.linkedIn
+        if(!TextUtils.isEmpty(linkedInAccount)) {
+            linkedIn!!.setText(linkedInAccount)
+            linkedInWrapper!!.setOnClickListener {
+                openLink(Uri.parse(LINKEDIN_PREFIX + linkedInAccount))
+            }
             linkedInWrapper!!.setVisibility(View.VISIBLE)
         }
 
