@@ -41,11 +41,13 @@ class UserDetailFragment() : Fragment()
     private var emailIcon: ImageView? = null
     private var emailWrapper: View? = null
     private var company: TextView? = null
+    private var facebookIcon: ImageView? = null
     private var facebook: TextView? = null
     private var facebookWrapper: View? = null
     private var twitter: TextView? = null
     private var twitterIcon: ImageView? = null
     private var twitterWrapper: View? = null
+    private var linkedInIcon: ImageView? = null
     private var linkedIn: TextView? = null
     private var linkedInWrapper: View? = null
     private var gPlus: TextView? = null
@@ -123,11 +125,13 @@ class UserDetailFragment() : Fragment()
         emailIcon = view.findView(R.id.email_icon) as ImageView
         emailWrapper = view.findView(R.id.email_wrapper)
         company = view.findView(R.id.company) as TextView
+        facebookIcon = view.findView(R.id.facebook_icon) as ImageView
         facebook = view.findView(R.id.facebook) as TextView
         facebookWrapper = view.findView(R.id.wrapper_facebook)
         twitter = view.findView(R.id.twitter) as TextView
         twitterIcon = view.findView(R.id.twitter_icon) as ImageView
         twitterWrapper = view.findView(R.id.wrapper_twitter)
+        linkedInIcon = view.findView(R.id.linkedIn_icon) as ImageView
         linkedIn = view.findView(R.id.linkedIn) as TextView
         linkedInWrapper = view.findView(R.id.wrapper_linkedIn)
         gPlus = view.findView(R.id.gPlus) as TextView
@@ -294,7 +298,6 @@ class UserDetailFragment() : Fragment()
                 intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
                 intent.putExtra(ContactsContract.Intents.Insert.COMPANY, userAccount.company)
                 intent.putExtra(ContactsContract.Intents.Insert.NAME, userAccount.name)
-                intent.putExtra(ContactsContract.Intents.Insert.PHONETIC_NAME, userAccount.phoneticName)
                 startActivity(intent);
             }
             addContact.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_addcontact))
@@ -324,6 +327,8 @@ class UserDetailFragment() : Fragment()
         websiteIcon!!.setImageDrawable(websiteDrawable)
 
         twitterIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_twitter))
+        facebookIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_facebook))
+        linkedInIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_linkedin))
         gPlusIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_gplus))
     }
 

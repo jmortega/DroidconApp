@@ -198,11 +198,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
+                android:id="@+id/facebook_icon"
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
-                style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_facebook"/>
+                style="@style/ProfileIcons"/>
 
             <TextView
                 android:id="@+id/facebook"
@@ -246,11 +246,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
+                android:id="@+id/linkedIn_icon"
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
-                style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_linkedin"/>
+                style="@style/ProfileIcons"/>
 
             <TextView
                 android:id="@+id/linkedIn"
