@@ -6,14 +6,16 @@ import android.graphics.Point
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.text.TextUtils
-import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.SearchView
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.tasks.sticky.StickyTaskManager
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
-import co.touchlab.droidconandroid.tasks.FindUserByIdTask
+import co.touchlab.droidconandroid.tasks.FindUserTaskKot
 import co.touchlab.droidconandroid.utils.Toaster
 import com.google.zxing.integration.android.IntentIntegrator
 import org.apache.commons.lang3.StringUtils
@@ -25,8 +27,6 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
 {
     companion object
     {
-        val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
-        val USER_PREFIX: String = "user_"
         public fun startMe(c: Context)
         {
             val i = Intent(c, javaClass<FindUserKot>())
@@ -34,7 +34,7 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
         }
     }
 
-    private var userCode: EditText? = null
+    private var searchView: SearchView? = null
     private var stickyTaskManager: StickyTaskManager? = null
 
     public fun callMe(c: Context)
@@ -50,63 +50,40 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
         stickyTaskManager = StickyTaskManager(savedInstanceState)
 
         setContentView(R.layout.activity_find_user)
-        userCode = findViewById(R.id.userCode) as EditText
+        val toolbar = findViewById(R.id.toolbar) as Toolbar;
+        setSupportActionBar(toolbar);
 
-        findView(R.id.findUser).setOnClickListener(object : View.OnClickListener
-        {
-            override fun onClick(v: View)
-            {
-                val userCodeVal = userCode!!.getText().toString()
-                if(!TextUtils.isEmpty(userCodeVal)) {
+        searchView = findViewById(R.id.search) as SearchView
+        searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
 
-                    try {
-                        TaskQueue.loadQueueDefault(this@FindUserKot).execute(FindUserByIdTask(java.lang.Long.parseLong(userCodeVal)))
-                    } catch(e: NumberFormatException) {
-                        Toaster.showMessage(this@FindUserKot, "Search is only by ID right now.")
-                    }
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!TextUtils.isEmpty(query)) {
+                    TaskQueue.loadQueueDefault(this@FindUserKot).execute(FindUserTaskKot(query!!))
+                    searchView!!.clearFocus()
                 }
+                return false
             }
         })
 
-        findView(R.id.startScanner).setOnClickListener { v -> startScan() }
-
         EventBusExt.getDefault().register(this)
+    }
+
+    override fun onResume() {
+        super<AppCompatActivity>.onResume()
+        if(getSupportFragmentManager().findFragmentByTag(UserDetailFragment.TAG) != null) {
+            //unsuccessful attempt to hide keyboard
+            searchView!!.clearFocus()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(searchView!!.getWindowToken(), 0);
+        }
     }
 
     override fun onDestroy() {
         super<AppCompatActivity>.onDestroy()
         EventBusExt.getDefault().unregister(this)
-    }
-
-    fun startScan()
-    {
-        val display = getWindowManager()!!.getDefaultDisplay()!!
-        val size = Point();
-        display.getSize(size);
-        val width = size.x;
-        val height = size.y;
-        val minSize = Math.min(width, height)
-        val scanSize = (minSize * .8).toInt()
-        val integrator = IntentIntegrator(this)
-        integrator.addExtra("SCAN_MODE", "QR_CODE_MODE")
-        integrator.addExtra("SCAN_WIDTH", scanSize)
-        integrator.addExtra("SCAN_HEIGHT", scanSize)
-        integrator.addExtra("SAVE_HISTORY", false)
-
-        integrator.initiateScan()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?)
-    {
-        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null)
-        {
-            val scanResults = scanResult.getContents()
-            if(StringUtils.startsWith(scanResults, USER_PREFIX))
-            {
-                userCode!!.setText(scanResults!!.substring(USER_PREFIX.length()))
-            }
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle)
