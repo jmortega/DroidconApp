@@ -1,7 +1,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent" android:layout_height="match_parent"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:orientation="vertical"
             android:background="@color/white"
             tools:context="co.touchlab.droidconandroid.FindUser"
@@ -79,6 +78,16 @@
 
                 </LinearLayout>
 
+
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/addContact"
+                    android:visibility="gone"
+                    android:background="?attr/selectableItemBackground"/>
+
             </RelativeLayout>
         </FrameLayout>
 
@@ -91,14 +100,13 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:id="@+id/phone_icon"
-                style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_phone"/>
+                style="@style/ProfileIcons"/>
 
             <TextView
                 android:id="@+id/phone"
@@ -118,12 +126,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 android:id="@+id/email_icon"
-                style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_email"/>
+                style="@style/ProfileIcons"/>
 
             <TextView
                 android:id="@+id/email"
@@ -143,12 +150,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
-                android:id="@+id/company_icon"
-                app:vc_startDrawable="@drawable/ic_work"/>
+                android:id="@+id/company_icon"/>
 
             <TextView
                 android:id="@+id/company2"
@@ -168,12 +174,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
                 style="@style/ProfileIcons"
-                android:id="@+id/website_icon"
-                app:vc_startDrawable="@drawable/ic_website"/>
+                android:id="@+id/website_icon"/>
 
             <TextView
                 android:id="@+id/website"
@@ -217,11 +222,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
-                style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_twitter"/>
+                android:id="@+id/twitter_icon"
+                style="@style/ProfileIcons"/>
 
             <TextView
                 android:id="@+id/twitter"
@@ -265,11 +270,11 @@
             tools:visibility="visible"
             android:orientation="horizontal">
 
-            <com.wnafee.vector.MorphButton
+            <ImageView
                 android:layout_width="@dimen/social_icon"
                 android:layout_height="@dimen/social_icon"
-                style="@style/ProfileIcons"
-                app:vc_startDrawable="@drawable/ic_gplus"/>
+                android:id="@+id/gPlus_icon"
+                style="@style/ProfileIcons"/>
 
             <TextView
                 android:id="@+id/gPlus"
