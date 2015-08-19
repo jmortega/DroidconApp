@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.NFC" />
 
@@ -39,7 +40,8 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".FindUserKot" />
+            android:name=".FindUserKot"
+            android:label="@string/action_search"/>
         <activity
             android:name=".UserDetailActivity"
             android:label="User Detail">

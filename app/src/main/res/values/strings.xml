@@ -71,6 +71,8 @@
     <string name="development">Development</string>
     <string name="design">Design</string>
     <string name="business">Business</string>
+
     <string name="action_filter">Filters</string>
+    <string name="action_search">Find Attendees</string>
 
 </resources>

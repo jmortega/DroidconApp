@@ -10,7 +10,6 @@ import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.data.UserAuthHelper
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.FindUserRequest
-import co.touchlab.droidconandroid.network.SingleUserInfoRequest
 import co.touchlab.droidconandroid.network.dao.UserInfoResponse
 import com.crashlytics.android.Crashlytics
 import retrofit.RetrofitError
@@ -28,7 +27,21 @@ class FindUserTaskKot(val code: String) : AbstractFindUserTask()
         }, fun(): UserInfoResponse? {
             val restAdapter = DataHelper.makeRequestAdapter(context)
             val findUserRequest = restAdapter!!.create(javaClass<FindUserRequest>())!!
-            return findUserRequest.getUserInfo(code)
+            try {
+                return findUserRequest.getUserInfo(code)
+            } catch(e: RetrofitError) {
+                if(e.getResponse().getStatus() == HttpURLConnection.HTTP_NOT_FOUND) {
+                    errorStringCode = R.string.error_user_not_found
+                }
+                else if(e.getKind()== RetrofitError.Kind.NETWORK){
+                    errorStringCode = R.string.network_error
+                }
+                else {
+                    throw RuntimeException(e)
+                }
+            }
+
+            return null
         })
     }
 }
@@ -40,14 +53,14 @@ class FindUserByIdTask(val id: Long) : AbstractFindUserTask()
     override fun run(context: Context?) {
         handleData(context!!, fun(): UserAccount? = DatabaseHelper.getInstance(context).getUserAccountDao().queryForId(id), fun(): UserInfoResponse? {
             val restAdapter = DataHelper.makeRequestAdapter(context)
-            val findUserRequest = restAdapter!!.create(javaClass<SingleUserInfoRequest>())!!
+            val findUserRequest = restAdapter!!.create(javaClass<FindUserRequest>())!!
             try {
                 return findUserRequest.getUserInfo(id)
             } catch(e: RetrofitError) {
                 if(e.getResponse().getStatus() == HttpURLConnection.HTTP_NOT_FOUND) {
                     errorStringCode = R.string.error_user_not_found
                 }
-                else if(e.isNetworkError()){
+                else if(e.getKind()== RetrofitError.Kind.NETWORK){
                     errorStringCode = R.string.network_error
                 }
                 else {
@@ -101,7 +114,7 @@ abstract class AbstractFindUserTask() : Task()
     override fun handleError(context: Context?, e: Throwable?): Boolean {
         Crashlytics.logException(e)
         errorStringCode = R.string.error_unknown
-        return false
+        return true
     }
 
     fun handleData(context: Context, loadFromDb: () -> UserAccount?, loadRequest: () -> UserInfoResponse?)

@@ -4,9 +4,12 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -85,4 +88,16 @@ public class Event implements ScheduleBlock
         return endDateLong;
     }
 
+    public String allSpeakersString()
+    {
+        List<String> names =new ArrayList<>();
+        for(EventSpeaker eventSpeaker : speakerList)
+        {
+            UserAccount userAccount = eventSpeaker.userAccount;
+            if(userAccount != null)
+                names.add(userAccount.name);
+        }
+
+        return StringUtils.join(names, ", ");
+    }
 }

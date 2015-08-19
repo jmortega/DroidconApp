@@ -88,7 +88,7 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.rsvp.setVisibility(View.GONE)
             }
 
-            holder.locationTime.setText("${event.venue.name} ${getDetailedTime(event)}")
+            holder.locationTime.setText("${event.allSpeakersString()}")
 
             val track = Track.findByServerName(event.category)
             if(track != null && !event.isPast()) {

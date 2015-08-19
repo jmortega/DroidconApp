@@ -10,7 +10,7 @@ public enum Track
 {
     DEVELOPMENT("Develop", R.string.development, R.color.droidcon_blue, R.color.selector_blue),
     DESIGN("Design", R.string.design, R.color.droidcon_pink, R.color.selector_pink),
-    BUSINESS("THEME_BUSINESS", R.string.business, R.color.orange, R.color.selector_orange);
+    BUSINESS("Business", R.string.business, R.color.orange, R.color.selector_orange);
 
     public String getServerName()
     {

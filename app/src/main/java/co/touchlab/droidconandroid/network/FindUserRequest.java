@@ -11,4 +11,7 @@ public interface FindUserRequest
 {
     @GET("/dataTest/findUserByCode/{userCode}")
     UserInfoResponse getUserInfo(@Path("userCode") String userCode) throws Exception;
+
+    @GET("/dataTest/findUserById/{userId}")
+    UserInfoResponse getUserInfo(@Path("userId")Long userId) throws Exception;
 }
