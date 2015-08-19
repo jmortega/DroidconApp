@@ -36,6 +36,9 @@ public class UserAccount
     public String company;
 
     @DatabaseField
+    public String facebook;
+
+    @DatabaseField
     public String twitter;
 
     @DatabaseField
@@ -46,33 +49,27 @@ public class UserAccount
 
     @DatabaseField
     public boolean following;
-    
+
     @DatabaseField
     public String email;
-    
+
     @DatabaseField
-    public String phoneticName;    
-    
-    @DatabaseField
-    public String nickname;
-    
-    @DatabaseField
-    public String gPlus;    
-    
+    public String gPlus;
+
     @DatabaseField
     public String phone;
 
     @DatabaseField
     public String coverKey;
 
+    @DatabaseField
+    public Boolean emailPublic;
+
     public String avatarImageUrl()
     {
-        if(TextUtils.isEmpty(avatarKey))
-            return null;
-        else if(avatarKey.startsWith("http"))
-            return avatarKey;
-        else
-            return HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey;
+        if(TextUtils.isEmpty(avatarKey)) return null;
+        else if(avatarKey.startsWith("http")) return avatarKey;
+        else return HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + avatarKey;
     }
 
     @Override
@@ -90,14 +87,14 @@ public class UserAccount
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (profile != null ? !profile.equals(that.profile) : that.profile != null) return false;
         if (twitter != null ? !twitter.equals(that.twitter) : that.twitter != null) return false;
+        if (facebook != null ? !facebook.equals(that.twitter) : that.facebook != null) return false;
         if (userCode != null ? !userCode.equals(that.userCode) : that.userCode != null) return false;
         if (website != null ? !website.equals(that.website) : that.website != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (phoneticName != null ? !phoneticName.equals(that.phoneticName) : that.phoneticName != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-        if (nickname != null ? !nickname.equals(that.nickname) : that.nickname != null) return false;
         if (gPlus != null ? !gPlus.equals(that.gPlus) : that.gPlus != null) return false;
         if (coverKey != null ? !coverKey.equals(that.coverKey) : that.coverKey != null) return false;
+        if (emailPublic != null ? ! emailPublic.equals(that.emailPublic) : that.emailPublic != null) return false;
 
         return true;
     }
@@ -112,14 +109,14 @@ public class UserAccount
         result = 31 * result + (userCode != null ? userCode.hashCode() : 0);
         result = 31 * result + (company != null ? company.hashCode() : 0);
         result = 31 * result + (twitter != null ? twitter.hashCode() : 0);
+        result = 31 * result + (facebook != null ? facebook.hashCode() : 0);
         result = 31 * result + (linkedIn != null ? linkedIn.hashCode() : 0);
         result = 31 * result + (website != null ? website.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (phoneticName != null ? phoneticName.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
         result = 31 * result + (gPlus != null ? gPlus.hashCode() : 0);
         result = 31 * result + (coverKey != null ? coverKey.hashCode() : 0);
+        result = 31 * result + (emailPublic != null ? emailPublic.hashCode() : 0);
         return result;
     }
 

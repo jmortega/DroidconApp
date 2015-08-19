@@ -193,6 +193,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:id="@+id/wrapper_facebook"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/facebook_icon"
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                style="@style/ProfileIcons"/>
+
+            <TextView
+                android:id="@+id/facebook"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/facebook"
+                tools:text="Facebook"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:id="@+id/wrapper_twitter"
             android:visibility="gone"
             tools:visibility="visible"
@@ -210,6 +234,30 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/twitter"
                 tools:text="\@TouchLabNY"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/wrapper_linkedIn"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/linkedIn_icon"
+                android:layout_width="@dimen/social_icon"
+                android:layout_height="@dimen/social_icon"
+                style="@style/ProfileIcons"/>
+
+            <TextView
+                android:id="@+id/linkedIn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/linkedin"
+                tools:text="LinkedIn"/>
 
         </LinearLayout>
 
