@@ -60,6 +60,7 @@ class UserDetailFragment() : Fragment()
         val TAG: String = UserDetailFragment.javaClass.getSimpleName()
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
         val TWITTER_PREFIX: String = "http://www.twitter.com/"
+        val GPLUS_PREFIX: String = "http://www.google.com/+"
         val PHONE_PREFIX: String = "tel:"
         val USER_ID = "USER_ID"
 
@@ -232,16 +233,23 @@ class UserDetailFragment() : Fragment()
             company!!.setVisibility(View.VISIBLE)
         }
 
-        if(!TextUtils.isEmpty(userAccount.twitter)) {
-            twitter!!.setText("@${userAccount.twitter}")
+        var twitterAccount = userAccount.twitter
+        if(!TextUtils.isEmpty(twitterAccount)) {
+            twitterAccount = twitterAccount.replace("@", "")
+            twitter!!.setText("@$twitterAccount")
             twitterWrapper!!.setOnClickListener {
-                openLink(Uri.parse(TWITTER_PREFIX + userAccount.twitter))
+                openLink(Uri.parse(TWITTER_PREFIX + twitterAccount))
             }
             twitterWrapper!!.setVisibility(View.VISIBLE)
         }
 
-        if(!TextUtils.isEmpty(userAccount.gPlus)) {
-            gPlus!!.setText("+${userAccount.gPlus}")
+        var gPlusAccount = userAccount.gPlus
+        if(!TextUtils.isEmpty(gPlusAccount)) {
+            gPlusAccount = gPlusAccount.replace("+", "")
+            gPlus!!.setText("+$gPlusAccount")
+            gPlusWrapper!!.setOnClickListener {
+                openLink(Uri.parse(GPLUS_PREFIX + gPlusAccount))
+            }
             gPlusWrapper!!.setVisibility(View.VISIBLE)
         }
 
