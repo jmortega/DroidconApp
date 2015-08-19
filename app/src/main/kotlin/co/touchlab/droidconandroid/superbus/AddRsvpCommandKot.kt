@@ -33,7 +33,7 @@ class AddRsvpCommandKot(var eventId: Long? = null, var rsvpUuid: String? = null)
     }
 
     override fun handleError(context: Context?, e: Throwable?): Boolean {
-        Log.w("asdf", "Whoops", e);
+        Log.e("RSVP", "Error adding RSVP eventID: " + eventId , e);
         Crashlytics.logException(e);
         return true;
     }

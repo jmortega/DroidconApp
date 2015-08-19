@@ -14,7 +14,6 @@ import co.touchlab.droidconandroid.utils.TimeUtils
 import com.crashlytics.android.Crashlytics
 import org.apache.commons.lang3.StringUtils
 import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.concurrent.Callable
 
 /**
@@ -126,7 +125,7 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
     }
 
     override fun handleError(context: Context?, e: Throwable?): Boolean {
-        Log.w("asdf", "Whoops", e);
+        Log.e("Schedule", "Error fetching schedule data", e);
         Crashlytics.logException(e);
         return true;
     }

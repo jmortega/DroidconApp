@@ -56,8 +56,8 @@ public class DataHelper
         GsonConverter gsonConverter = new GsonConverter(gson);
 
         final OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setReadTimeout(60, TimeUnit.SECONDS);
-        okHttpClient.setConnectTimeout(60, TimeUnit.SECONDS);
+        okHttpClient.setReadTimeout(15, TimeUnit.SECONDS);
+        okHttpClient.setConnectTimeout(15, TimeUnit.SECONDS);
 
         RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setRequestInterceptor(requestInterceptor)

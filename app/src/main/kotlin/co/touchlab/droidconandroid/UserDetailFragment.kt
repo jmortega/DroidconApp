@@ -161,6 +161,9 @@ class UserDetailFragment() : Fragment()
         if (findUserTask.isError())
         {
             Toaster.showMessage(getActivity(), findUserTask.errorStringCode!!)
+
+            if (getActivity() is UserDetailActivity)
+                (getActivity() as UserDetailActivity).onFragmentFinished()
         }
         else
         {
