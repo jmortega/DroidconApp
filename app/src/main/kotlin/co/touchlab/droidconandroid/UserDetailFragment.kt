@@ -311,7 +311,8 @@ class UserDetailFragment() : Fragment()
                 val intent = Intent(ContactsContract.Intents.Insert.ACTION);
                 // Sets the MIME type to match the Contacts Provider
                 intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-                intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
+                if (userAccount.emailPublic != null && userAccount.emailPublic)
+                    intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
                 intent.putExtra(ContactsContract.Intents.Insert.COMPANY, userAccount.company)
                 intent.putExtra(ContactsContract.Intents.Insert.NAME, userAccount.name)
                 startActivity(intent);
