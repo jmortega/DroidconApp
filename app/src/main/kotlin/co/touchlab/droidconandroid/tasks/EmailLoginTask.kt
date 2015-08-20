@@ -14,6 +14,7 @@ import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.UploadCoverCommand
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
+import com.crashlytics.android.Crashlytics
 import com.google.android.gms.auth.GoogleAuthUtil
 import org.apache.commons.lang3.StringUtils
 
@@ -42,8 +43,10 @@ open class EmailLoginTask(val email: String, val name: String?, val password: St
 class GoogleLoginTask(val email: String, val name: String?, val imageURL: String?, val coverURL: String?) : AbstractLoginTask()
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {
-        Log.w("dude", "dude2", e);
-        return false
+        Crashlytics.logException(e)
+        failed = true
+        EventBusExt.getDefault()!!.post(this);
+        return true
     }
 
     companion object
@@ -75,6 +78,7 @@ class GoogleLoginTask(val email: String, val name: String?, val imageURL: String
 
 abstract class AbstractLoginTask : Task()
 {
+    var failed: Boolean = false
     var firstLogin: Boolean = false
 
     fun handleLoginResult(context: Context?, loginResult: LoginResult?)

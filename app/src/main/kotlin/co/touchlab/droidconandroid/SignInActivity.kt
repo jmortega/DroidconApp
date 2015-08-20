@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import android.widget.*
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.TaskQueue
-import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.tasks.AbstractLoginTask
 import co.touchlab.droidconandroid.tasks.GoogleLoginTask
 import co.touchlab.droidconandroid.utils.Toaster
@@ -95,10 +94,18 @@ public class SignInActivity : AppCompatActivity() {
     }
 
     public fun onEventMainThread(t: AbstractLoginTask) {
-        finish()
-        MyActivity.startMe(this)
-        if (t.firstLogin)
-            EditUserProfile.callMe(this)
+        if (!t.failed) {
+            finish()
+            MyActivity.startMe(this)
+            if (t.firstLogin)
+                EditUserProfile.callMe(this)
+        }
+        else
+        {
+            okButton!!.setEnabled(true);
+            progressBar!!.setVisibility(View.GONE)
+            Toaster.showMessage(this@SignInActivity, R.string.google_error)
+        }
     }
 
     override fun onStop() {

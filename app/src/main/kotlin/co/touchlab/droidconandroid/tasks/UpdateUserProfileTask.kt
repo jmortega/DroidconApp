@@ -64,7 +64,7 @@ class UpdateUserProfileTask(c: Context, val name: String?,
 class UpdateUserProfileCommand() : RetrofitPersistedTask()
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {
-        Log.w("asdf", "Whoops", e);
+        Log.e("User Profile", "Error while updating the user profile", e);
         Crashlytics.logException(e)
         return true;
     }

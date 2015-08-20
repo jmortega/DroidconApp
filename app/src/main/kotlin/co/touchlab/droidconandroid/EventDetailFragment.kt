@@ -1,6 +1,8 @@
 package co.touchlab.droidconandroid
 
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.CoordinatorLayout
@@ -221,7 +223,9 @@ class EventDetailFragment() : Fragment()
             }
         }
 
-        backdrop!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), backdropRes))
+        var backdropDrawable = ResourcesCompat.getDrawable(getActivity(), backdropRes)
+        backdropDrawable.setColorFilter(PorterDuffColorFilter(getResources().getColor(R.color.black_40), PorterDuff.Mode.DARKEN))
+        backdrop!!.setImageDrawable(backdropDrawable)
 
         //Toolbar Colors
         collapsingToolbar!!.setContentScrimColor(trackColor)

@@ -35,7 +35,7 @@ open class RemoveRsvpCommandKot(var eventId: Long? = null) : RetrofitPersistedTa
     }
 
     override fun handleError(context: Context?, e: Throwable?): Boolean {
-        Log.w("asdf", "Whoops", e);
+        Log.e("RSVP", "Error removing RSVP eventID: " + eventId , e);
         Crashlytics.logException(e);
         return true;
     }
