@@ -27,6 +27,7 @@ import co.touchlab.droidconandroid.data.Track
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
 import co.touchlab.droidconandroid.tasks.EventDetailLoadTask
+import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot
 import com.wnafee.vector.compat.ResourcesCompat
 import java.text.SimpleDateFormat
@@ -134,7 +135,7 @@ class EventDetailFragment() : Fragment()
 
     private fun startDetailRefresh()
     {
-        TaskQueue.loadQueueDefault(getActivity()).execute(EventDetailLoadTask(getActivity()!!, findEventIdArg()))
+        Queues.localQueue(getActivity()).execute(EventDetailLoadTask(getActivity()!!, findEventIdArg()))
     }
 
     public fun onEventMainThread(eventDetailTask: EventDetailLoadTask)
@@ -187,9 +188,9 @@ class EventDetailFragment() : Fragment()
         if(!event.isPast()) {
             fab!!.setOnClickListener { v ->
                 if (event.isRsvped()) {
-                    TaskQueue.loadQueueDefault(getActivity()).execute(RemoveRsvpTaskKot(getActivity()!!, event.id))
+                    Queues.localQueue(getActivity()).execute(RemoveRsvpTaskKot(getActivity()!!, event.id))
                 } else {
-                    TaskQueue.loadQueueDefault(getActivity()).execute(AddRsvpTaskKot(getActivity()!!, event.id))
+                    Queues.localQueue(getActivity()).execute(AddRsvpTaskKot(getActivity()!!, event.id))
                 }
             }
         }

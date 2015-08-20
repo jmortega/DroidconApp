@@ -11,6 +11,7 @@ import co.touchlab.droidconandroid.tasks.LocalUserDisplayNameTask
 import android.text.TextUtils
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.tasks.AbstractLoginTask
+import co.touchlab.droidconandroid.tasks.Queues
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -39,12 +40,12 @@ class EmailLoginActivity : Activity()
         password = findView(R.id.password) as EditText
 
         findView(R.id.goButton).setOnClickListener { v ->
-            TaskQueue.loadQueueDefault(this).execute(EmailLoginTask(email!!.getText().toString(), name!!.getText().toString(), password!!.getText().toString()))
+            Queues.networkQueue(this).execute(EmailLoginTask(email!!.getText().toString(), name!!.getText().toString(), password!!.getText().toString()))
         }
 
         EventBusExt.getDefault()!!.register(this)
 
-        TaskQueue.loadQueueDefault(this).execute(LocalUserDisplayNameTask())
+        Queues.localQueue(this).execute(LocalUserDisplayNameTask())
     }
 
     override fun onDestroy()

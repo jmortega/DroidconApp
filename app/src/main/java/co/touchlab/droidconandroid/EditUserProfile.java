@@ -43,6 +43,7 @@ import co.touchlab.droidconandroid.data.UserAccount;
 import co.touchlab.droidconandroid.superbus.QuickClearAvatarTask;
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand;
 import co.touchlab.droidconandroid.tasks.GrabUserProfile;
+import co.touchlab.droidconandroid.tasks.Queues;
 import co.touchlab.droidconandroid.tasks.UpdateUserProfileTask;
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory;
 import co.touchlab.droidconandroid.utils.Toaster;
@@ -164,12 +165,12 @@ public class EditUserProfile extends StickyTaskManagerActivity
     private void refreshProfile()
     {
         AppPrefs appPrefs = AppPrefs.getInstance(this);
-        TaskQueue.loadQueueDefault(this).execute(new GrabUserProfile(appPrefs.getUserId()));
+        Queues.localQueue(this).execute(new GrabUserProfile(appPrefs.getUserId()));
     }
 
     private void saveProfile()
     {
-        TaskQueue.loadQueueDefault(this).execute(
+        Queues.localQueue(this).execute(
                 new UpdateUserProfileTask(this, getStringFromEditText(name),
                                           getStringFromEditText(bio),
                                           getStringFromEditText(company),
@@ -397,7 +398,7 @@ public class EditUserProfile extends StickyTaskManagerActivity
 
     public void photoEditComplete(String path)
     {
-        TaskQueue.loadQueueDefault(this).execute(
+        Queues.localQueue(this).execute(
                 new QuickClearAvatarTask(AppPrefs.getInstance(this).getUserId()));
         refreshProfile();
         PersistedTaskQueueFactory.getInstance(this).execute(new UploadAvatarCommand(path));

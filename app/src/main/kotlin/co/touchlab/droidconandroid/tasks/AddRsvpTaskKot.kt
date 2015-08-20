@@ -8,6 +8,7 @@ import co.touchlab.droidconandroid.superbus.AddRsvpCommandKot
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
+import com.crashlytics.android.Crashlytics
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -15,16 +16,10 @@ import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {
-        throw UnsupportedOperationException()
+        //This is all local.  Should work.
+        return false
     }
 
-    companion object
-    {
-        public fun createTask(c : Context, event: Event)
-        {
-            TaskQueue.loadQueueDefault(c).execute(AddRsvpTaskKot(c, event.id))
-        }
-    }
     override fun run(context: Context?)
     {
         databaseHelper.performTransactionOrThrowRuntime(object : Callable<Void>
