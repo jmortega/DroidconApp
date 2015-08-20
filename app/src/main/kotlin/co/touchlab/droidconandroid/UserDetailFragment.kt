@@ -189,7 +189,7 @@ class UserDetailFragment() : Fragment()
             //       http://jakewharton.com/coercing-picasso-to-play-with-palette/
             Picasso.with(getActivity())!!
                     .load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + coverKey)
-                    .transform(PaletteTransformation.instance())
+//                    .transform(PaletteTransformation.instance())
                     .into(object : CustomTarget(){
                         override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                             super.onBitmapLoaded(bitmap, from)
@@ -293,9 +293,7 @@ class UserDetailFragment() : Fragment()
             website!!.setText(userAccount.website)
             websiteWrapper!!.setOnClickListener{
                 var url = userAccount.website
-                if (!url.startsWith("www.") && !url.startsWith("http://")) {
-                    url = "www." + url;
-                }
+
                 if (!url.startsWith("http://")) {
                     url = "http://" + url;
                 }
