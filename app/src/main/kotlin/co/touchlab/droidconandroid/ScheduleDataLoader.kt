@@ -3,8 +3,8 @@ package co.touchlab.droidconandroid
 import android.content.Context
 import android.text.format.DateUtils
 import co.touchlab.android.threading.loaders.AbstractEventBusLoader
+import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.DatabaseHelper
-import co.touchlab.droidconandroid.data.Event
 import co.touchlab.droidconandroid.data.ScheduleBlock
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
@@ -16,7 +16,7 @@ import java.util.Comparator
 /**
  * Created by kgalligan on 8/1/14.
  */
-class ScheduleDataLoader(c: Context, val all: Boolean, val day: Long) : AbstractEventBusLoader<List<ScheduleBlock>>(c)
+class ScheduleDataLoader(val c: Context, val all: Boolean, val day: Long) : AbstractEventBusLoader<List<ScheduleBlock>>(c)
 {
     override fun findContent(): List<ScheduleBlock>?
     {
@@ -71,6 +71,7 @@ class ScheduleDataLoader(c: Context, val all: Boolean, val day: Long) : Abstract
 
     public fun onEvent(task: RefreshScheduleDataKot)
     {
+        AppPrefs.getInstance(c).setRefreshTime(System.currentTimeMillis())
         onContentChanged()
     }
 
