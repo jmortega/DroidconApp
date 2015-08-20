@@ -272,9 +272,7 @@ class UserDetailFragment() : Fragment()
             website!!.setText(userAccount.website)
             websiteWrapper!!.setOnClickListener{
                 var url = userAccount.website
-                if (!url.startsWith("www.") && !url.startsWith("http://")) {
-                    url = "www." + url;
-                }
+
                 if (!url.startsWith("http://")) {
                     url = "http://" + url;
                 }

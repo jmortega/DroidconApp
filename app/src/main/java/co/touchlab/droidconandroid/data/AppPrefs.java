@@ -37,6 +37,13 @@ public class AppPrefs
         return instance;
     }
 
+    public boolean once(String key)
+    {
+        Boolean shouldOnce = getBoolean(key, true);
+        setBoolean(key, false);
+        return shouldOnce;
+    }
+
     public boolean isLoggedIn()
     {
         return StringUtils.isNoneEmpty(getUserUuid());

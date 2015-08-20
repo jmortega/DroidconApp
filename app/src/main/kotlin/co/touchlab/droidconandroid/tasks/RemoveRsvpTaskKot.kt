@@ -17,13 +17,6 @@ class RemoveRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
         throw UnsupportedOperationException()
     }
 
-    companion object
-    {
-        public fun createTask(c : Context, event: Event)
-        {
-            TaskQueue.loadQueueDefault(c).execute(AddRsvpTaskKot(c, event.id))
-        }
-    }
     override fun run(context: Context?)
     {
         databaseHelper.performTransactionOrThrowRuntime(object : Callable<Void>

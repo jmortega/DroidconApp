@@ -1,7 +1,11 @@
 package co.touchlab.droidconandroid
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.CoordinatorLayout
@@ -24,6 +28,7 @@ import co.touchlab.droidconandroid.data.Track
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
 import co.touchlab.droidconandroid.tasks.EventDetailLoadTask
+import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot
 import co.touchlab.droidconandroid.tasks.TrackDrawableTask
 import com.wnafee.vector.compat.ResourcesCompat
@@ -136,7 +141,7 @@ class EventDetailFragment() : Fragment()
 
     private fun startDetailRefresh()
     {
-        TaskQueue.loadQueueDefault(getActivity()).execute(EventDetailLoadTask(getActivity()!!, findEventIdArg()))
+        Queues.localQueue(getActivity()).execute(EventDetailLoadTask(getActivity()!!, findEventIdArg()))
     }
 
     public fun onEventMainThread(eventDetailTask: EventDetailLoadTask)
@@ -197,20 +202,38 @@ class EventDetailFragment() : Fragment()
         fab!!.setBackgroundTintList(fabColorList)
         fab!!.setRippleColor(trackColor)
 
-        if (event.isRsvped())
+
+        if(event.isPast())
         {
-            fab!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_check))
+            fab!!.setImageDrawable(null)
         }
-        else
-        {
-            fab!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_plus))
+        else {
+            if (event.isRsvped()) {
+                fab!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_check))
+            } else {
+                fab!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_plus))
+            }
         }
 
-        fab!!.setOnClickListener { v ->
-            if (event.isRsvped()) {
-                TaskQueue.loadQueueDefault(getActivity()).execute(RemoveRsvpTaskKot(getActivity()!!, event.id))
-            } else {
-                TaskQueue.loadQueueDefault(getActivity()).execute(AddRsvpTaskKot(getActivity()!!, event.id))
+        if(!event.isPast()) {
+            fab!!.setOnClickListener { v ->
+                if (event.isRsvped()) {
+                    Queues.localQueue(getActivity()).execute(RemoveRsvpTaskKot(getActivity()!!, event.id))
+                } else {
+                    Queues.localQueue(getActivity()).execute(AddRsvpTaskKot(getActivity()!!, event.id))
+                }
+            }
+        }
+
+        if(event.isNow())
+        {
+            fab!!.setOnLongClickListener { v ->
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://imgur.com/gallery/7drHiqr"));
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null)
+                {
+                    getActivity().startActivity(intent);
+                }
+                true;
             }
         }
 
@@ -283,6 +306,11 @@ class EventDetailFragment() : Fragment()
         val venueFormatString = getResources().getString(R.string.event_venue_time);
 
         adapter.addHeader(venueFormatString.format(event.venue.name, timeFormat.format(startDateVal), timeFormat.format(endDateVal)), R.drawable.ic_map)
+
+        if(event.isNow())
+            adapter.addBody("<i><b>"+ getResources().getString(R.string.event_now) +"</b></i>")
+        else if(event.isPast())
+            adapter.addBody("<i><b>"+ getResources().getString(R.string.event_past) +"</b></i>")
 
         //Description text
         if (!TextUtils.isEmpty(event.description))

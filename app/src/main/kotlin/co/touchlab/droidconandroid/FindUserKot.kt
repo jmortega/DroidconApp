@@ -16,6 +16,7 @@ import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.tasks.sticky.StickyTaskManager
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import co.touchlab.droidconandroid.tasks.FindUserTaskKot
+import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.utils.Toaster
 import com.google.zxing.integration.android.IntentIntegrator
 import org.apache.commons.lang3.StringUtils
@@ -61,7 +62,7 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!TextUtils.isEmpty(query)) {
-                    TaskQueue.loadQueueDefault(this@FindUserKot).execute(FindUserTaskKot(query!!))
+                    Queues.networkQueue(this@FindUserKot).execute(FindUserTaskKot(query!!))
                     searchView!!.clearFocus()
                 }
                 return false

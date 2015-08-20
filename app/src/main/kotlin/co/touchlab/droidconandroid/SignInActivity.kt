@@ -18,6 +18,7 @@ import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.droidconandroid.tasks.AbstractLoginTask
 import co.touchlab.droidconandroid.tasks.GoogleLoginTask
+import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.utils.Toaster
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -155,7 +156,7 @@ public class SignInActivity : AppCompatActivity() {
                 }
             }
 
-            TaskQueue.loadQueueDefault(this@SignInActivity).execute(GoogleLoginTask(accountName!!, person?.getDisplayName(), imageURL, coverURL))
+            Queues.networkQueue(this@SignInActivity).execute(GoogleLoginTask(accountName!!, person?.getDisplayName(), imageURL, coverURL))
         }
 
         override fun onConnectionSuspended(i: Int) {
