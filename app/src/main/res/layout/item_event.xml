@@ -35,12 +35,10 @@
         <!-- todo get real icon-->
         <ImageView
             android:layout_gravity="right"
-            android:layout_marginRight="@dimen/padding_small"
-            android:layout_marginTop="@dimen/padding_tiny"
-            android:layout_width="@dimen/rsvp_icon"
-            android:layout_height="@dimen/rsvp_icon"
-            android:background="@color/primary"
-            android:src="@drawable/ic_action_tick"
+            android:layout_marginRight="@dimen/padding_tiny"
+            android:layout_marginTop="@dimen/padding_small"
+            android:layout_width="@dimen/rsvp_width"
+            android:layout_height="@dimen/rsvp_height"
             android:visibility="gone"
             tools:visibility="visible"
             android:id="@+id/rsvp"/>

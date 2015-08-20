@@ -81,7 +81,7 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 if(event.isNow())
                     holder.rsvp.setImageDrawable(ResourcesCompat.getDrawable(context, R.drawable.ic_play))
                 else if(allEvents)
-                    holder.rsvp.setImageDrawable(ResourcesCompat.getDrawable(context, R.drawable.ic_action_tick))
+                    holder.rsvp.setImageDrawable(ResourcesCompat.getDrawable(context, R.drawable.ic_check_green))
                 else
                     holder.rsvp.setVisibility(View.GONE)
             } else {
