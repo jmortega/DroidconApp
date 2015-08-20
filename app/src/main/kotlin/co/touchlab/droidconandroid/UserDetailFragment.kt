@@ -190,7 +190,7 @@ class UserDetailFragment() : Fragment()
             Picasso.with(getActivity())!!
                     .load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + coverKey)
 //                    .transform(PaletteTransformation.instance())
-                    .into(object : CustomTarget(){
+                    /*.into(object : CustomTarget(){
                         override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                             super.onBitmapLoaded(bitmap, from)
                             if(getActivity() != null)
@@ -203,7 +203,8 @@ class UserDetailFragment() : Fragment()
                                 makeIconsPretty(darkVibrantColor)
                             }
                         }
-                    })
+                    })*/
+            .into(header)
 
         }
         else
