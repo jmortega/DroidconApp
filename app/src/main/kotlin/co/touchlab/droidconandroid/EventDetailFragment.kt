@@ -1,8 +1,7 @@
 package co.touchlab.droidconandroid
 
 import android.content.res.ColorStateList
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.CoordinatorLayout
@@ -26,6 +25,7 @@ import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
 import co.touchlab.droidconandroid.tasks.EventDetailLoadTask
 import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot
+import co.touchlab.droidconandroid.tasks.TrackDrawableTask
 import com.wnafee.vector.compat.ResourcesCompat
 import java.text.SimpleDateFormat
 import java.util.ArrayList
@@ -34,6 +34,9 @@ import java.util.Date
 /**
  * Created by kgalligan on 7/27/14.
  */
+var buisnessDrawable: Drawable? = null
+var designDrawable: Drawable? = null
+var devDrawable: Drawable? = null
 class EventDetailFragment() : Fragment()
 {
     private var name: TextView? = null
@@ -124,6 +127,7 @@ class EventDetailFragment() : Fragment()
         recycler!!.setLayoutManager(LinearLayoutManager(getActivity()))
 
         updateTrackColor(findTrackIdArg())
+        backdrop!!.setBackgroundColor(trackColor)
 
         startDetailRefresh()
 
@@ -157,6 +161,30 @@ class EventDetailFragment() : Fragment()
     public fun onEventMainThread(@suppress("UNUSED_PARAMETER") task: RemoveRsvpTaskKot)
     {
         startDetailRefresh()
+    }
+
+    public fun onEventMainThread(task: TrackDrawableTask)
+    {
+        when (task.drawableRes)
+        {
+            R.drawable.illo_development ->
+            {
+                devDrawable = task.drawable
+            }
+
+            R.drawable.illo_design ->
+            {
+                designDrawable = task.drawable
+            }
+
+            R.drawable.illo_business ->
+            {
+                buisnessDrawable = task.drawable
+            }
+        }
+
+        if (task.drawable != null)
+            updateBackdropDrawable(task.drawable!!)
     }
 
     /**
@@ -200,8 +228,7 @@ class EventDetailFragment() : Fragment()
         name!!.setText(event.name)
 
         //Track
-        //TODO: Use track drawables
-        var backdropRes = R.drawable.welcome_0
+        var backdropDrawable: Drawable? = null
         if (!TextUtils.isEmpty(event.category))
         {
             var track = Track.findByServerName(event.category)
@@ -209,23 +236,31 @@ class EventDetailFragment() : Fragment()
             {
                 Track.DEVELOPMENT ->
                 {
-                    backdropRes = R.drawable.welcome_0
+                    if (devDrawable == null)
+                        TaskQueue.loadQueueDefault(getActivity()).execute(TrackDrawableTask(getActivity().getApplicationContext(), R.drawable.illo_development))
+                    else
+                        backdropDrawable = devDrawable
                 }
 
                 Track.DESIGN ->
                 {
-                    backdropRes = R.drawable.welcome_1
+                    if (designDrawable == null)
+                        TaskQueue.loadQueueDefault(getActivity()).execute(TrackDrawableTask(getActivity().getApplicationContext(), R.drawable.illo_design))
+                    else
+                        backdropDrawable = designDrawable
                 }
                 Track.BUSINESS ->
                 {
-                    backdropRes = R.drawable.welcome_2
+                    if (buisnessDrawable == null)
+                        TaskQueue.loadQueueDefault(getActivity()).execute(TrackDrawableTask(getActivity().getApplicationContext(), R.drawable.illo_business))
+                    else
+                        backdropDrawable = buisnessDrawable
                 }
             }
         }
 
-        var backdropDrawable = ResourcesCompat.getDrawable(getActivity(), backdropRes)
-        backdropDrawable.setColorFilter(PorterDuffColorFilter(getResources().getColor(R.color.black_40), PorterDuff.Mode.DARKEN))
-        backdrop!!.setImageDrawable(backdropDrawable)
+        if (backdropDrawable != null)
+            updateBackdropDrawable(backdropDrawable)
 
         //Toolbar Colors
         collapsingToolbar!!.setContentScrimColor(trackColor)
@@ -288,5 +323,10 @@ class EventDetailFragment() : Fragment()
 
         trackColor = getResources().getColor(track!!.getTextColorRes())
         fabColorList = getResources().getColorStateList(track.getCheckBoxSelectorRes())
+    }
+
+    private fun updateBackdropDrawable(backdropDrawable: Drawable)
+    {
+        backdrop!!.setImageDrawable(backdropDrawable)
     }
 }
