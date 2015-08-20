@@ -41,9 +41,15 @@ class UserDetailFragment() : Fragment()
     private var emailIcon: ImageView? = null
     private var emailWrapper: View? = null
     private var company: TextView? = null
+    private var facebookIcon: ImageView? = null
+    private var facebook: TextView? = null
+    private var facebookWrapper: View? = null
     private var twitter: TextView? = null
     private var twitterIcon: ImageView? = null
     private var twitterWrapper: View? = null
+    private var linkedInIcon: ImageView? = null
+    private var linkedIn: TextView? = null
+    private var linkedInWrapper: View? = null
     private var gPlus: TextView? = null
     private var gPlusIcon: ImageView? = null
     private var gPlusWrapper: View? = null
@@ -61,6 +67,8 @@ class UserDetailFragment() : Fragment()
         val HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES: String = "https://s3.amazonaws.com/droidconimages/"
         val TWITTER_PREFIX: String = "http://www.twitter.com/"
         val GPLUS_PREFIX: String = "http://www.google.com/+"
+        val LINKEDIN_PREFIX: String = "http://www.linkedin.com/in/"
+        val FACEBOOK_PREFIX: String = "http://www.facebook.com/"
         val PHONE_PREFIX: String = "tel:"
         val USER_ID = "USER_ID"
 
@@ -119,9 +127,15 @@ class UserDetailFragment() : Fragment()
         emailIcon = view.findView(R.id.email_icon) as ImageView
         emailWrapper = view.findView(R.id.email_wrapper)
         company = view.findView(R.id.company) as TextView
+        facebookIcon = view.findView(R.id.facebook_icon) as ImageView
+        facebook = view.findView(R.id.facebook) as TextView
+        facebookWrapper = view.findView(R.id.wrapper_facebook)
         twitter = view.findView(R.id.twitter) as TextView
         twitterIcon = view.findView(R.id.twitter_icon) as ImageView
         twitterWrapper = view.findView(R.id.wrapper_twitter)
+        linkedInIcon = view.findView(R.id.linkedIn_icon) as ImageView
+        linkedIn = view.findView(R.id.linkedIn) as TextView
+        linkedInWrapper = view.findView(R.id.wrapper_linkedIn)
         gPlus = view.findView(R.id.gPlus) as TextView
         gPlusIcon = view.findView(R.id.gPlus_icon) as ImageView
         gPlusWrapper = view.findViewById(R.id.gPlus_wrapper)
@@ -194,12 +208,7 @@ class UserDetailFragment() : Fragment()
             makeIconsPretty(iconsDefaultColor)
         }
 
-        if(!TextUtils.isEmpty(userAccount.phoneticName))
-        {
-            name!!.setText("${userAccount.name} (${userAccount.phoneticName})")
-        }
-        else
-        {
+        if(!TextUtils.isEmpty(userAccount.phone)) {
             name!!.setText(userAccount.name)
         }
 
@@ -215,9 +224,15 @@ class UserDetailFragment() : Fragment()
             phoneWrapper!!.setVisibility(View.VISIBLE)
         }
 
-        if(!TextUtils.isEmpty(userAccount.email)) {
+        if(!TextUtils.isEmpty(userAccount.email) && userAccount.emailPublic != null && userAccount.emailPublic) {
             email!!.setText(userAccount.email)
-//            emailWrapper!!.setVisibility(View.VISIBLE)
+
+            emailWrapper!!.setOnClickListener {
+                val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", userAccount.email, null));
+                startActivity(emailIntent);
+            }
+            emailWrapper!!.setVisibility(View.VISIBLE)
         }
 
         if(!TextUtils.isEmpty(userAccount.company)) {
@@ -233,6 +248,15 @@ class UserDetailFragment() : Fragment()
             company!!.setVisibility(View.VISIBLE)
         }
 
+        var facebookAccount = userAccount.facebook
+        if(!TextUtils.isEmpty(facebookAccount)) {
+            facebook!!.setText(facebookAccount)
+            facebookWrapper!!.setOnClickListener {
+                openLink(Uri.parse(FACEBOOK_PREFIX + facebookAccount))
+            }
+            facebookWrapper!!.setVisibility(View.VISIBLE)
+        }
+
         var twitterAccount = userAccount.twitter
         if(!TextUtils.isEmpty(twitterAccount)) {
             twitterAccount = twitterAccount.replace("@", "")
@@ -241,6 +265,15 @@ class UserDetailFragment() : Fragment()
                 openLink(Uri.parse(TWITTER_PREFIX + twitterAccount))
             }
             twitterWrapper!!.setVisibility(View.VISIBLE)
+        }
+
+        var linkedInAccount = userAccount.linkedIn
+        if(!TextUtils.isEmpty(linkedInAccount)) {
+            linkedIn!!.setText(linkedInAccount)
+            linkedInWrapper!!.setOnClickListener {
+                openLink(Uri.parse(LINKEDIN_PREFIX + linkedInAccount))
+            }
+            linkedInWrapper!!.setVisibility(View.VISIBLE)
         }
 
         var gPlusAccount = userAccount.gPlus
@@ -278,10 +311,10 @@ class UserDetailFragment() : Fragment()
                 val intent = Intent(ContactsContract.Intents.Insert.ACTION);
                 // Sets the MIME type to match the Contacts Provider
                 intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-                intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
+                if (userAccount.emailPublic != null && userAccount.emailPublic)
+                    intent.putExtra(ContactsContract.Intents.Insert.EMAIL, userAccount.email)
                 intent.putExtra(ContactsContract.Intents.Insert.COMPANY, userAccount.company)
                 intent.putExtra(ContactsContract.Intents.Insert.NAME, userAccount.name)
-                intent.putExtra(ContactsContract.Intents.Insert.PHONETIC_NAME, userAccount.phoneticName)
                 startActivity(intent);
             }
             addContact.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_addcontact))
@@ -311,6 +344,8 @@ class UserDetailFragment() : Fragment()
         websiteIcon!!.setImageDrawable(websiteDrawable)
 
         twitterIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_twitter))
+        facebookIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_facebook))
+        linkedInIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_linkedin))
         gPlusIcon!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_gplus))
     }
 
