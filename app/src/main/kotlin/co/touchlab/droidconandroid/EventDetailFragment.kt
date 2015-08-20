@@ -1,8 +1,10 @@
 package co.touchlab.droidconandroid
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.CoordinatorLayout
@@ -192,6 +194,18 @@ class EventDetailFragment() : Fragment()
             }
         }
 
+        if(event.isNow())
+        {
+            fab!!.setOnLongClickListener { v ->
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://imgur.com/gallery/7drHiqr"));
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null)
+                {
+                    getActivity().startActivity(intent);
+                }
+                true;
+            }
+        }
+
         var p = fab!!.getLayoutParams() as CoordinatorLayout.LayoutParams
         p.setAnchorId(R.id.appbar)
         fab!!.setLayoutParams(p)
@@ -255,7 +269,9 @@ class EventDetailFragment() : Fragment()
 
         adapter.addHeader(venueFormatString.format(event.venue.name, timeFormat.format(startDateVal), timeFormat.format(endDateVal)), R.drawable.ic_map)
 
-        if(event.isPast())
+        if(event.isNow())
+            adapter.addBody("<i><b>"+ getResources().getString(R.string.event_now) +"</b></i>")
+        else if(event.isPast())
             adapter.addBody("<i><b>"+ getResources().getString(R.string.event_past) +"</b></i>")
 
         //Description text

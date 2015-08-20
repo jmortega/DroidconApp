@@ -69,6 +69,7 @@
     <string name="event_venue_time" >%1$s, %2$s - %3$s</string>
     <string name="event_speaker_name" >Speaker: %1$s</string>
     <string name="event_track" >on the %1$s track</string>
+    <string name="event_now" >This session is happening now</string>
     <string name="event_past" >This session has already ended</string>
 
     <!-- tracks-->
