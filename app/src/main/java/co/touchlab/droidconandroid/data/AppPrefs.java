@@ -20,6 +20,7 @@ public class AppPrefs
     public static final String COVER_KEY        = "cover_key";
     public static final String CONVENTION_START = "convention_start";
     public static final String CONVENTION_END = "convention_end";
+    public static final String MY_RSVPS_LOADED = "myrsvps3";
     private static AppPrefs instance;
 
     private SharedPreferences prefs;
@@ -41,6 +42,16 @@ public class AppPrefs
         Boolean shouldOnce = getBoolean(key, true);
         setBoolean(key, false);
         return shouldOnce;
+    }
+
+    public boolean isMyRsvpsLoaded()
+    {
+        return getBoolean(MY_RSVPS_LOADED, false);
+    }
+
+    public void setMyRsvpsLoaded(boolean b)
+    {
+        setBoolean(MY_RSVPS_LOADED, b);
     }
 
     public boolean isLoggedIn()

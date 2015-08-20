@@ -11,13 +11,16 @@ import co.touchlab.droidconandroid.BuildConfig
 import co.touchlab.droidconandroid.data.*
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.RefreshScheduleDataRequest
+import co.touchlab.droidconandroid.network.RsvpRequest
 import co.touchlab.droidconandroid.network.dao.Convention
 import co.touchlab.droidconandroid.utils.TimeUtils
 import com.crashlytics.android.Crashlytics
 import com.google.gson.Gson
+import com.j256.ormlite.dao.Dao
 import org.apache.commons.lang3.StringUtils
 import java.io.InputStreamReader
 import java.text.ParseException
+import java.util.*
 import java.util.concurrent.Callable
 
 fun saveConventionData(context: Context?, convention: Convention) {
@@ -135,8 +138,38 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
         val restAdapter = DataHelper.makeRequestAdapter(context)!!
         val request = restAdapter.create(javaClass<RefreshScheduleDataRequest>())!!
 
+
         val convention = request.getScheduleData(BuildConfig.CONVENTION_ID)
         saveConventionData(context, convention)
+
+        if(!AppPrefs.getInstance(context).isMyRsvpsLoaded())
+        {
+            try {
+                val rsvpRequest = restAdapter.create(javaClass<RsvpRequest>())!!
+                val myRsvpResponse = rsvpRequest.getMyRsvps()
+                val databaseHelper = DatabaseHelper.getInstance(context)
+                databaseHelper.performTransactionOrThrowRuntime (object : Callable<Void> {
+                    //            throws(javaClass<Exception>())
+                    override fun call(): Void? {
+                        val eventDao = databaseHelper.getEventDao()
+                        for (eventId in myRsvpResponse.starred_sessions) {
+                            val event = eventDao.queryForId(eventId.toLong())
+                            if(event != null) {
+                                event.rsvpUuid = UUID.randomUUID().toString()
+                                eventDao.update(event)
+                            }
+                        }
+                        return null;
+                    }
+                })
+            } catch(e: Exception) {
+                //Yeah, well, its not your banking app
+                Crashlytics.logException(e)
+            } finally {
+                AppPrefs.getInstance(context).setMyRsvpsLoaded(true)
+            }
+
+        }
 
         EventBusExt.getDefault()!!.post(this)
     }

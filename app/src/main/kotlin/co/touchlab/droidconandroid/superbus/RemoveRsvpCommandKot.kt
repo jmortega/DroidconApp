@@ -5,8 +5,8 @@ import android.util.Log
 import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask
 import co.touchlab.android.threading.tasks.persisted.PersistedTask
 import co.touchlab.droidconandroid.data.AppPrefs
+import co.touchlab.droidconandroid.network.RsvpRequest
 import co.touchlab.droidconandroid.network.DataHelper
-import co.touchlab.droidconandroid.network.RemoveRsvpRequest
 import com.crashlytics.android.Crashlytics
 
 /**
@@ -23,12 +23,12 @@ open class RemoveRsvpCommandKot(var eventId: Long? = null) : RetrofitPersistedTa
 
     override fun runNetwork(context: Context?) {
         val restAdapter = DataHelper.makeRequestAdapter(context)
-        val removeRsvpRequest = restAdapter!!.create(javaClass<RemoveRsvpRequest>())
+        val removeRsvpRequest = restAdapter!!.create(javaClass<RsvpRequest>())
 
 
         val userUuid = AppPrefs.getInstance(context).getUserUuid()
         if (eventId != null && userUuid != null) {
-            removeRsvpRequest!!.removeRsvp(eventId!!)
+            removeRsvpRequest!!.removeRsvp(eventId!!, "notneeded")
         } else {
             throw IllegalArgumentException("Some value is null: " + eventId + "/" + userUuid)
         }
