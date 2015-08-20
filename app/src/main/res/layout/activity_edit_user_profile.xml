@@ -328,7 +328,7 @@
 
             <EditText
                 android:id="@+id/bio"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
                 android:minLines="2"
                 android:maxLines="6"
                 android:gravity="top|left"

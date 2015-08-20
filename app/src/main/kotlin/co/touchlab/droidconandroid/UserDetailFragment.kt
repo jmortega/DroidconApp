@@ -2,7 +2,6 @@ package co.touchlab.droidconandroid
 
 import android.app.SearchManager
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.net.Uri
@@ -21,8 +20,6 @@ import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import co.touchlab.droidconandroid.tasks.FindUserByIdTask
 import co.touchlab.droidconandroid.tasks.Queues
-import co.touchlab.droidconandroid.utils.CustomTarget
-import co.touchlab.droidconandroid.utils.PaletteTransformation
 import co.touchlab.droidconandroid.utils.Toaster
 import com.squareup.picasso.Picasso
 import com.wnafee.vector.compat.ResourcesCompat
@@ -186,33 +183,14 @@ class UserDetailFragment() : Fragment()
         val coverKey = userAccount.coverKey
         val iconsDefaultColor = getResources().getColor(R.color.social_icons)
         if (!TextUtils.isEmpty(coverKey)) {
-            //       http://jakewharton.com/coercing-picasso-to-play-with-palette/
             Picasso.with(getActivity())!!
                     .load(HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES + coverKey)
-//                    .transform(PaletteTransformation.instance())
-                    /*.into(object : CustomTarget(){
-                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                            super.onBitmapLoaded(bitmap, from)
-                            if(getActivity() != null)
-                            {
-                                var palette = PaletteTransformation.getPalette(bitmap);
-
-                                header!!.setImageBitmap(bitmap)
-                                val darkVibrantColor = palette.getDarkVibrantColor(iconsDefaultColor)
-
-                                makeIconsPretty(darkVibrantColor)
-                            }
-                        }
-                    })*/
-            .into(header)
-
-        }
-        else
-        {
-            makeIconsPretty(iconsDefaultColor)
+                    .into(header)
         }
 
-        if(!TextUtils.isEmpty(userAccount.phone)) {
+        makeIconsPretty(iconsDefaultColor)
+
+        if(!TextUtils.isEmpty(userAccount.name)) {
             name!!.setText(userAccount.name)
         }
 
