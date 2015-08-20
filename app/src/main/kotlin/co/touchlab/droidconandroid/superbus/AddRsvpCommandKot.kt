@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask
 import co.touchlab.android.threading.tasks.persisted.PersistedTask
-import co.touchlab.droidconandroid.network.AddRsvpRequest
+import co.touchlab.droidconandroid.network.RsvpRequest
 import co.touchlab.droidconandroid.network.DataHelper
 import com.crashlytics.android.Crashlytics
 
@@ -14,7 +14,7 @@ import com.crashlytics.android.Crashlytics
 class AddRsvpCommandKot(var eventId: Long? = null, var rsvpUuid: String? = null) : RetrofitPersistedTask() {
     override fun runNetwork(context: Context?) {
         val restAdapter = DataHelper.makeRequestAdapter(context)
-        val addRsvpRequest = restAdapter!!.create(javaClass<AddRsvpRequest>())
+        val addRsvpRequest = restAdapter!!.create(javaClass<RsvpRequest>())
 
         if (eventId != null && rsvpUuid != null) {
             val basicIdResult = addRsvpRequest!!.addRsvp(eventId!!, rsvpUuid!!)

@@ -1,6 +1,7 @@
 package co.touchlab.droidconandroid.network;
 
 import co.touchlab.droidconandroid.network.dao.Convention;
+import co.touchlab.droidconandroid.network.dao.MyRsvpResponse;
 import retrofit.http.GET;
 import retrofit.http.Path;
 
