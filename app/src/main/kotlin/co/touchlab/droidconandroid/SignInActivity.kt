@@ -168,8 +168,6 @@ public class SignInActivity : AppCompatActivity() {
             if (result != null && result.hasResolution()) {
                 try {
                     result.startResolutionForResult(this@SignInActivity, SignInActivity.REQUEST_CODE_RESOLVE_ERR)
-                    okButton!!.setEnabled(true);
-                    progressBar!!.setVisibility(View.GONE)
                 } catch (e: IntentSender.SendIntentException) {
                     googleApiClient!!.connect()
                 }
@@ -177,6 +175,9 @@ public class SignInActivity : AppCompatActivity() {
             } else {
                 Toaster.showMessage(this@SignInActivity, R.string.google_error)
             }
+
+            okButton!!.setEnabled(true);
+            progressBar!!.setVisibility(View.GONE)
         }
 
 

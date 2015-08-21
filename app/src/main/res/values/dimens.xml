@@ -66,4 +66,7 @@
     <dimen name="sponsor_section_padding2">20dp</dimen>
 
     <dimen name="sponsor_top_padding">24dp</dimen>
+    <dimen name="welcome_image_side">396dp</dimen>
+
+    <dimen name="sponsor_section_title">24sp</dimen>
 </resources>
