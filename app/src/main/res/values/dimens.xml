@@ -49,4 +49,20 @@
     <dimen name="event_entry_icon">26dp</dimen>
     <dimen name="event_fab_margin">0dp</dimen>
 
+    <dimen name="sponsor_platinum_width">328dp</dimen>
+    <dimen name="sponsor_platinum_height">77dp</dimen>
+
+    <dimen name="sponsor_gold_width">164dp</dimen>
+    <dimen name="sponsor_gold_height">38dp</dimen>
+
+    <dimen name="sponsor_silver_width">136dp</dimen>
+    <dimen name="sponsor_silver_height">32dp</dimen>
+
+    <dimen name="sponsor_bronze_width">102dp</dimen>
+    <dimen name="sponsor_bronze_height">24dp</dimen>
+
+    <dimen name="sponsor_padding">5dp</dimen>
+    <dimen name="sponsor_section_padding">15dp</dimen>
+
+    <dimen name="sponsor_top_padding">24dp</dimen>
 </resources>

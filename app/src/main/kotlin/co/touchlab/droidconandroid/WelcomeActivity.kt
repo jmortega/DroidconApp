@@ -57,7 +57,7 @@ public class WelcomeActivity : AppCompatActivity()
 
             override fun onPageSelected(position: Int) {
 
-                if(position == 3) {
+                if(position == 4) {
                     advanceTV.setText(R.string.lets_go)
                     advanceTV.setTextColor(getResources().getColor(R.color.orange))
                     indicator.setFillColor(getResources().getColor(R.color.orange))
@@ -74,7 +74,7 @@ public class WelcomeActivity : AppCompatActivity()
         advanceTV.setOnClickListener { v ->
             val position = pager.getCurrentItem()
             when(position) {
-                3 -> {
+                4 -> {
                     MyActivity.startMe(this@WelcomeActivity)
                     finish()
                 }
@@ -93,14 +93,15 @@ class WelcomePagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapt
             0 -> return WelcomeFragment.newInstance(R.color.primary, R.drawable.welcome_0, R.color.white, R.string.welcome_0_title, R.string.welcome_0_desc)
             1 -> return WelcomeFragment.newInstance(R.color.droidcon_pink, R.drawable.welcome_1, R.color.white, R.string.welcome_1_title, R.string.welcome_1_desc)
             2 -> return WelcomeFragment.newInstance(R.color.droidcon_blue, R.drawable.welcome_2, R.color.white, R.string.welcome_2_title, R.string.welcome_2_desc)
-//            todo add correct image
-            3 -> return WelcomeFragment.newInstance(android.R.color.white, R.drawable.welcome_2, R.color.orange, R.string.welcome_3_title, R.string.welcome_3_desc)
+            //3 -> return WelcomeFragment.newInstance(android.R.color.white, R.drawable.welcome_2, R.color.orange, R.string.welcome_3_title, R.string.welcome_3_desc)
+            3 -> return SponsorWelcomeFragment()
+            4 -> return Sponsor2WelcomeFragment()
         }
         throw IllegalStateException("Too many fragments")
     }
 
     override fun getCount(): Int {
-        return 4;
+        return 5;
     }
 
 }
