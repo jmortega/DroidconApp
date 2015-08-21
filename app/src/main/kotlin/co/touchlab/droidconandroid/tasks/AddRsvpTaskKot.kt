@@ -4,9 +4,9 @@ import android.content.Context
 import co.touchlab.droidconandroid.data.Event
 import java.util.UUID
 import java.util.concurrent.Callable
-import co.touchlab.droidconandroid.superbus.AddRsvpCommandKot
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.droidconandroid.tasks.persisted.AddRsvp
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 import com.crashlytics.android.Crashlytics
 
@@ -34,7 +34,8 @@ open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
                     val uuid = UUID.randomUUID().toString()
                     event.rsvpUuid = uuid
                     dao.update(event)
-                    PersistedTaskQueueFactory.getInstance(context).execute(AddRsvpCommandKot(eventId, uuid))
+                    val addRsvpCommandKot = AddRsvp(eventId, uuid)
+                    PersistedTaskQueueFactory.getInstance(context).execute(addRsvpCommandKot)
                 }
 
                 return null

@@ -84,7 +84,7 @@ public class WelcomeActivity : AppCompatActivity()
             val position = pager.getCurrentItem()
             when(position) {
                 lastIndex -> {
-                    if(!short)
+//                    if(!short)
                         MyActivity.startMe(this@WelcomeActivity)
                     finish()
                 }

@@ -51,7 +51,7 @@
     <string name="title_activity_edit_user_profile">Edit my profile</string>
     <string name="hint_name">Full name</string>
     <string name="hint_email">Email address</string>
-    <string name="public_email">Share email address?</string>
+    <string name="public_email">Hide my email address</string>
     <string name="hint_phone">Phone number</string>
     <string name="hint_company">Company</string>
     <string name="hint_website">http://yoursite.com</string>
@@ -72,6 +72,7 @@
     <string name="event_track" >on the %1$s track</string>
     <string name="event_now" >This session is happening now</string>
     <string name="event_past" >This session has already ended</string>
+    <string name="event_conflict" >This session conflicts with another session in your schedule</string>
 
     <!-- tracks-->
     <string name="filter">Filter</string>

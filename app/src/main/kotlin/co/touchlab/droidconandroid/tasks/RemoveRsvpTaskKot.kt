@@ -4,9 +4,9 @@ import android.content.Context
 import co.touchlab.droidconandroid.data.Event
 import java.util.concurrent.Callable
 import co.touchlab.android.threading.tasks.TaskQueue
-import co.touchlab.droidconandroid.superbus.RemoveRsvpCommandKot
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
+import co.touchlab.droidconandroid.tasks.persisted.RemoveRsvp
 
 /**
  * Created by kgalligan on 7/20/14.
@@ -30,7 +30,7 @@ class RemoveRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
                 {
                     event.rsvpUuid = null
                     dao.update(event)
-                    PersistedTaskQueueFactory.getInstance(context).execute(RemoveRsvpCommandKot(eventId))
+                    PersistedTaskQueueFactory.getInstance(context).execute(RemoveRsvp(eventId))
                 }
 
                 return null

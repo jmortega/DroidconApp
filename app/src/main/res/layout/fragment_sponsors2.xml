@@ -24,7 +24,7 @@
                 android:text="CODE LAB Powered By Twilio"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_xlarge"
+                android:textSize="@dimen/sponsor_section_title"
                 />
 
             <LinearLayout
@@ -86,7 +86,7 @@
                 android:text="PARTY SPONSORS"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_xlarge"
+                android:textSize="@dimen/sponsor_section_title"
                 />
 
             <LinearLayout
@@ -118,7 +118,7 @@
                 android:text="COMMUNITY SPONSORS"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_xlarge"
+                android:textSize="@dimen/sponsor_section_title"
                 />
 
             <LinearLayout
@@ -154,7 +154,7 @@
         android:paddingTop="@dimen/padding_small"
         android:text="... and, more sponsors"
         android:textColor="@color/orange"
-        android:textSize="@dimen/text_xlarge"
+        android:textSize="@dimen/sponsor_section_title"
         />
 
 </LinearLayout>

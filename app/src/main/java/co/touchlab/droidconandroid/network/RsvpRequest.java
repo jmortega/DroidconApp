@@ -15,11 +15,11 @@ public interface RsvpRequest
 {
     @FormUrlEncoded
     @POST("/dataTest/rsvpEvent/{eventId}")
-    BasicIdResult addRsvp(@Path("eventId") Long eventId, @Field("rsvpUuid") String rsvpUuid) throws Exception;
+    BasicIdResult addRsvp(@Path("eventId") Long eventId, @Field("rsvpUuid") String rsvpUuid);
 
     @FormUrlEncoded
     @POST("/dataTest/unRsvpEvent/{eventId}")
-    Response removeRsvp(@Path("eventId") Long eventId, @Field("dummy") String justFiller) throws Exception;
+    Response removeRsvp(@Path("eventId") Long eventId, @Field("dummy") String justFiller);
 
     @GET("/dataTest/allRsvps")
     MyRsvpResponse getMyRsvps()throws Exception;

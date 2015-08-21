@@ -4,13 +4,20 @@
               android:orientation="vertical"
               android:paddingTop="@dimen/status_bar_height"
               android:layout_width="match_parent"
+              android:gravity="center"
               android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:layout_width="@dimen/welcome_image_side"
+        android:layout_height="@dimen/welcome_image_side"
         android:layout_margin="@dimen/padding_small"
-        android:id="@+id/image"/>
+        >
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/image"/>
+    </FrameLayout>
+
 
     <TextView
         android:layout_width="wrap_content"

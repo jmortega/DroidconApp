@@ -37,7 +37,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
-import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.data.UserAccount;
 import co.touchlab.droidconandroid.superbus.QuickClearAvatarTask;
@@ -66,7 +65,7 @@ public class EditUserProfile extends StickyTaskManagerActivity
     private EditText  email;
     private EditText  bio;
     private ImageView myPic;
-    private CheckBox  shareEmail;
+    private CheckBox  hideEmail;
 
     public static void callMe(Context c)
     {
@@ -103,7 +102,7 @@ public class EditUserProfile extends StickyTaskManagerActivity
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         bio = (EditText) findViewById(R.id.bio);
         myPic = (ImageView) findViewById(R.id.profile_image);
-        shareEmail = (CheckBox) findViewById(R.id.public_email);
+        hideEmail = (CheckBox) findViewById(R.id.hide_email);
 
         EventBusExt.getDefault().register(this);
     }
@@ -181,7 +180,7 @@ public class EditUserProfile extends StickyTaskManagerActivity
                                           getStringFromEditText(phone),
                                           getStringFromEditText(email),
                                           getStringFromEditText(gPlus),
-                                          shareEmail.isChecked()));
+                                          ! hideEmail.isChecked()));
         finish();
     }
 
@@ -214,9 +213,10 @@ public class EditUserProfile extends StickyTaskManagerActivity
             website.setText(ua.website);
             userCode.setText(ua.userCode);
             bio.setText(ua.profile);
-            shareEmail.setChecked(ua.emailPublic == null
-                                          ? false
-                                          : ua.emailPublic);
+            //If email is set to null or not public in the UA then we want to check the "hide email" box
+            hideEmail.setChecked(ua.emailPublic == null
+                                         ? true
+                                         : ! ua.emailPublic);
         }
 
         if (!TextUtils.isEmpty(ua.avatarKey))
