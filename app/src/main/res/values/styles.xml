@@ -71,5 +71,22 @@
         <item name="android:paddingLeft">@dimen/height_xlarge</item>
         <item name="android:textColor">@color/text_gray</item>
     </style>
+    <style name="about_header">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/padding_medium</item>
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textSize">@dimen/text_small</item>
+    </style>
+    <style name="about_body">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/padding_medium</item>
+        <item name="android:layout_marginRight">@dimen/padding_medium</item>
+        <item name="android:layout_marginTop">@dimen/about_body_top</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:textSize">@dimen/text_small</item>
+    </style>
 
 </resources>

@@ -69,4 +69,6 @@
     <dimen name="welcome_image_side">396dp</dimen>
 
     <dimen name="sponsor_section_title">24sp</dimen>
+
+    <dimen name="about_body_top">10dp</dimen>
 </resources>
