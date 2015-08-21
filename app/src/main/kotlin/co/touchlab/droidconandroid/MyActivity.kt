@@ -203,6 +203,7 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
                     R.string.social -> FindUserKot.startMe(this@MyActivity)
                     R.string.profile -> EditUserProfile.callMe(this@MyActivity)
                     R.string.sponsors -> startActivity(WelcomeActivity.getLaunchIntent(this@MyActivity, true))
+                    R.string.about -> AboutActivity.callMe(this@MyActivity)
                 }
 
                 if (fragment != null) {

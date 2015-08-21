@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/header"
+        android:text="@string/about_app_header"
+        style="@style/about_header" />
+
+    <TextView
+        android:id="@+id/body"
+        android:layout_below="@+id/header"
+        android:text="@string/about_app"
+        style="@style/about_body"/>
+
+    <Button
+        android:id="@+id/more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/body"
+        android:layout_alignParentRight="true"
+        android:text="@string/more"
+        android:textColor="@color/accent"
+        style="?android:attr/borderlessButtonStyle"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/more"
+        android:background="@color/divider_grey"/>
+
+</RelativeLayout>

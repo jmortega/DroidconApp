@@ -34,6 +34,10 @@
             android:name=".EmailLoginActivity"
             android:label="Email Login" />
         <activity
+            android:name=".AboutActivity"
+            android:label="@string/about" />
+
+        <activity
             android:name=".ScheduleDataActivity"
             android:label="@string/title_activity_debug_schedule_display" />
 
