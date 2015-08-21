@@ -295,17 +295,18 @@
                 android:text="@string/public_email"/>
 
             <CheckBox
-                android:id="@+id/public_email"
+                android:id="@+id/hide_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@+id/name"
-                android:layout_alignTop="@id/public_email_label"/>
+                android:layout_alignTop="@id/public_email_label"
+                android:checked="true"/>
 
             <TextView
                 android:id="@+id/bioLabel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/public_email"
+                android:layout_below="@id/hide_email"
                 android:layout_marginLeft="@dimen/profile_header"
                 android:layout_marginTop="@dimen/profile_header_vertical_margin"
                 android:layout_marginBottom="@dimen/profile_header_vertical_margin"

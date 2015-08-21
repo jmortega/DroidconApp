@@ -24,7 +24,7 @@ class UpdateUserProfileTask(c: Context, val name: String?,
                             val phone: String?,
                             val email: String?,
                             val gPlus: String?,
-                            val shareEmail: Boolean) : DatabaseTaskKot(c)
+                            val emailPublic: Boolean) : DatabaseTaskKot(c)
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {
         return false
@@ -49,7 +49,7 @@ class UpdateUserProfileTask(c: Context, val name: String?,
                 userAccount.phone = phone
                 userAccount.email = email
                 userAccount.gPlus = gPlus
-                userAccount.emailPublic = shareEmail
+                userAccount.emailPublic = emailPublic
                 dao.createOrUpdate(userAccount)
 
                 AppPrefs.getInstance(context).setName(name)
