@@ -63,6 +63,7 @@
 
     <dimen name="sponsor_padding">5dp</dimen>
     <dimen name="sponsor_section_padding">15dp</dimen>
+    <dimen name="sponsor_section_padding2">20dp</dimen>
 
     <dimen name="sponsor_top_padding">24dp</dimen>
 </resources>
