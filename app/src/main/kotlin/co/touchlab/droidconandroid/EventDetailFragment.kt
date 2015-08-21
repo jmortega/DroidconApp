@@ -155,7 +155,7 @@ class EventDetailFragment() : Fragment()
         updateToolbar(event)
         updateFAB(event)
 
-        updateContent(event, eventDetailTask.speakers)
+        updateContent(event, eventDetailTask.speakers, eventDetailTask.conflict)
    }
 
     public fun onEventMainThread(@suppress("UNUSED_PARAMETER") task: AddRsvpTaskKot)
@@ -293,7 +293,7 @@ class EventDetailFragment() : Fragment()
     /**
      * Adds all the content to the recyclerView
      */
-    private fun updateContent(event: Event, speakers: ArrayList<UserAccount>?)
+    private fun updateContent(event: Event, speakers: ArrayList<UserAccount>?, conflict: Boolean)
     {
         var adapter = EventDetailAdapter(getActivity(), trackColor)
 
@@ -311,6 +311,8 @@ class EventDetailFragment() : Fragment()
             adapter.addBody("<i><b>"+ getResources().getString(R.string.event_now) +"</b></i>")
         else if(event.isPast())
             adapter.addBody("<i><b>"+ getResources().getString(R.string.event_past) +"</b></i>")
+        else if(conflict)
+            adapter.addBody("<i><b>"+ getResources().getString(R.string.event_conflict) +"</b></i>")
 
         //Description text
         if (!TextUtils.isEmpty(event.description))

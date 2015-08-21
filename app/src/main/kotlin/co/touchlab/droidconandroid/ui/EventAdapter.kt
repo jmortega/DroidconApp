@@ -17,6 +17,17 @@ import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Date
 
+fun hasConflict(event: Event, dataSet: List<ScheduleBlock>):Boolean
+{
+    for (ce in dataSet) {
+        if(ce is Event) {
+            if (event.id != ce.id && !TextUtils.isEmpty(ce.rsvpUuid) && event.startDateLong <= ce.endDateLong && event.endDateLong >= ce.startDateLong)
+                return true
+        }
+    }
+
+    return false
+}
 /**
  *
  * Created by izzyoji :) on 8/6/15.
@@ -60,6 +71,8 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         throw UnsupportedOperationException()
     }
 
+
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         val context = holder!!.itemView.getContext()
         val resources = context.getResources()
@@ -80,6 +93,8 @@ class EventAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.rsvp.setVisibility(View.VISIBLE)
                 if(event.isNow())
                     holder.rsvp.setImageDrawable(ResourcesCompat.getDrawable(context, R.drawable.ic_play))
+                else if(!event.isPast() && hasConflict(event, dataSet))
+                    holder.rsvp.setImageDrawable(ResourcesCompat.getDrawable(context, R.drawable.ic_check_red))
                 else if(allEvents)
                     holder.rsvp.setImageDrawable(ResourcesCompat.getDrawable(context, R.drawable.ic_check_green))
                 else
