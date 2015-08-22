@@ -13,6 +13,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.neenbedankt.android-apt'
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -122,4 +123,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.1@aar') {
         transitive = true;
     }
+
+    compile 'com.j256.ormlite:ormliteer-android:0.2.0.5'
+    apt 'com.koenv:ormlite-processor:0.2.0.5'
 }

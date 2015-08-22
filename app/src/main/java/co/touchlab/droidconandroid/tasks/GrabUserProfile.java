@@ -1,6 +1,5 @@
 package co.touchlab.droidconandroid.tasks;
 
-import android.app.Activity;
 import android.content.Context;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;

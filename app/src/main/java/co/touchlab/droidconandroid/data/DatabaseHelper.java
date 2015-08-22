@@ -4,10 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.misc.TransactionManager;
-import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.android.squeaky.Dao;
+import com.j256.ormlite.android.squeaky.SqueakyOpenHelper;
 import com.j256.ormlite.table.TableUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +18,7 @@ import co.touchlab.droidconandroid.data.staff.EventAttendee;
 /**
  * Created by kgalligan on 6/28/14.
  */
-public class DatabaseHelper extends OrmLiteSqliteOpenHelper
+public class DatabaseHelper extends SqueakyOpenHelper
 {
 
     private static final String DATABASE_FILE_NAME = "droidcon";
@@ -45,6 +43,34 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
 
 
     @Override
+    public void onCreate(SQLiteDatabase db)
+    {
+        try
+        {
+            TableUtils.createTables(db, tableClasses);
+        }
+        catch(SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    {
+        try
+        {
+            TableUtils.dropTables(db, true, tableClasses);
+        }
+        catch(SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        onCreate(db);
+    }
+
+    @Override
     public void onOpen(SQLiteDatabase db)
     {
         super.onOpen(db);
@@ -52,122 +78,36 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     }
 
     // @reminder Ordering matters, create foreign key dependant classes later
-    private final Class[] tableClasses = new Class[]{
-            Venue.class
-            , Event.class
-            , Block.class
-            , Invite.class
-            , UserAccount.class
-            , EventAttendee.class
-            , EventSpeaker.class
-    };
-
-    //todo blow this up
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource)
-    {
-        try
-        {
-            for (Class mTableClass : tableClasses)
-            {
-                TableUtils.getCreateTableStatements(connectionSource, mTableClass);
-                TableUtils.createTable(connectionSource, mTableClass);
-            }
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void onUpgrade(final SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion, int newVersion)
-    {
-
-        for (int i = tableClasses.length - 1; i >= 0; i--)
-        {
-            Class tableClass = tableClasses[i];
-            try
-            {
-                TableUtils.dropTable(connectionSource, tableClass, true);
-            }
-            catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-
-        onCreate(sqLiteDatabase, connectionSource);
-    }
+    private final Class[] tableClasses = new Class[] {Venue.class, Event.class, Block.class, Invite.class, UserAccount.class, EventAttendee.class, EventSpeaker.class};
 
     @NotNull
     public Dao<Venue, Long> getVenueDao()
     {
-        try
-        {
-            return (Dao<Venue, Long>) getDao(Venue.class);
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return (Dao<Venue, Long>) getDao(Venue.class);
     }
 
     @NotNull
     public Dao<Event, Long> getEventDao()
     {
-        try
-        {
-            return (Dao<Event, Long>) getDao(Event.class);
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return (Dao<Event, Long>) getDao(Event.class);
     }
 
     @NotNull
     public Dao<UserAccount, Long> getUserAccountDao()
     {
-        try
-        {
-            return (Dao<UserAccount, Long>) getDao(UserAccount.class);
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return (Dao<UserAccount, Long>) getDao(UserAccount.class);
     }
 
     @NotNull
     public Dao<EventSpeaker, Long> getEventSpeakerDao()
     {
-        try
-        {
-            return (Dao<EventSpeaker, Long>) getDao(EventSpeaker.class);
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return (Dao<EventSpeaker, Long>) getDao(EventSpeaker.class);
     }
 
     @NotNull
     public Dao<Block, Long> getBlockDao()
     {
-        try
-        {
-            return (Dao<Block, Long>) getDao(Block.class);
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public TransactionManager createTransactionManager()
-    {
-        return new TransactionManager(getConnectionSource());
+        return (Dao<Block, Long>) getDao(Block.class);
     }
 
     /**
@@ -176,15 +116,21 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
      */
     public void performTransactionOrThrowRuntime(Callable<Void> transaction)
     {
+        SQLiteDatabase db = getWritableDatabase();
         try
         {
-            TransactionManager transactionManager = createTransactionManager();
-            transactionManager.callInTransaction(transaction);
+            db.beginTransaction();
+            transaction.call();
+            db.setTransactionSuccessful();
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             Log.e(DatabaseHelper.class.getName(), e.getMessage());
             throw new RuntimeException(e);
+        }
+        finally
+        {
+            db.endTransaction();
         }
     }
 

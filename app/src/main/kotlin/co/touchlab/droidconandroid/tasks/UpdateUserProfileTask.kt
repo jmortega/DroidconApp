@@ -15,7 +15,7 @@ import com.crashlytics.android.Crashlytics
 /**
  * Created by kgalligan on 8/3/14.
  */
-class UpdateUserProfileTask(c: Context, val name: String?,
+class UpdateUserProfileTask(val name: String?,
                             val profile: String?,
                             val company: String?,
                             val twitter: String?,

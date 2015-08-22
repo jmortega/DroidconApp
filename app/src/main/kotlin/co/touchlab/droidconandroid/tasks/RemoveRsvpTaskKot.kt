@@ -1,14 +1,12 @@
 package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
-import co.touchlab.droidconandroid.data.Event
-import java.util.concurrent.Callable
-import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 import co.touchlab.droidconandroid.tasks.persisted.RemoveRsvp
+import java.util.concurrent.Callable
 
 /**
  * Created by kgalligan on 7/20/14.

@@ -6,7 +6,6 @@ import com.crashlytics.android.Crashlytics;
 
 import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask;
 import co.touchlab.droidconandroid.data.AppPrefs;
-import co.touchlab.droidconandroid.network.BasicIdResult;
 import co.touchlab.droidconandroid.network.DataHelper;
 import co.touchlab.droidconandroid.network.RsvpRequest;
 

@@ -1,6 +1,5 @@
 package co.touchlab.droidconandroid.ui
 
-import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.support.v7.widget.RecyclerView
@@ -13,8 +12,6 @@ import android.widget.TextView
 import co.touchlab.droidconandroid.R
 import co.touchlab.droidconandroid.UserDetailFragment
 import co.touchlab.droidconandroid.data.AppPrefs
-import co.touchlab.droidconandroid.utils.CustomTarget
-import co.touchlab.droidconandroid.utils.PaletteTransformation
 import com.squareup.picasso.Picasso
 import com.wnafee.vector.compat.ResourcesCompat
 

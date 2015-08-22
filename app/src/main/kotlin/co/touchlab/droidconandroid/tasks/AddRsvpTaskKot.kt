@@ -1,16 +1,13 @@
 package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
-import co.touchlab.droidconandroid.data.Event
-import java.util.UUID
-import java.util.concurrent.Callable
-import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.tasks.persisted.AddRsvp
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
-import com.crashlytics.android.Crashlytics
+import java.util.UUID
+import java.util.concurrent.Callable
 
 /**
  * Created by kgalligan on 7/20/14.

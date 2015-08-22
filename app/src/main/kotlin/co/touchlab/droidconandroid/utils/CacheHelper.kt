@@ -1,10 +1,10 @@
 package co.touchlab.droidconandroid.utils
 
 import android.content.Context
-import java.io.File
 import org.apache.commons.io.IOUtils
-import java.io.FileInputStream
 import org.apache.commons.lang3.StringUtils
+import java.io.File
+import java.io.FileInputStream
 import java.io.FileWriter
 
 /**

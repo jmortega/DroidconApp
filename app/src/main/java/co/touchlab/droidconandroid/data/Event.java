@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -51,8 +50,8 @@ public class Event implements ScheduleBlock
     @DatabaseField
     public String rsvpUuid;
 
-    @ForeignCollectionField(eager = true, columnName = "eventSpeaker_id")
-    public Collection<EventSpeaker> speakerList;
+    @ForeignCollectionField(foreignFieldName = "event")
+    public List<EventSpeaker> speakerList;
 
     public boolean isRsvped()
     {

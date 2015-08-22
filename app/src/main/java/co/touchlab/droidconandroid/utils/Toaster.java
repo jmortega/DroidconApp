@@ -1,6 +1,7 @@
 package co.touchlab.droidconandroid.utils;
 
 import android.content.Context;
+
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 

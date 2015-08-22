@@ -2,7 +2,7 @@ package co.touchlab.droidconandroid.data;
 
 import android.text.TextUtils;
 
-import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.android.squeaky.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -123,7 +123,7 @@ public class UserAccount
     public static UserAccount findByCode(DatabaseHelper databaseHelper, String code) throws SQLException
     {
         Dao<UserAccount, Long> dao = databaseHelper.getUserAccountDao();
-        List<UserAccount> list = dao.queryBuilder().where().eq("userCode", code).query();
+        List<UserAccount> list = dao.createWhere().eq("userCode", code).query();
         return list.size() == 0 ? null : list.get(0);
     }
 

@@ -23,7 +23,7 @@ class ScheduleDataLoader(val c: Context, val all: Boolean, val day: Long) : Abst
         val databaseHelper = DatabaseHelper.getInstance(getContext())
         val eventDao = databaseHelper.getEventDao()
         val blockDao = databaseHelper.getBlockDao()
-        val baseQuery = eventDao.queryBuilder().where().between("startDateLong", day, day + DateUtils.DAY_IN_MILLIS)
+        val baseQuery = eventDao.createWhere().between("startDateLong", day, day + DateUtils.DAY_IN_MILLIS)
         val events = if(all)
         {
             baseQuery.query()!!
@@ -33,10 +33,14 @@ class ScheduleDataLoader(val c: Context, val all: Boolean, val day: Long) : Abst
             baseQuery.and().isNotNull("rsvpUuid")!!.query()!!
         }
 
-        val blocks = blockDao.queryBuilder().where().between("startDateLong", day, day + DateUtils.DAY_IN_MILLIS).query()
+        val blocks = blockDao.createWhere().between("startDateLong", day, day + DateUtils.DAY_IN_MILLIS).query()
 
         val eventsAndBlocks = ArrayList<ScheduleBlock>()
 
+        for (event in events) {
+            eventDao.fillForeignCollection(event, "speakerList")
+        }
+        
         eventsAndBlocks.addAll(events)
         eventsAndBlocks.addAll(blocks)
 

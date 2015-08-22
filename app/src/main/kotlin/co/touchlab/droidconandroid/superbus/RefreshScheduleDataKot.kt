@@ -16,11 +16,10 @@ import co.touchlab.droidconandroid.network.dao.Convention
 import co.touchlab.droidconandroid.utils.TimeUtils
 import com.crashlytics.android.Crashlytics
 import com.google.gson.Gson
-import com.j256.ormlite.dao.Dao
 import org.apache.commons.lang3.StringUtils
 import java.io.InputStreamReader
 import java.text.ParseException
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.Callable
 
 fun saveConventionData(context: Context?, convention: Convention) {
@@ -73,8 +72,7 @@ fun saveConventionData(context: Context?, convention: Convention) {
 
                                 userAccountDao.createOrUpdate(userAccount)
 
-                                val resultList = eventSpeakerDao.queryBuilder()!!
-                                        .where()!!
+                                val resultList = eventSpeakerDao.createWhere()!!
                                         .eq("event_id", event.id)!!
                                         .and()!!
                                         .eq("userAccount_id", userAccount.id)!!

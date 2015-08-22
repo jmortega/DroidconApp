@@ -3,8 +3,6 @@ package co.touchlab.droidconandroid
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
@@ -26,11 +24,7 @@ import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.droidconandroid.data.Event
 import co.touchlab.droidconandroid.data.Track
 import co.touchlab.droidconandroid.data.UserAccount
-import co.touchlab.droidconandroid.tasks.AddRsvpTaskKot
-import co.touchlab.droidconandroid.tasks.EventDetailLoadTask
-import co.touchlab.droidconandroid.tasks.Queues
-import co.touchlab.droidconandroid.tasks.RemoveRsvpTaskKot
-import co.touchlab.droidconandroid.tasks.TrackDrawableTask
+import co.touchlab.droidconandroid.tasks.*
 import com.wnafee.vector.compat.ResourcesCompat
 import java.text.SimpleDateFormat
 import java.util.ArrayList

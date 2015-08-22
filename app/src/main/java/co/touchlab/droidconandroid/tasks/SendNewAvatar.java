@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import co.touchlab.android.threading.tasks.Task;
-import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by kgalligan on 8/3/14.

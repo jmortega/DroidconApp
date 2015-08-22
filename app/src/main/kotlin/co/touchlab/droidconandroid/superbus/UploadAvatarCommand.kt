@@ -7,7 +7,6 @@ import co.touchlab.android.threading.tasks.Task
 import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask
 import co.touchlab.android.threading.tasks.persisted.PersistedTask
 import co.touchlab.droidconandroid.BuildConfig
-import co.touchlab.droidconandroid.R
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.network.dao.UserInfoResponse

@@ -12,7 +12,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kgalligan on 8/2/14.

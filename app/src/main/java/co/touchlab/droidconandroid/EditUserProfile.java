@@ -170,7 +170,7 @@ public class EditUserProfile extends StickyTaskManagerActivity
     private void saveProfile()
     {
         Queues.localQueue(this).execute(
-                new UpdateUserProfileTask(this, getStringFromEditText(name),
+                new UpdateUserProfileTask(getStringFromEditText(name),
                                           getStringFromEditText(bio),
                                           getStringFromEditText(company),
                                           getStringFromEditText(twitter),

@@ -18,13 +18,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import co.touchlab.android.threading.eventbus.EventBusExt
-import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.droidconandroid.tasks.AbstractLoginTask
 import co.touchlab.droidconandroid.tasks.GoogleLoginTask
 import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.utils.Toaster
 import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.ErrorDialogFragment
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.plus.Plus

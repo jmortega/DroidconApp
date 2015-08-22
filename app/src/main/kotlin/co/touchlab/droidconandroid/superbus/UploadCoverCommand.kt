@@ -6,7 +6,6 @@ import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask
 import co.touchlab.android.threading.tasks.persisted.PersistedTask
 import co.touchlab.droidconandroid.BuildConfig
-import co.touchlab.droidconandroid.R
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.network.dao.UserInfoResponse
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask

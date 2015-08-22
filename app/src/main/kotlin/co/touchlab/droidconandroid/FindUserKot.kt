@@ -2,23 +2,19 @@ package co.touchlab.droidconandroid
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Point
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.SearchView
 import co.touchlab.android.threading.eventbus.EventBusExt
-import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.tasks.sticky.StickyTaskManager
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import co.touchlab.droidconandroid.tasks.FindUserTaskKot
 import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.utils.Toaster
-import com.google.zxing.integration.android.IntentIntegrator
 import org.apache.commons.lang3.StringUtils
 
 /**

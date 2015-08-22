@@ -1,10 +1,9 @@
 package co.touchlab.droidconandroid.tasks
 
-import co.touchlab.android.threading.tasks.TaskQueue
 import android.content.Context
-import co.touchlab.droidconandroid.utils.UserProfileInfo
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
+import co.touchlab.droidconandroid.utils.UserProfileInfo
 
 /**
  * Created by kgalligan on 7/27/14.
