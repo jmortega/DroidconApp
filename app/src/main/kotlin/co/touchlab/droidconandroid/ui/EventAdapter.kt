@@ -21,7 +21,7 @@ fun hasConflict(event: Event, dataSet: List<ScheduleBlock>):Boolean
 {
     for (ce in dataSet) {
         if(ce is Event) {
-            if (event.id != ce.id && !TextUtils.isEmpty(ce.rsvpUuid) && event.startDateLong <= ce.endDateLong && event.endDateLong >= ce.startDateLong)
+            if (event.id != ce.id && !TextUtils.isEmpty(ce.rsvpUuid) && event.startDateLong < ce.endDateLong && event.endDateLong > ce.startDateLong)
                 return true
         }
     }
