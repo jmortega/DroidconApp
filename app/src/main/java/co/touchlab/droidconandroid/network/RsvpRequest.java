@@ -21,6 +21,6 @@ public interface RsvpRequest
     @POST("/dataTest/unRsvpEvent/{eventId}")
     Response removeRsvp(@Path("eventId") Long eventId, @Field("dummy") String justFiller);
 
-    @GET("/dataTest/allRsvps")
-    MyRsvpResponse getMyRsvps()throws Exception;
+    @GET("/dataTest/allRsvps/{conventionId}")
+    MyRsvpResponse getMyRsvps(@Path("conventionId") Long conventionId)throws Exception;
 }

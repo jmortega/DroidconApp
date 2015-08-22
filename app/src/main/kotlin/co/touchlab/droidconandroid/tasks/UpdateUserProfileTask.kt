@@ -2,6 +2,7 @@ package co.touchlab.droidconandroid.tasks
 
 import android.content.Context
 import android.util.Log
+import co.touchlab.android.threading.tasks.Task
 import co.touchlab.android.threading.tasks.helper.RetrofitPersistedTask
 import co.touchlab.android.threading.tasks.persisted.PersistedTask
 import co.touchlab.droidconandroid.data.AppPrefs
@@ -24,7 +25,7 @@ class UpdateUserProfileTask(c: Context, val name: String?,
                             val phone: String?,
                             val email: String?,
                             val gPlus: String?,
-                            val emailPublic: Boolean) : DatabaseTaskKot(c)
+                            val emailPublic: Boolean) : Task()
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {
         return false
@@ -35,9 +36,9 @@ class UpdateUserProfileTask(c: Context, val name: String?,
         val appPrefs = AppPrefs.getInstance(context)
         if (appPrefs.isLoggedIn())
         {
-            databaseHelper.inTransaction {
+            DatabaseHelper.getInstance(context).inTransaction {
                 ->
-                val dao = databaseHelper.getUserAccountDao()
+                val dao = DatabaseHelper.getInstance(context).getUserAccountDao()
                 val userAccount = dao.queryForId(appPrefs.getUserId())!!
                 userAccount.name = name
                 userAccount.profile = profile

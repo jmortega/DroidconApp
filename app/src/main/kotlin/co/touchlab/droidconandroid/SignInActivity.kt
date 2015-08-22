@@ -3,12 +3,15 @@ package co.touchlab.droidconandroid
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +24,8 @@ import co.touchlab.droidconandroid.tasks.GoogleLoginTask
 import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.utils.Toaster
 import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.ErrorDialogFragment
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.plus.Plus
 
@@ -32,6 +37,8 @@ public class SignInActivity : AppCompatActivity() {
 
     public companion object {
         val REQUEST_CODE_RESOLVE_ERR = 9000
+        val DIALOG_ERROR = "dialog_error";
+        val REQUEST_RESOLVE_ERROR = 1001;
         var googleApiClient: GoogleApiClient? = null
 
         public fun getLaunchIntent(c: Context): Intent {
@@ -41,6 +48,8 @@ public class SignInActivity : AppCompatActivity() {
 
     private var okButton: Button? = null
     private var progressBar: View? = null
+
+    private var mResolvingError = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +92,6 @@ public class SignInActivity : AppCompatActivity() {
         EventBusExt.getDefault()!!.register(this)
 
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -165,7 +173,12 @@ public class SignInActivity : AppCompatActivity() {
 
     public inner class OnConnectionFailedListenerImpl() : GoogleApiClient.OnConnectionFailedListener {
         override fun onConnectionFailed(result: ConnectionResult?) {
-            if (result != null && result.hasResolution()) {
+            if(mResolvingError)
+            {
+                return
+            }
+            else if (result != null && result.hasResolution()) {
+                mResolvingError = true;
                 try {
                     result.startResolutionForResult(this@SignInActivity, SignInActivity.REQUEST_CODE_RESOLVE_ERR)
                 } catch (e: IntentSender.SendIntentException) {
@@ -173,7 +186,14 @@ public class SignInActivity : AppCompatActivity() {
                 }
 
             } else {
-                Toaster.showMessage(this@SignInActivity, R.string.google_error)
+                if(result != null) {
+                    showErrorDialog(result.getErrorCode());
+                    mResolvingError = true;
+                }
+                else
+                {
+                    Toaster.showMessage(this@SignInActivity, R.string.google_error)
+                }
             }
 
             okButton!!.setEnabled(true);
@@ -183,7 +203,33 @@ public class SignInActivity : AppCompatActivity() {
 
     }
 
+    fun showErrorDialog( errorCode: Int) {
+        // Create a fragment for the error dialog
+        val dialogFragment = ErrorDialogFragment();
+        // Pass the error that should be displayed
+        val args = Bundle();
+        args.putInt(DIALOG_ERROR, errorCode);
+        dialogFragment.setArguments(args);
+        dialogFragment.show(getSupportFragmentManager(), "errordialog");
+    }
 
+    fun onDialogDismissed()
+    {
+        mResolvingError = false;
+    }
+
+    public inner class ErrorDialogFragment : DialogFragment() {
+
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            val errorCode = this.getArguments().getInt(DIALOG_ERROR);
+            return GoogleApiAvailability.getInstance().getErrorDialog(
+                    this.getActivity(), errorCode, REQUEST_RESOLVE_ERROR);
+        }
+
+        override fun onDismiss(dialog: DialogInterface?) {
+            onDialogDismissed();
+        }
+    }
 }
 
 class AccountAdapter : ArrayAdapter<Account> {

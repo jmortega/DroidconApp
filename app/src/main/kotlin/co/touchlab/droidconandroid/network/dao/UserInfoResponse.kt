@@ -5,6 +5,8 @@ package co.touchlab.droidconandroid.network.dao
  */
 data class UserInfoResponse(var user: UserAccount, var speaking: Array<EventInfo>, var attending: Array<EventInfo>)
 
+data class UserSearchResponse(var results: Array<UserAccount>)
+
 data class LoginResult(var uuid: String, var userId: Long, var user: UserAccount, var speaking: Array<EventInfo>, var attending: Array<EventInfo>)
 
 data class UserAccount(var id: Long, var name: String, var profile: String,

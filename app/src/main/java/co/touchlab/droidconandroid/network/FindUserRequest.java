@@ -1,6 +1,7 @@
 package co.touchlab.droidconandroid.network;
 
 import co.touchlab.droidconandroid.network.dao.UserInfoResponse;
+import co.touchlab.droidconandroid.network.dao.UserSearchResponse;
 import retrofit.http.GET;
 import retrofit.http.Path;
 
@@ -10,8 +11,8 @@ import retrofit.http.Path;
 public interface FindUserRequest
 {
     @GET("/dataTest/findUserByCode/{userCode}")
-    UserInfoResponse getUserInfo(@Path("userCode") String userCode) throws Exception;
+    UserInfoResponse getUserInfo(@Path("userCode") String userCode);
 
-    @GET("/dataTest/findUserById/{userId}")
-    UserInfoResponse getUserInfo(@Path("userId")Long userId) throws Exception;
+    @GET("/dataTest/findUserBySearch/{search}")
+    UserSearchResponse searchUsers(@Path("search") String search);
 }

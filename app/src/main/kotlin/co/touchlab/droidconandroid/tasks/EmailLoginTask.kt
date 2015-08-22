@@ -7,7 +7,6 @@ import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.Task
 import co.touchlab.droidconandroid.data.UserAuthHelper
 import co.touchlab.droidconandroid.network.DataHelper
-import co.touchlab.droidconandroid.network.EmailLoginRequest
 import co.touchlab.droidconandroid.network.GoogleLoginRequest
 import co.touchlab.droidconandroid.network.dao.LoginResult
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
@@ -21,25 +20,6 @@ import org.apache.commons.lang3.StringUtils
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class EmailLoginTask(val email: String, val name: String?, val password: String?) : AbstractLoginTask()
-{
-    override fun handleError(context: Context?, e: Throwable?): Boolean {
-        Log.w("dude", "dude2", e);
-        return false
-    }
-
-    override fun run(context: Context?)
-    {
-        val restAdapter = DataHelper.makeRequestAdapter(context)
-        val emailLoginRequest = restAdapter!!.create(javaClass<EmailLoginRequest>())!!
-        val loginResult = emailLoginRequest.emailLogin(email, password, name)
-
-        handleLoginResult(context, loginResult)
-
-        EventBusExt.getDefault()!!.post(this);
-    }
-}
-
 class GoogleLoginTask(val email: String, val name: String?, val imageURL: String?, val coverURL: String?) : AbstractLoginTask()
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {

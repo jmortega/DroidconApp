@@ -48,31 +48,6 @@ class FindUserTaskKot(val code: String) : AbstractFindUserTask()
 
 data class FindUserResponse(val user: UserAccount)
 
-class FindUserByIdTask(val id: Long) : AbstractFindUserTask()
-{
-    override fun run(context: Context?) {
-        handleData(context!!, fun(): UserAccount? = DatabaseHelper.getInstance(context).getUserAccountDao().queryForId(id), fun(): UserInfoResponse? {
-            val restAdapter = DataHelper.makeRequestAdapter(context)
-            val findUserRequest = restAdapter!!.create(javaClass<FindUserRequest>())!!
-            try {
-                return findUserRequest.getUserInfo(id)
-            } catch(e: RetrofitError) {
-                if(e.getResponse().getStatus() == HttpURLConnection.HTTP_NOT_FOUND) {
-                    errorStringCode = R.string.error_user_not_found
-                }
-                else if(e.getKind()== RetrofitError.Kind.NETWORK){
-                    errorStringCode = R.string.network_error
-                }
-                else {
-                    throw RuntimeException(e)
-                }
-            }
-
-            return null
-        })
-    }
-}
-
 abstract class AbstractFindUserTask() : Task()
 {
     public var user: UserAccount? = null

@@ -20,6 +20,7 @@ import android.view.MenuItem
 import android.view.View
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.data.AppPrefs
+import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.data.Track
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.UploadCoverCommand
@@ -75,7 +76,6 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
         {
             nfcAdapter.setNdefPushMessageCallback(this,this)
         }
-
 
         if(savedInstanceState == null)
         {
@@ -276,8 +276,20 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
     override fun createNdefMessage(event: NfcEvent?): NdefMessage?
     {
         val appPrefs = AppPrefs.getInstance(this)
-        var id = ByteBuffer.allocate(java.lang.Long.SIZE / java.lang.Byte.SIZE).putLong(appPrefs.getUserId()).array()
-        var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", id)
+
+        val userCode = DatabaseHelper.getInstance(this).getUserAccountDao().queryForId(appPrefs.getUserId()).userCode
+        val byteBuffer = ByteBuffer.allocate((userCode.length() * java.lang.Character.SIZE) / java.lang.Byte.SIZE)
+        for(i in 0..(userCode.length()-1))
+        {
+            byteBuffer.putChar(userCode.charAt(i))
+        }
+        /*for(c in userCode)
+        {
+
+        }*/
+        /*var id = byteBuffer.putChar(appPrefs.getUserId()).array()
+        var id = ByteBuffer.allocate(java.lang.Long.SIZE / java.lang.Byte.SIZE).putLong(appPrefs.getUserId()).array()*/
+        var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", byteBuffer.array())
                    ,NdefRecord.createApplicationRecord("co.touchlab.droidconandroid")))
         return msg;
     }

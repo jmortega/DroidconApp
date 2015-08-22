@@ -15,11 +15,11 @@ class UserDetailActivity : AppCompatActivity(), UserDetailFragment.Companion.Fin
 {
     companion object
     {
-        val USER_ID = "USER_ID"
-        fun callMe(a: Activity, id: Long)
+        val USER_CODE = "USER_CODE"
+        fun callMe(a: Activity, userCode: String)
         {
             val i = Intent(a, javaClass<UserDetailActivity>())
-            i.putExtra(USER_ID, id)
+            i.putExtra(USER_CODE, userCode)
             a.startActivity(i)
         }
     }
@@ -65,7 +65,13 @@ class UserDetailActivity : AppCompatActivity(), UserDetailFragment.Companion.Fin
 
         var newIntent = Intent()
         var buf = ByteBuffer.wrap(msg.getRecords()[0].getPayload())
-        newIntent.putExtra(USER_ID, buf.getLong())
+        val sb = StringBuilder()
+        while(buf.hasRemaining())
+        {
+            sb.append(buf.getChar())
+        }
+
+        newIntent.putExtra(USER_CODE, sb.toString())
         setIntent(newIntent)
     }
 

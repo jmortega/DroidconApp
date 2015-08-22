@@ -141,7 +141,7 @@ class EventDetailFragment() : Fragment()
 
     private fun startDetailRefresh()
     {
-        Queues.localQueue(getActivity()).execute(EventDetailLoadTask(getActivity()!!, findEventIdArg()))
+        Queues.localQueue(getActivity()).execute(EventDetailLoadTask(findEventIdArg()))
     }
 
     public fun onEventMainThread(eventDetailTask: EventDetailLoadTask)
@@ -218,9 +218,9 @@ class EventDetailFragment() : Fragment()
         if(!event.isPast()) {
             fab!!.setOnClickListener { v ->
                 if (event.isRsvped()) {
-                    Queues.localQueue(getActivity()).execute(RemoveRsvpTaskKot(getActivity()!!, event.id))
+                    Queues.localQueue(getActivity()).execute(RemoveRsvpTaskKot(event.id))
                 } else {
-                    Queues.localQueue(getActivity()).execute(AddRsvpTaskKot(getActivity()!!, event.id))
+                    Queues.localQueue(getActivity()).execute(AddRsvpTaskKot(event.id))
                 }
             }
         }

@@ -96,14 +96,15 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
     public fun onEventMainThread(findUserTask: AbstractFindUserTask)
     {
         if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            val userId = findUserTask.user?.id
-            if (findUserTask.isError() || userId == null) {
+            val userCode = findUserTask.user?.userCode
+
+            if (findUserTask.isError() || StringUtils.isEmpty(userCode)) {
                 Toaster.showMessage(this, findUserTask.errorStringCode!!)
             } else {
                 val fragmentManager = getSupportFragmentManager()
                 val ft = fragmentManager!!.beginTransaction()!!
 
-                ft.replace(R.id.fragmentContainer, UserDetailFragment.createFragment(userId), UserDetailFragment.TAG)
+                ft.replace(R.id.fragmentContainer, UserDetailFragment.createFragment(userCode!!), UserDetailFragment.TAG)
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();

@@ -146,7 +146,7 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
         {
             try {
                 val rsvpRequest = restAdapter.create(javaClass<RsvpRequest>())!!
-                val myRsvpResponse = rsvpRequest.getMyRsvps()
+                val myRsvpResponse = rsvpRequest.getMyRsvps(BuildConfig.CONVENTION_ID.toLong())
                 val databaseHelper = DatabaseHelper.getInstance(context)
                 databaseHelper.performTransactionOrThrowRuntime (object : Callable<Void> {
                     //            throws(javaClass<Exception>())

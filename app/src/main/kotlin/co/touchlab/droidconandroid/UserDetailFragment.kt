@@ -18,11 +18,12 @@ import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.UserAccount
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
-import co.touchlab.droidconandroid.tasks.FindUserByIdTask
+import co.touchlab.droidconandroid.tasks.FindUserTaskKot
 import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.utils.Toaster
 import com.squareup.picasso.Picasso
 import com.wnafee.vector.compat.ResourcesCompat
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -67,12 +68,11 @@ class UserDetailFragment() : Fragment()
         val LINKEDIN_PREFIX: String = "http://www.linkedin.com/in/"
         val FACEBOOK_PREFIX: String = "http://www.facebook.com/"
         val PHONE_PREFIX: String = "tel:"
-        val USER_ID = "USER_ID"
 
-        fun createFragment(id: Long): UserDetailFragment
+        fun createFragment(code: String): UserDetailFragment
         {
             val bundle = Bundle()
-            bundle.putLong(USER_ID, id);
+            bundle.putString(UserDetailActivity.USER_CODE, code);
 
             val f = UserDetailFragment()
             f.setArguments(bundle);
@@ -89,7 +89,7 @@ class UserDetailFragment() : Fragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBusExt.getDefault().register(this)
-        Queues.networkQueue(getActivity()).execute(FindUserByIdTask(findUserIdArg()))
+        Queues.networkQueue(getActivity()).execute(FindUserTaskKot(findUserCodeArg()))
     }
 
     override fun onDestroy() {
@@ -97,18 +97,18 @@ class UserDetailFragment() : Fragment()
         EventBusExt.getDefault().unregister(this)
     }
 
-    private fun findUserIdArg(): Long
+    private fun findUserCodeArg(): String
     {
-        var userId = getArguments()?.getLong(USER_ID, -1)
-        if (userId == null || userId == -1L)
+        var userCode = getArguments()?.getString(UserDetailActivity.USER_CODE)
+        if (StringUtils.isEmpty(userCode))
         {
-            userId = getActivity()!!.getIntent()!!.getLongExtra(USER_ID, -1)
+            userCode = getActivity()!!.getIntent()!!.getStringExtra(UserDetailActivity.USER_CODE)
         }
 
-        if (userId == null || userId == -1L)
-            throw IllegalArgumentException("Must set user id");
+        if (StringUtils.isEmpty(userCode))
+            throw IllegalArgumentException("Must set user code");
 
-        return userId!!
+        return userCode!!
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?

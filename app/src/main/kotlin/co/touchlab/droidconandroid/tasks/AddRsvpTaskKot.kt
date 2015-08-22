@@ -6,6 +6,8 @@ import java.util.UUID
 import java.util.concurrent.Callable
 import co.touchlab.android.threading.tasks.TaskQueue
 import co.touchlab.android.threading.eventbus.EventBusExt
+import co.touchlab.android.threading.tasks.Task
+import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.tasks.persisted.AddRsvp
 import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 import com.crashlytics.android.Crashlytics
@@ -13,7 +15,7 @@ import com.crashlytics.android.Crashlytics
 /**
  * Created by kgalligan on 7/20/14.
  */
-open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
+open class AddRsvpTaskKot(val eventId : Long) : Task()
 {
     override fun handleError(context: Context?, e: Throwable?): Boolean {
         //This is all local.  Should work.
@@ -22,12 +24,12 @@ open class AddRsvpTaskKot(c : Context, val eventId : Long) : DatabaseTaskKot(c)
 
     override fun run(context: Context?)
     {
-        databaseHelper.performTransactionOrThrowRuntime(object : Callable<Void>
+        DatabaseHelper.getInstance(context).performTransactionOrThrowRuntime(object : Callable<Void>
         {
 //            throws(javaClass<Exception>())
             override fun call(): Void?
             {
-                val dao = databaseHelper.getEventDao()
+                val dao = DatabaseHelper.getInstance(context).getEventDao()
                 val event = dao.queryForId(eventId)
                 if (event != null && event.rsvpUuid == null)
                 {
