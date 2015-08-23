@@ -20,7 +20,10 @@ public class PersistedTaskQueueFactory
             PersistedTaskQueueConfig build;
             try
             {
-                build = new PersistedTaskQueueConfig.Builder().build(context);
+                build = new PersistedTaskQueueConfig
+                        .Builder()
+                        .addQueueListener(new BackoffRetryListener())
+                        .build(context);
             }
             catch(ConfigException e)
             {
