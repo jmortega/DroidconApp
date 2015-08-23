@@ -13,7 +13,9 @@
         android:id="@+id/body"
         android:layout_below="@+id/header"
         android:text="@string/about_app"
-        style="@style/about_body"/>
+        android:autoLink="web"
+        style="@style/about_body"
+        />
 
     <Button
         android:id="@+id/more"

@@ -46,9 +46,11 @@ class AboutActivity : AppCompatActivity()
         recycler!!.setLayoutManager(LinearLayoutManager(this))
 
         var adapter = AboutAdapter()
-        adapter.add(R.string.about_app_header, R.string.about_app)
+
         adapter.add(R.string.about_con_header, R.string.about_con)
         adapter.add(R.string.about_touch_header, R.string.about_touch)
+        adapter.add(R.string.about_app_header, R.string.about_app)
+
         recycler!!.setAdapter(adapter)
     }
 

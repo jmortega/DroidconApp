@@ -85,20 +85,17 @@
     <string name="action_search">Find Attendees</string>
 
     <string name="about_app_header">About the app</string>
-    <string name="about_app">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\n
-        Credits\nPersonname Person\nPersonname Person\nPersonname Person\nPersonname Person\nPersonname Person\nPersonname Person\nExcepteur sint occaecat cupidatat non proident.\n</string>
+    <string name="about_app">
+        The Droidcon NYC app has been coded in-house by Touch Lab\'s team.  Worked on by Liam, Izzy, Sam and Kevin.\n\n
+        The code is open source, at: https://github.com/touchlab/DroidconApp\n\n
+        Its a bit of an experiment, written largely in Kotlin, and including a new ORM framework. Fun stuff.
+    </string>
     <string name="about_con_header">About Droidcon</string>
-    <string name="about_con">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\n
-        Credits\nPersonname Person\nPersonname Person\nPersonname Person\nPersonname Person\nPersonname Person\nPersonname Person\nExcepteur sint occaecat cupidatat non proident.\n</string>
-    <string name="about_touch_header">About touchlab</string>
-    <string name="about_touch">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\n
-        Credits\nPersonname Person\nPersonname Person\nPersonname Person\nPersonname Person\nPersonname Person\nPersonname Person\nExcepteur sint occaecat cupidatat non proident.\n</string>
+    <string name="about_con">The Droidcon conferences around the world support the Android Platform and create a global network for developers and companies. We offer best-in-class presentations from leaders in all parts of the Android ecosystem, including core development, embedded solutions, augmented reality, business solutions and games.\n\n
+    http://droidcon.com/</string>
+    <string name="about_touch_header">About Touch Lab</string>
+    <string name="about_touch">Touch Lab is NY\'s premiere Android development shop.  Started in 2011, Touch Lab does one thing.  Android development.  We also run the big NY Android meetup http://www.meetup.com/android-developers-nyc/.\n\n
+    http://touchlab.co/</string>
     <string name="more">More</string>
     <string name="less">Less</string>
 
