@@ -75,7 +75,6 @@ class ScheduleDataLoader(val c: Context, val all: Boolean, val day: Long) : Abst
 
     public fun onEvent(task: RefreshScheduleDataKot)
     {
-        AppPrefs.getInstance(c).setRefreshTime(System.currentTimeMillis())
         onContentChanged()
     }
 

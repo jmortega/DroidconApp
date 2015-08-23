@@ -36,7 +36,9 @@ class RemoveRsvpTaskKot(val eventId : Long) : Task()
                 return null
             }
         })
+    }
 
+    override fun onComplete(context: Context?) {
         EventBusExt.getDefault()!!.post(this);
     }
 }

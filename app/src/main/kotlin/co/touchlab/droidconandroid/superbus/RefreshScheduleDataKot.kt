@@ -13,6 +13,7 @@ import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.RefreshScheduleDataRequest
 import co.touchlab.droidconandroid.network.RsvpRequest
 import co.touchlab.droidconandroid.network.dao.Convention
+import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 import co.touchlab.droidconandroid.utils.TimeUtils
 import com.crashlytics.android.Crashlytics
 import com.google.gson.Gson
@@ -124,6 +125,13 @@ open class SeedScheduleDataTask : Task() {
  * Created by kgalligan on 7/20/14.
  */
 open class RefreshScheduleDataKot : RetrofitPersistedTask() {
+    companion object
+    {
+        fun callMe(c: Context)
+        {
+            PersistedTaskQueueFactory.getInstance(c).execute(RefreshScheduleDataKot())
+        }
+    }
     override fun logSummary(): String {
         return this.javaClass.getSimpleName()
     }
@@ -169,6 +177,12 @@ open class RefreshScheduleDataKot : RetrofitPersistedTask() {
 
         }
 
+        AppPrefs.getInstance(context).setRefreshTime(System.currentTimeMillis())
+
+
+    }
+
+    override fun onComplete(context: Context?) {
         EventBusExt.getDefault()!!.post(this)
     }
 

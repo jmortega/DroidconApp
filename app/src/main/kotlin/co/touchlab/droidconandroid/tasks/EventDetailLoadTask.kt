@@ -39,7 +39,9 @@ open class EventDetailLoadTask(val eventId: Long) : Task()
         {
             speakers!!.add(eventSpeaker.userAccount!!)
         }
+    }
 
+    override fun onComplete(context: Context?) {
         EventBusExt.getDefault()?.post(this)
     }
 }

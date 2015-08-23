@@ -151,14 +151,14 @@ public class AppPrefs
         return getString(CONVENTION_END, null);
     }
 
-    public void setRefreshTime(@NotNull Long time)
+    public void setRefreshTime(@NotNull long time)
     {
         setLong(REFRESH_TIME, time);
     }
 
-    public Long getRefreshTime()
+    public long getRefreshTime()
     {
-        return getLong(REFRESH_TIME, -1l);
+        return prefs.getLong(REFRESH_TIME, 0);
     }
 
     //helper methods

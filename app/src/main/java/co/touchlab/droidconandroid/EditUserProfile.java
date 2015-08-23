@@ -54,7 +54,6 @@ public class EditUserProfile extends StickyTaskManagerActivity
 {
     public static final String HTTPS_S3_AMAZONAWS_COM_DROIDCONIMAGES = "https://s3.amazonaws.com/droidconimages/";
     private EditText  name;
-    private TextView  userCode;
     private EditText  company;
     private EditText  facebook;
     private EditText  twitter;
@@ -91,7 +90,6 @@ public class EditUserProfile extends StickyTaskManagerActivity
 
         name = (EditText) findViewById(R.id.name);
         email = (EditText) findViewById(R.id.email);
-        userCode = (TextView) findViewById(R.id.myUserCode);
         company = (EditText) findViewById(R.id.company);
         facebook = (EditText) findViewById(R.id.facebook);
         twitter = (EditText) findViewById(R.id.twitter);
@@ -200,7 +198,7 @@ public class EditUserProfile extends StickyTaskManagerActivity
         //This is a little shitty.  Assuming an empty code means we haven't
         //done the initial data set.  Updates should only be coming from
         //avatar uploads
-        if(StringUtils.isEmpty(userCode.getText()))
+        if(StringUtils.isEmpty(email.getText()))
         {
             name.setText(ua.name);
             email.setText(ua.email);
@@ -211,7 +209,6 @@ public class EditUserProfile extends StickyTaskManagerActivity
             linkedIn.setText(ua.linkedIn);
             gPlus.setText(ua.gPlus);
             website.setText(ua.website);
-            userCode.setText(ua.userCode);
             bio.setText(ua.profile);
             //If email is set to null or not public in the UA then we want to check the "hide email" box
             hideEmail.setChecked(ua.emailPublic == null

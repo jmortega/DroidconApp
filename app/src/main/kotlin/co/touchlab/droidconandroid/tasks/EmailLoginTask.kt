@@ -7,7 +7,6 @@ import co.touchlab.android.threading.tasks.Task
 import co.touchlab.droidconandroid.data.UserAuthHelper
 import co.touchlab.droidconandroid.network.DataHelper
 import co.touchlab.droidconandroid.network.GoogleLoginRequest
-import co.touchlab.droidconandroid.network.dao.LoginResult
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.UploadCoverCommand
@@ -19,8 +18,11 @@ import org.apache.commons.lang3.StringUtils
 /**
  * Created by kgalligan on 7/20/14.
  */
-class GoogleLoginTask(val email: String, val name: String?, val imageURL: String?, val coverURL: String?) : AbstractLoginTask()
+class GoogleLoginTask(val email: String, val name: String?, val imageURL: String?, val coverURL: String?) : Task()
 {
+    var failed: Boolean = false
+    var firstLogin: Boolean = false
+
     override fun handleError(context: Context?, e: Throwable?): Boolean {
         Crashlytics.logException(e)
         failed = true
@@ -42,29 +44,19 @@ class GoogleLoginTask(val email: String, val name: String?, val imageURL: String
         val loginRequest = restAdapter!!.create(javaClass<GoogleLoginRequest>())!!
         val loginResult = loginRequest.login(token, name)
 
-        handleLoginResult(context, loginResult)
+        val userAccount = UserAuthHelper.processLoginResonse(context!!, loginResult!!)
+        firstLogin = StringUtils.isEmpty(userAccount.profile) && StringUtils.isEmpty(userAccount.company)
+
+        RefreshScheduleDataKot.callMe(context)
+
         if (!TextUtils.isEmpty(imageURL))
             PersistedTaskQueueFactory.getInstance(context).execute(UploadAvatarCommand(imageURL!!))
 
         if (!TextUtils.isEmpty(coverURL))
             PersistedTaskQueueFactory.getInstance(context).execute(UploadCoverCommand(coverURL!!))
-
-        EventBusExt.getDefault()!!.post(this);
     }
 
-
-}
-
-abstract class AbstractLoginTask : Task()
-{
-    var failed: Boolean = false
-    var firstLogin: Boolean = false
-
-    fun handleLoginResult(context: Context?, loginResult: LoginResult?)
-    {
-        val userAccount = UserAuthHelper.processLoginResonse(context!!, loginResult!!)
-        firstLogin = StringUtils.isEmpty(userAccount.profile) && StringUtils.isEmpty(userAccount.company)
-
-        PersistedTaskQueueFactory.getInstance(context).execute(RefreshScheduleDataKot())
+    override fun onComplete(context: Context?) {
+        EventBusExt.getDefault()!!.post(this);
     }
 }

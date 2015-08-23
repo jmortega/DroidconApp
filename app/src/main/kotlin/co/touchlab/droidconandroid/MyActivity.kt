@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.text.format.DateUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -22,6 +23,8 @@ import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.DatabaseHelper
 import co.touchlab.droidconandroid.data.Track
+import co.touchlab.droidconandroid.gcm.RegistrationIntentService
+import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
 import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.UploadCoverCommand
 import co.touchlab.droidconandroid.ui.*
@@ -100,6 +103,22 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
         }
 
         EventBusExt.getDefault().register(this)
+
+        // Start IntentService to register this application with GCM.
+        val intent = Intent(this, javaClass<RegistrationIntentService>())
+        startService(intent)
+    }
+
+    override fun onResume() {
+        super<AppCompatActivity>.onResume()
+        var prefs = AppPrefs.getInstance(this)
+        var lastRefresh = prefs.getRefreshTime()
+
+        if (prefs.isLoggedIn()
+                && (System.currentTimeMillis() - lastRefresh > (DateUtils.HOUR_IN_MILLIS * 6)))
+        {
+            RefreshScheduleDataKot.callMe(this)
+        }
     }
 
     override fun onBackPressed() {

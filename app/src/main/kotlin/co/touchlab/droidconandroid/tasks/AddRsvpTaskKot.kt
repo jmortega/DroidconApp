@@ -40,8 +40,9 @@ open class AddRsvpTaskKot(val eventId : Long) : Task()
                 return null
             }
         })
-
-        EventBusExt.getDefault()!!.post(this);
     }
 
+    override fun onComplete(context: Context?) {
+        EventBusExt.getDefault()!!.post(this);
+    }
 }

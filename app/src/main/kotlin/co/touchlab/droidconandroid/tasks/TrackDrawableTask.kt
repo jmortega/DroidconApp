@@ -21,7 +21,6 @@ class TrackDrawableTask(val context: Context, val drawableRes: Int): Task()
     override fun run(context: Context?) {
         drawable = ResourcesCompat.getDrawable(context, drawableRes)
         drawable!!.setColorFilter(PorterDuffColorFilter(context!!.getResources().getColor(R.color.black_40), PorterDuff.Mode.DARKEN) as ColorFilter)
-        EventBusExt.getDefault()!!.post(this);
     }
 
     override fun handleError(context: Context?, e: Throwable?): Boolean {
@@ -30,4 +29,7 @@ class TrackDrawableTask(val context: Context, val drawableRes: Int): Task()
         return true
     }
 
+    override fun onComplete(context: Context?) {
+        EventBusExt.getDefault()!!.post(this);
+    }
 }

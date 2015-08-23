@@ -14,6 +14,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.google.gms.google-services'
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -107,6 +108,7 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.google.android.gms:play-services-identity:7.5.0'
     compile 'com.google.android.gms:play-services-plus:7.5.0'
+    compile 'com.google.android.gms:play-services-gcm:7.5.0'
     /*compile('com.github.androidsocialnetworks:library:0.3.2@aar') {
               transitive = true
           }*/

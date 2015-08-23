@@ -44,7 +44,9 @@ open class UploadCoverCommand(val coverURL: String? = null) : RetrofitPersistedT
         val gson = Gson()
         val userInfoResponse = gson.fromJson(userResponseString, javaClass<UserInfoResponse>())
         AbstractFindUserTask.saveUserResponse(context!!, null, userInfoResponse!!)
+    }
 
+    override fun onComplete(context: Context?) {
         EventBusExt.getDefault()!!.post(this)
     }
 

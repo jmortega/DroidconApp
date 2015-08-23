@@ -340,11 +340,6 @@
                 android:scrollbars="vertical"
                 android:hint="@string/hint_bio"/>
 
-            <TextView
-                android:id="@+id/myUserCode"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
-
         </RelativeLayout>
 
     </ScrollView>

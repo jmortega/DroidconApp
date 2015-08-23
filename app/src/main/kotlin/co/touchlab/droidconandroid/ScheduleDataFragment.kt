@@ -6,16 +6,12 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import co.touchlab.droidconandroid.data.AppPrefs
 import co.touchlab.droidconandroid.data.Event
 import co.touchlab.droidconandroid.data.ScheduleBlock
 import co.touchlab.droidconandroid.data.Track
-import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot
-import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory
 import co.touchlab.droidconandroid.ui.EventAdapter
 import co.touchlab.droidconandroid.ui.EventClickListener
 import co.touchlab.droidconandroid.utils.Toaster
@@ -64,19 +60,6 @@ class ScheduleDataFragment() : Fragment()
         //http://stackoverflow.com/a/28884330
         getParentFragment().getLoaderManager()!!.initLoader(position!!, null, this.ScheduleDataLoaderCallbacks())
 
-    }
-
-    override fun onResume()
-    {
-        super.onResume()
-        var prefs = AppPrefs.getInstance(getActivity())
-        var lastRefresh = prefs.getRefreshTime()
-
-        if (prefs.isLoggedIn()
-                && (lastRefresh == null || lastRefresh == -1L || System.currentTimeMillis() - lastRefresh > DateUtils.HOUR_IN_MILLIS))
-        {
-            PersistedTaskQueueFactory.getInstance(getActivity()).execute(RefreshScheduleDataKot())
-        }
     }
 
     inner class ScheduleDataLoaderCallbacks() : LoaderManager.LoaderCallbacks<List<ScheduleBlock>>

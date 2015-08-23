@@ -1,6 +1,7 @@
 package co.touchlab.droidconandroid
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -17,10 +18,15 @@ class EventDetailActivity : AppCompatActivity()
         val TRACK_ID = "TRACK_ID"
         fun callMe(a: Activity, id: Long, category: String?)
         {
+            val i = createIntent(a, category, id)
+            a.startActivity(i)
+        }
+
+        fun createIntent(a: Context?, category: String?, id: Long): Intent {
             val i = Intent(a, javaClass<EventDetailActivity>())
             i.putExtra(EVENT_ID, id)
             i.putExtra(TRACK_ID, category)
-            a.startActivity(i)
+            return i
         }
     }
 

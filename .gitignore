@@ -37,3 +37,5 @@ gen/
 *.swp
 
 build
+
+google-services.json

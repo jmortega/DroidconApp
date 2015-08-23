@@ -46,14 +46,16 @@ open class UploadAvatarCommand(val imageURL: String? = null) : RetrofitPersisted
         val uuid = AppPrefs.getInstance(context).getUserUuid()
         val postClient = BasicHttpClient(BuildConfig.BASE_URL)
         postClient.addHeader("uuid", uuid);
-        val uploadResponse = postClient.post("dataTest/uploadAvatar", "image/jpeg", body)
+        val uploadResponse = postClient.put("dataTest/uploadAvatar", "image/jpeg", body)
 //        postClient.checkAndThrowError()
 
         val userResponseString = uploadResponse?.getBodyAsString() ?: throw RuntimeException("No user response")
         val gson = Gson()
         val userInfoResponse = gson.fromJson(userResponseString, javaClass<UserInfoResponse>())
         AbstractFindUserTask.saveUserResponse(context!!, null, userInfoResponse!!)
+    }
 
+    override fun onComplete(context: Context?) {
         EventBusExt.getDefault()!!.post(this)
     }
 

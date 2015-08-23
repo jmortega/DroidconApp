@@ -27,7 +27,7 @@ public class DroidconApplication extends Application
             Queues.localQueue(this).execute(new SeedScheduleDataTask());
 
         if(AppPrefs.getInstance(this).isLoggedIn())
-            PersistedTaskQueueFactory.getInstance(this).execute(new RefreshScheduleDataKot());
+            RefreshScheduleDataKot.Companion.callMe(this);
 
         SetAlarmReceiver alarm = new SetAlarmReceiver();
         alarm.setAllAlarms(this);

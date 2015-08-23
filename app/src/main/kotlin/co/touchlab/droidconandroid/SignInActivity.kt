@@ -18,7 +18,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import co.touchlab.android.threading.eventbus.EventBusExt
-import co.touchlab.droidconandroid.tasks.AbstractLoginTask
 import co.touchlab.droidconandroid.tasks.GoogleLoginTask
 import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.utils.Toaster
@@ -100,7 +99,7 @@ public class SignInActivity : AppCompatActivity() {
         }
     }
 
-    public fun onEventMainThread(t: AbstractLoginTask) {
+    public fun onEventMainThread(t: GoogleLoginTask) {
         if (!t.failed) {
             finish()
             MyActivity.startMe(this)
