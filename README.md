@@ -23,12 +23,20 @@ A fork of ORMLite that is Android specific and uses source generation instead of
 is significantly improved, and it supports immutable fields as well as views.  Note *quite* open source
 yet.  Need to clean things up a bit.  Was going to announce it at the conference, but time ran short.
 
+Also, name isn't final.  See how that goes.
+
 ## Open Source Tools
 
 [Picasso](http://square.github.io/picasso/)
+
 [Retrofit](http://square.github.io/retrofit/)
+
 [OKHttp](http://square.github.io/okhttp/)
+
 [EventBus](https://github.com/greenrobot/EventBus)
+
 [SuperToasts](https://github.com/JohnPersano/SuperToasts)
+
 [VectorCompat](https://github.com/wnafee/vector-compat)
+
 [Circle Image View](https://github.com/hdodenhof/CircleImageView)
