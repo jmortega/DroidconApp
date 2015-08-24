@@ -2,12 +2,12 @@ package co.touchlab.droidconandroid.data;
 
 import android.text.TextUtils;
 
-import com.j256.ormlite.android.squeaky.Dao;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
 import java.sql.SQLException;
 import java.util.List;
+
+import co.touchlab.squeaky.android.squeaky.Dao;
+import co.touchlab.squeaky.field.DatabaseField;
+import co.touchlab.squeaky.table.DatabaseTable;
 
 /**
  * Created by kgalligan on 6/28/14.

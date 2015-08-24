@@ -1,7 +1,7 @@
 package co.touchlab.droidconandroid.data;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import co.touchlab.squeaky.field.DatabaseField;
+import co.touchlab.squeaky.table.DatabaseTable;
 
 /**
  * Created by kgalligan on 7/28/14.

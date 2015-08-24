@@ -7,13 +7,17 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
 import android.widget.SearchView
 import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.sticky.StickyTaskManager
+import co.touchlab.droidconandroid.network.dao.UserAccount
 import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
 import co.touchlab.droidconandroid.tasks.FindUserTaskKot
 import co.touchlab.droidconandroid.tasks.Queues
+import co.touchlab.droidconandroid.ui.EmailAccountsEditText
 import co.touchlab.droidconandroid.utils.Toaster
 import org.apache.commons.lang3.StringUtils
 
@@ -31,7 +35,7 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
         }
     }
 
-    private var searchView: SearchView? = null
+    private var searchView: EmailAccountsEditText? = null
     private var stickyTaskManager: StickyTaskManager? = null
 
     public fun callMe(c: Context)
@@ -50,8 +54,12 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
         val toolbar = findViewById(R.id.toolbar) as Toolbar;
         setSupportActionBar(toolbar);
 
-        searchView = findViewById(R.id.search) as SearchView
-        searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchView = findViewById(R.id.search) as EmailAccountsEditText;
+
+        searchView!!.setOnItemClickListener(ItemClick())
+        searchView!!.setOnItemSelectedListener(ItemSelected())
+
+        /*searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
@@ -63,9 +71,32 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
                 }
                 return false
             }
-        })
+        })*/
 
         EventBusExt.getDefault().register(this)
+    }
+
+    inner class ItemClick : AdapterView.OnItemClickListener
+    {
+        override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            callResult(position)
+        }
+    }
+
+    inner class ItemSelected : AdapterView.OnItemSelectedListener
+    {
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+        }
+
+        override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            callResult(position)
+        }
+    }
+    private fun callResult(position: Int) {
+        val userAccount = searchView!!.getAdapter().getItem(position) as UserAccount
+        UserDetailActivity.callMe(this, userAccount.userCode)
+        searchView!!.clearListSelection()
     }
 
     override fun onResume() {

@@ -1,8 +1,8 @@
 package co.touchlab.droidconandroid.network.dao;
 
-import com.j256.ormlite.field.DatabaseField;
-
 import java.util.List;
+
+import co.touchlab.squeaky.field.DatabaseField;
 
 /**
  * Created by kgalligan on 7/19/14.

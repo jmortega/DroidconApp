@@ -24,11 +24,10 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <SearchView
+        <co.touchlab.droidconandroid.ui.EmailAccountsEditText
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:queryHint="Enter attendee code"
             android:iconifiedByDefault="false"/>
 
         <FrameLayout

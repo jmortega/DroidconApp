@@ -1,10 +1,9 @@
 package co.touchlab.droidconandroid.data.staff;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
 import co.touchlab.droidconandroid.data.Event;
 import co.touchlab.droidconandroid.data.UserAccount;
+import co.touchlab.squeaky.field.DatabaseField;
+import co.touchlab.squeaky.table.DatabaseTable;
 
 /**
  * Created by kgalligan on 6/28/14.

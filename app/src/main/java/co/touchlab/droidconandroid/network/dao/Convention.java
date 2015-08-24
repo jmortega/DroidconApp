@@ -1,12 +1,11 @@
 package co.touchlab.droidconandroid.network.dao;
 
-import com.j256.ormlite.field.DatabaseField;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import co.touchlab.squeaky.field.DatabaseField;
 
 
 /**

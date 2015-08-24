@@ -1,14 +1,14 @@
 package co.touchlab.droidconandroid.data;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
-import com.j256.ormlite.table.DatabaseTable;
-
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import co.touchlab.squeaky.field.DatabaseField;
+import co.touchlab.squeaky.field.ForeignCollectionField;
+import co.touchlab.squeaky.table.DatabaseTable;
 
 /**
  * Created by kgalligan on 6/28/14.
@@ -60,7 +60,7 @@ public class Event implements ScheduleBlock
 
     public boolean isPast()
     {
-        return endDateLong != null && System.currentTimeMillis() > endDateLong ;
+        return endDateLong != null && System.currentTimeMillis() > endDateLong;
     }
 
     public boolean isNow()

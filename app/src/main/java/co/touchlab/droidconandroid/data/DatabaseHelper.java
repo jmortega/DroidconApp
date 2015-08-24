@@ -4,16 +4,15 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.j256.ormlite.android.squeaky.Dao;
-import com.j256.ormlite.android.squeaky.SqueakyOpenHelper;
-import com.j256.ormlite.table.TableUtils;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
 import co.touchlab.droidconandroid.data.staff.EventAttendee;
+import co.touchlab.squeaky.android.squeaky.Dao;
+import co.touchlab.squeaky.android.squeaky.SqueakyOpenHelper;
+import co.touchlab.squeaky.table.TableUtils;
 
 /**
  * Created by kgalligan on 6/28/14.
