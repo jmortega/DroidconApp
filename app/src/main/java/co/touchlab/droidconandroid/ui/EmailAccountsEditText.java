@@ -142,25 +142,12 @@ public class EmailAccountsEditText extends AutoCompleteTextView
         showDropDown();
     }
 
-    public static class ResultsAdapter extends ArrayAdapter<String>
+    public static class ResultsAdapter extends ArrayAdapter<UserAccount>
     {
-
-        private ArrayList<UserAccount> accounts;
         public ResultsAdapter(Context context, UserAccount[] objects)
         {
-            super(context, android.R.layout.simple_list_item_1);
-            accounts = new ArrayList<>();
+            super(context, android.R.layout.simple_list_item_1, objects);
 
-            for(UserAccount user : objects)
-            {
-                accounts.add(user);
-                add(user.getName());
-            }
-        }
-
-        public UserAccount getAccount(int position)
-        {
-            return accounts.get(position);
         }
 
         @Override
@@ -169,7 +156,7 @@ public class EmailAccountsEditText extends AutoCompleteTextView
             View row = LayoutInflater.from(getContext())
                                          .inflate(android.R.layout.simple_list_item_1, null);
 
-            ((TextView)row.findViewById(android.R.id.text1)).setText(getItem(position));
+            ((TextView)row.findViewById(android.R.id.text1)).setText(getItem(position).getName());
 
             return row;
         }

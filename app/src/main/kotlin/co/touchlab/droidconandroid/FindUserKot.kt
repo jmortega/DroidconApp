@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import co.touchlab.android.threading.tasks.sticky.StickyTaskManager
+import co.touchlab.droidconandroid.network.dao.UserAccount
 import co.touchlab.droidconandroid.ui.EmailAccountsEditText
 
 /**
@@ -68,9 +69,9 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
         }
     }
     private fun callResult(position: Int) {
-        val userAccount = (searchView!!.getAdapter() as EmailAccountsEditText.ResultsAdapter)
-                .getAccount(position)
+        val userAccount = searchView!!.getAdapter().getItem(position) as UserAccount
         UserDetailActivity.callMe(this, userAccount.userCode)
+        searchView!!.setText("")
         searchView!!.clearListSelection()
     }
 
