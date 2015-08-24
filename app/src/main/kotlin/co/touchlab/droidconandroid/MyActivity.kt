@@ -29,7 +29,6 @@ import co.touchlab.droidconandroid.superbus.UploadAvatarCommand
 import co.touchlab.droidconandroid.superbus.UploadCoverCommand
 import co.touchlab.droidconandroid.ui.*
 import com.wnafee.vector.compat.ResourcesCompat
-import java.nio.ByteBuffer
 import java.util.ArrayList
 
 public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.CreateNdefMessageCallback
@@ -232,6 +231,13 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
                     filterAdapter!!.clearSelectedTracks()
                 }
             }
+
+            override fun onHeaderItemClick()
+            {
+                drawerLayout!!.closeDrawer(navigationRecycler)
+                val userCode = DatabaseHelper.getInstance(this@MyActivity).getUserAccountDao().queryForId(AppPrefs.getInstance(this@MyActivity).getUserId()).userCode
+                UserDetailActivity.callMe(this@MyActivity, userCode)
+            }
         })
         navigationRecycler!!.setAdapter(drawerAdapter)
 
@@ -297,18 +303,8 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
         val appPrefs = AppPrefs.getInstance(this)
 
         val userCode = DatabaseHelper.getInstance(this).getUserAccountDao().queryForId(appPrefs.getUserId()).userCode
-        val byteBuffer = ByteBuffer.allocate((userCode.length() * java.lang.Character.SIZE) / java.lang.Byte.SIZE)
-        for(i in 0..(userCode.length()-1))
-        {
-            byteBuffer.putChar(userCode.charAt(i))
-        }
-        /*for(c in userCode)
-        {
 
-        }*/
-        /*var id = byteBuffer.putChar(appPrefs.getUserId()).array()
-        var id = ByteBuffer.allocate(java.lang.Long.SIZE / java.lang.Byte.SIZE).putLong(appPrefs.getUserId()).array()*/
-        var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", byteBuffer.array())
+        var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", userCode.toByteArray())
                    ,NdefRecord.createApplicationRecord("co.touchlab.droidconandroid")))
         return msg;
     }

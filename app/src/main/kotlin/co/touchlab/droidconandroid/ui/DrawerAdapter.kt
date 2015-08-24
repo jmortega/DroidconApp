@@ -58,6 +58,12 @@ class DrawerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             headerHolder.name.setText(AppPrefs.getInstance(context).getName())
             headerHolder.email.setText(AppPrefs.getInstance(context).getEmail())
 
+            headerHolder.itemView.setOnClickListener{
+                if(selectedPos != position) {
+                    drawerClickListener.onHeaderItemClick()
+                }
+            }
+
         } else if(getItemViewType(position) == VIEW_TYPE_NAVIGATION) {
             val navItem = dataSet.get(position) as NavigationItem
             val navHolder = holder as NavigationViewHolder
@@ -152,6 +158,8 @@ class DrawerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 interface DrawerClickListener {
 
     fun onNavigationItemClick(position: Int, titleRes: Int)
+
+    fun onHeaderItemClick()
 
 }
 
