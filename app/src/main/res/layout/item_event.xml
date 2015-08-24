@@ -29,8 +29,8 @@
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/height_xlarge"
         android:layout_marginRight="@dimen/padding_small"
-        card_view:cardElevation="2dp"
-        card_view:cardCornerRadius="2dp">
+        card_view:cardCornerRadius="2dp"
+        android:stateListAnimator="@anim/lift">
 
         <!-- todo get real icon-->
         <ImageView
