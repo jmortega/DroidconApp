@@ -55,7 +55,7 @@ public class MyGcmListenerService extends GcmListenerService
                 {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + name));
 
-                    if (intent.resolveActivity(getPackageManager()) == null) {
+                    if (intent.resolveActivity(manager) == null) {
                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + name));
                     }
 
