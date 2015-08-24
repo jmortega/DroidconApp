@@ -8,7 +8,6 @@ import co.touchlab.droidconandroid.data.AppPrefs;
 import co.touchlab.droidconandroid.superbus.RefreshScheduleDataKot;
 import co.touchlab.droidconandroid.superbus.SeedScheduleDataTask;
 import co.touchlab.droidconandroid.tasks.Queues;
-import co.touchlab.droidconandroid.tasks.persisted.PersistedTaskQueueFactory;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -28,8 +27,5 @@ public class DroidconApplication extends Application
 
         if(AppPrefs.getInstance(this).isLoggedIn())
             RefreshScheduleDataKot.Companion.callMe(this);
-
-        SetAlarmReceiver alarm = new SetAlarmReceiver();
-        alarm.setAllAlarms(this);
     }
 }

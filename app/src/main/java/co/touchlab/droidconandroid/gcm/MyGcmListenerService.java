@@ -1,5 +1,4 @@
 package co.touchlab.droidconandroid.gcm;
-import android.app.ApplicationErrorReport;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -46,12 +45,21 @@ public class MyGcmListenerService extends GcmListenerService
             String gcmType = data.getString("type");
             if(StringUtils.equalsIgnoreCase(gcmType, "version"))
             {
-                PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                PackageManager manager = getPackageManager();
+                String name = getPackageName();
+                PackageInfo pInfo = manager.getPackageInfo(name, 0);
+
                 int versionCode = pInfo.versionCode;
                 int checkCode = Integer.parseInt(data.getString("versionCode"));
                 if(versionCode < checkCode)
                 {
-                    sendNotification("Droidcon NYC 2015", "Please update your app");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + name));
+
+                    if (intent.resolveActivity(getPackageManager()) == null) {
+                       intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + name));
+                    }
+
+                    sendIntentNotification("Droidcon NYC 2015", "Please update your app", intent);
                 }
             }
             else if(StringUtils.equalsIgnoreCase(gcmType, "message"))
@@ -104,13 +112,13 @@ public class MyGcmListenerService extends GcmListenerService
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                                  .bigText(message + "|" + title + "|" + message))
+                                  .bigText(message))
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
