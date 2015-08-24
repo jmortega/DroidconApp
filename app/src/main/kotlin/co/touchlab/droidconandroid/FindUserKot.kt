@@ -3,23 +3,13 @@ package co.touchlab.droidconandroid
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
-import android.widget.SearchView
-import co.touchlab.android.threading.eventbus.EventBusExt
 import co.touchlab.android.threading.tasks.sticky.StickyTaskManager
-import co.touchlab.droidconandroid.network.dao.UserAccount
-import co.touchlab.droidconandroid.tasks.AbstractFindUserTask
-import co.touchlab.droidconandroid.tasks.FindUserTaskKot
-import co.touchlab.droidconandroid.tasks.Queues
 import co.touchlab.droidconandroid.ui.EmailAccountsEditText
-import co.touchlab.droidconandroid.utils.Toaster
-import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by kgalligan on 7/26/14.
@@ -58,22 +48,6 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
 
         searchView!!.setOnItemClickListener(ItemClick())
         searchView!!.setOnItemSelectedListener(ItemSelected())
-
-        /*searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!TextUtils.isEmpty(query)) {
-                    Queues.networkQueue(this@FindUserKot).execute(FindUserTaskKot(query!!))
-                    searchView!!.clearFocus()
-                }
-                return false
-            }
-        })*/
-
-        EventBusExt.getDefault().register(this)
     }
 
     inner class ItemClick : AdapterView.OnItemClickListener
@@ -94,7 +68,8 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
         }
     }
     private fun callResult(position: Int) {
-        val userAccount = searchView!!.getAdapter().getItem(position) as UserAccount
+        val userAccount = (searchView!!.getAdapter() as EmailAccountsEditText.ResultsAdapter)
+                .getAccount(position)
         UserDetailActivity.callMe(this, userAccount.userCode)
         searchView!!.clearListSelection()
     }
@@ -109,34 +84,10 @@ public class FindUserKot : AppCompatActivity(), UserDetailFragment.Companion.Fin
         }
     }
 
-    override fun onDestroy() {
-        super<AppCompatActivity>.onDestroy()
-        EventBusExt.getDefault().unregister(this)
-    }
-
     override fun onSaveInstanceState(outState: Bundle)
     {
         super<AppCompatActivity>.onSaveInstanceState(outState)
         stickyTaskManager!!.onSaveInstanceState(outState)
-    }
-
-    public fun onEventMainThread(findUserTask: AbstractFindUserTask)
-    {
-        if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            val userCode = findUserTask.user?.userCode
-
-            if (findUserTask.isError() || StringUtils.isEmpty(userCode)) {
-                Toaster.showMessage(this, findUserTask.errorStringCode!!)
-            } else {
-                val fragmentManager = getSupportFragmentManager()
-                val ft = fragmentManager!!.beginTransaction()!!
-
-                ft.replace(R.id.fragmentContainer, UserDetailFragment.createFragment(userCode!!), UserDetailFragment.TAG)
-                        .addToBackStack(null)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
-            }
-        }
     }
 
     override fun onFragmentFinished()

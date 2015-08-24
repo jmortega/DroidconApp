@@ -3,10 +3,10 @@ package co.touchlab.droidconandroid.ui;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,16 +73,39 @@ public class EmailAccountsEditText extends AutoCompleteTextView
                     {
                         if(task instanceof SearchUsersTask)
                         {
-                            ((SearchUsersTask)task).cancel();
+                            ((SearchUsersTask) task).cancel();
                         }
                     }
-                }); taskQueue.execute(new SearchUsersTask(s.toString()));
+                });
+                taskQueue.execute(new SearchUsersTask(s.toString()));
             }
 
             @Override
             public void afterTextChanged(Editable s)
             {
 
+            }
+        });
+
+        setOnEditorActionListener(new OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                TaskQueue taskQueue = Queues.networkQueue(getContext());
+                taskQueue.query(new BaseTaskQueue.QueueQuery()
+                {
+                    @Override
+                    public void query(BaseTaskQueue queue, Task task)
+                    {
+                        if(task instanceof SearchUsersTask)
+                        {
+                            ((SearchUsersTask) task).cancel();
+                        }
+                    }
+                });
+                taskQueue.execute(new SearchUsersTask(v.getText().toString()));
+                return true;
             }
         });
     }
@@ -119,13 +142,25 @@ public class EmailAccountsEditText extends AutoCompleteTextView
         showDropDown();
     }
 
-    public static class ResultsAdapter extends ArrayAdapter<UserAccount>
+    public static class ResultsAdapter extends ArrayAdapter<String>
     {
 
+        private ArrayList<UserAccount> accounts;
         public ResultsAdapter(Context context, UserAccount[] objects)
         {
-            super(context, android.R.layout.simple_list_item_1, objects);
+            super(context, android.R.layout.simple_list_item_1);
+            accounts = new ArrayList<>();
 
+            for(UserAccount user : objects)
+            {
+                accounts.add(user);
+                add(user.getName());
+            }
+        }
+
+        public UserAccount getAccount(int position)
+        {
+            return accounts.get(position);
         }
 
         @Override
@@ -134,7 +169,7 @@ public class EmailAccountsEditText extends AutoCompleteTextView
             View row = LayoutInflater.from(getContext())
                                          .inflate(android.R.layout.simple_list_item_1, null);
 
-            ((TextView)row.findViewById(android.R.id.text1)).setText(getItem(position).getName());
+            ((TextView)row.findViewById(android.R.id.text1)).setText(getItem(position));
 
             return row;
         }
