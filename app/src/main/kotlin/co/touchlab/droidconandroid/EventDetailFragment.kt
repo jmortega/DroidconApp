@@ -197,17 +197,13 @@ class EventDetailFragment() : Fragment()
         fab!!.setRippleColor(trackColor)
 
 
-        if(event.isPast())
-        {
-            fab!!.setImageDrawable(null)
-        }
-        else {
+
             if (event.isRsvped()) {
                 fab!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_check))
             } else {
                 fab!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_plus))
             }
-        }
+
 
         if(!event.isPast()) {
             fab!!.setOnClickListener { v ->
@@ -232,9 +228,17 @@ class EventDetailFragment() : Fragment()
         }
 
         var p = fab!!.getLayoutParams() as CoordinatorLayout.LayoutParams
-        p.setAnchorId(R.id.appbar)
-        fab!!.setLayoutParams(p)
-        fab!!.setVisibility(View.VISIBLE)
+        if (event.isPast())
+        {
+            p.setAnchorId(View.NO_ID)
+            fab!!.setLayoutParams(p)
+            fab!!.setVisibility(View.GONE)
+        }
+        else {
+            p.setAnchorId(R.id.appbar)
+            fab!!.setLayoutParams(p)
+            fab!!.setVisibility(View.VISIBLE)
+        }
     }
 
     /**
