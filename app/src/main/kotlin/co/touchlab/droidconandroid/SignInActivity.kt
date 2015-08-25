@@ -265,6 +265,7 @@ class AccountAdapter : ArrayAdapter<Account> {
 
         var radioButton = view.findViewById(R.id.radio) as RadioButton
         radioButton.setChecked(selectedPos == position)
+        radioButton.setClickable(false)
 
         return view;
     }
