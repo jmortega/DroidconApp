@@ -197,17 +197,13 @@ class EventDetailFragment() : Fragment()
         fab!!.setRippleColor(trackColor)
 
 
-        if(event.isPast())
-        {
-            fab!!.setImageDrawable(null)
-        }
-        else {
+
             if (event.isRsvped()) {
                 fab!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_check))
             } else {
                 fab!!.setImageDrawable(ResourcesCompat.getDrawable(getActivity(), R.drawable.ic_plus))
             }
-        }
+
 
         if(!event.isPast()) {
             fab!!.setOnClickListener { v ->
@@ -232,9 +228,17 @@ class EventDetailFragment() : Fragment()
         }
 
         var p = fab!!.getLayoutParams() as CoordinatorLayout.LayoutParams
-        p.setAnchorId(R.id.appbar)
-        fab!!.setLayoutParams(p)
-        fab!!.setVisibility(View.VISIBLE)
+        if (event.isPast())
+        {
+            p.setAnchorId(View.NO_ID)
+            fab!!.setLayoutParams(p)
+            fab!!.setVisibility(View.GONE)
+        }
+        else {
+            p.setAnchorId(R.id.appbar)
+            fab!!.setLayoutParams(p)
+            fab!!.setVisibility(View.VISIBLE)
+        }
     }
 
     /**
@@ -299,7 +303,17 @@ class EventDetailFragment() : Fragment()
         val timeFormat = SimpleDateFormat("hh:mm a")
         val venueFormatString = getResources().getString(R.string.event_venue_time);
 
-        adapter.addHeader(venueFormatString.format(event.venue.name, timeFormat.format(startDateVal), timeFormat.format(endDateVal)), R.drawable.ic_map)
+        var formattedStart = timeFormat.format(startDateVal)
+        var formattedEnd =  timeFormat.format(endDateVal)
+
+        val startMarker = formattedStart.substring(Math.max(formattedStart.length() - 3, 0))
+        val endMarker = formattedEnd.substring(Math.max(formattedEnd.length() - 3, 0))
+
+        if (TextUtils.equals(startMarker, endMarker)) {
+            formattedStart = formattedStart.substring(0, Math.max(formattedStart.length() - 3, 0))
+        }
+
+        adapter.addHeader(venueFormatString.format(event.venue.name, formattedStart, formattedEnd), R.drawable.ic_map)
 
         if(event.isNow())
             adapter.addBody("<i><b>"+ getResources().getString(R.string.event_now) +"</b></i>")
