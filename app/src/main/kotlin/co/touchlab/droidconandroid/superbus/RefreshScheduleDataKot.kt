@@ -50,8 +50,8 @@ fun saveConventionData(context: Context?, convention: Convention) {
                         event.venue = venue
                         if (StringUtils.isEmpty(event.startDate) || StringUtils.isEmpty(event.endDate))
                             continue
-                        event.startDateLong = TimeUtils.DATE_FORMAT.parse(event.startDate)!!.getTime()
-                        event.endDateLong = TimeUtils.DATE_FORMAT.parse(event.endDate)!!.getTime()
+                        event.startDateLong = TimeUtils.DATE_FORMAT.get().parse(event.startDate)!!.getTime()
+                        event.endDateLong = TimeUtils.DATE_FORMAT.get().parse(event.endDate)!!.getTime()
 
                         if (dbEvent != null)
                             event.rsvpUuid = dbEvent.rsvpUuid
@@ -92,8 +92,8 @@ fun saveConventionData(context: Context?, convention: Convention) {
                 }
 
                 for (block in blocks) {
-                    block.startDateLong = TimeUtils.DATE_FORMAT.parse(block.startDate)!!.getTime()
-                    block.endDateLong = TimeUtils.DATE_FORMAT.parse(block.endDate)!!.getTime()
+                    block.startDateLong = TimeUtils.DATE_FORMAT.get().parse(block.startDate)!!.getTime()
+                    block.endDateLong = TimeUtils.DATE_FORMAT.get().parse(block.endDate)!!.getTime()
 
                     blockDao.createOrUpdate(block)
                 }

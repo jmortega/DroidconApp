@@ -91,8 +91,8 @@ class ScheduleFragment : Fragment(), FilterableFragmentInterface
             val endString: String? = AppPrefs.getInstance(getActivity()).getConventionEndDate()
 
             if (!TextUtils.isEmpty(startString) && !TextUtils.isEmpty(endString)) {
-                var start: Long = TimeUtils.sanitize(TimeUtils.DATE_FORMAT.parse(startString))
-                val end: Long = TimeUtils.sanitize(TimeUtils.DATE_FORMAT.parse(endString))
+                var start: Long = TimeUtils.sanitize(TimeUtils.DATE_FORMAT.get().parse(startString))
+                val end: Long = TimeUtils.sanitize(TimeUtils.DATE_FORMAT.get().parse(endString))
 
                 while (start <= end) {
                     dates.add(start)

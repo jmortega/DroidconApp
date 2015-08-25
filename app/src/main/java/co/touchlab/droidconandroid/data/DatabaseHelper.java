@@ -21,7 +21,8 @@ public class DatabaseHelper extends SqueakyOpenHelper
 {
 
     private static final String DATABASE_FILE_NAME = "droidcon";
-    private static final int VERSION = 3;
+    public static final  int    BASELINE           = 3;
+    private static final int VERSION = BASELINE;
     private static DatabaseHelper instance;
 
     private DatabaseHelper(Context context)
@@ -32,7 +33,7 @@ public class DatabaseHelper extends SqueakyOpenHelper
     @NotNull
     public static synchronized DatabaseHelper getInstance(Context context)
     {
-        if (instance == null)
+        if(instance == null)
         {
             instance = new DatabaseHelper(context);
         }
@@ -57,16 +58,7 @@ public class DatabaseHelper extends SqueakyOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        try
-        {
-            TableUtils.dropTables(db, true, tableClasses);
-        }
-        catch(SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
 
-        onCreate(db);
     }
 
     @Override

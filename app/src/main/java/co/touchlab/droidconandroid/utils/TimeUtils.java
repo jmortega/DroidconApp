@@ -1,6 +1,7 @@
 package co.touchlab.droidconandroid.utils;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,8 +12,15 @@ import java.util.GregorianCalendar;
  */
 public class TimeUtils
 {
-    public static  SimpleDateFormat  DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy hh:mma");
-    private static GregorianCalendar calendar    = new GregorianCalendar();
+    public static  ThreadLocal<DateFormat> DATE_FORMAT = new ThreadLocal<DateFormat>()
+    {
+        @Override
+        protected DateFormat initialValue()
+        {
+            return new SimpleDateFormat("MM/dd/yyyy hh:mma");
+        }
+    };
+    private static GregorianCalendar       calendar    = new GregorianCalendar();
 
     @NotNull
     public static Long sanitize(@NotNull Date date)
