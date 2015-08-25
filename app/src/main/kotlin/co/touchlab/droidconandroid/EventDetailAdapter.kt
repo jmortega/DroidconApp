@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.TextUtils
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +34,8 @@ class EventDetailAdapter(val context: Context, val trackColor: Int) : RecyclerVi
     public val TYPE_DIVIDER: Int = 3
     public val TYPE_SPACE: Int = 4
     public val TYPE_SPEAKER: Int = 5
+
+    public val HEADER_TYPEFACE: Typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
 
     //=================== Public helper functions ===================
     public fun addHeader(venue: String, icon: Int)
@@ -116,7 +118,7 @@ class EventDetailAdapter(val context: Context, val trackColor: Int) : RecyclerVi
 
                 headerVH.text!!.setText((data.get(position) as TextDetail).text)
                 headerVH.text!!.setTextColor(trackColor)
-                headerVH.text!!.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+                headerVH.text!!.setTypeface(HEADER_TYPEFACE)
             }
 
             TYPE_BODY ->

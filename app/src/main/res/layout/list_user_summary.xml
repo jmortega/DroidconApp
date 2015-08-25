@@ -16,9 +16,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_large"
+        android:textSize="@dimen/text_small"
+        android:fontFamily="sans-serif-medium"
         android:layout_toRightOf="@id/profile_image"
-        android:layout_alignBaseline="@id/profile_image"
+        android:layout_alignTop="@id/profile_image"
+        android:layout_alignBottom="@id/profile_image"
+        android:gravity="center_vertical"
         android:paddingTop="@dimen/padding_wedge"
         android:paddingBottom="@dimen/padding_wedge"
         android:id="@+id/name"/>
