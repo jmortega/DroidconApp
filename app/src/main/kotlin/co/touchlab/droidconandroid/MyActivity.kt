@@ -268,6 +268,20 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
             drawerLayout!!.closeDrawer(filterDrawer)
         }
 
+        var smallestWidthPx = if (getResources().getDisplayMetrics().widthPixels < getResources().getDisplayMetrics().heightPixels)
+            getResources().getDisplayMetrics().widthPixels
+        else
+            getResources().getDisplayMetrics().heightPixels
+        var drawerMargin = getResources().getDimensionPixelOffset(R.dimen.drawer_margin);
+
+        filterDrawer!!.getLayoutParams().width = Math.min(
+                getResources().getDimensionPixelSize(R.dimen.drawer_width),
+                smallestWidthPx - drawerMargin)
+
+        navigationRecycler!!.getLayoutParams().width = Math.min(
+                getResources().getDimensionPixelSize(R.dimen.drawer_width),
+                smallestWidthPx - drawerMargin)
+
     }
 
     override fun getCurrentFilters(): ArrayList<String> {
