@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * Created by izzyoji :) on 8/5/15.
@@ -17,7 +18,7 @@ public class TimeUtils
         @Override
         protected DateFormat initialValue()
         {
-            return new SimpleDateFormat("MM/dd/yyyy hh:mma");
+            return new SimpleDateFormat("MM/dd/yyyy hh:mma", Locale.US);
         }
     };
     private static GregorianCalendar       calendar    = new GregorianCalendar();
