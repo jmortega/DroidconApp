@@ -25,7 +25,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -237,8 +236,8 @@ public class EditUserProfile extends StickyTaskManagerActivity
 
     private void callPhotoGrabber()
     {
-        new AlertDialog.Builder(this).setMessage("The thing and stuff")
-                .setPositiveButton("Camera", new DialogInterface.OnClickListener()
+        new AlertDialog.Builder(this).setMessage(getString(R.string.photoChooser))
+                .setPositiveButton(getString(R.string.camera), new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which)
@@ -246,7 +245,7 @@ public class EditUserProfile extends StickyTaskManagerActivity
                         startCamera();
                     }
                 })
-                .setNegativeButton("Gallery", new DialogInterface.OnClickListener()
+                .setNegativeButton(getString(R.string.gallery), new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which)

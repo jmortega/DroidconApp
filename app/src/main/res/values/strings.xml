@@ -107,4 +107,8 @@ Wanna join a team where Android isn\'t "that other platform", where we care abou
     <string name="more">More</string>
     <string name="less">Less</string>
 
+    <string name="photoChooser">Get new image from...</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+
 </resources>

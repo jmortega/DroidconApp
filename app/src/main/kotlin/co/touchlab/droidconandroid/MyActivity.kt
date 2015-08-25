@@ -234,9 +234,15 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
 
             override fun onHeaderItemClick()
             {
-                drawerLayout!!.closeDrawer(navigationRecycler)
-                val userCode = DatabaseHelper.getInstance(this@MyActivity).getUserAccountDao().queryForId(AppPrefs.getInstance(this@MyActivity).getUserId()).userCode
-                UserDetailActivity.callMe(this@MyActivity, userCode)
+                val userId = AppPrefs.getInstance(this@MyActivity).getUserId()
+                if (userId != null)
+                {
+                    val ua = DatabaseHelper.getInstance(this@MyActivity).getUserAccountDao().queryForId(userId)
+                    if (ua != null && ua.userCode != null && !TextUtils.isEmpty(ua.userCode)) {
+                        drawerLayout!!.closeDrawer(navigationRecycler)
+                        UserDetailActivity.callMe(this@MyActivity, ua.userCode)
+                    }
+                }
             }
         })
         navigationRecycler!!.setAdapter(drawerAdapter)
@@ -300,13 +306,17 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
 
     override fun createNdefMessage(event: NfcEvent?): NdefMessage?
     {
-        val appPrefs = AppPrefs.getInstance(this)
-
-        val userCode = DatabaseHelper.getInstance(this).getUserAccountDao().queryForId(appPrefs.getUserId()).userCode
-
-        var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", userCode.toByteArray())
-                   ,NdefRecord.createApplicationRecord("co.touchlab.droidconandroid")))
-        return msg;
+        val userId = AppPrefs.getInstance(this@MyActivity).getUserId()
+        if (userId != null)
+        {
+            val ua = DatabaseHelper.getInstance(this@MyActivity).getUserAccountDao().queryForId(userId)
+            if (ua != null && ua.userCode != null && !TextUtils.isEmpty(ua.userCode)) {
+                var msg = NdefMessage( arrayOf(NdefRecord.createMime("application/vnd.co.touchlab.droidconandroid", ua.userCode.toByteArray())
+                        ,NdefRecord.createApplicationRecord("co.touchlab.droidconandroid")))
+                return msg
+            }
+        }
+        return null;
     }
 }
 
