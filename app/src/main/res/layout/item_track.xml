@@ -3,7 +3,10 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="@dimen/padding_xxlarge"
+              android:background="?attr/selectableItemBackground"
+              android:theme="@style/drawerTheme"
+    >
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,6 +20,7 @@
         android:focusable="false"
         android:clickable="false"
         tools:checked="true"
-        android:id="@+id/checkbox"/>
+        android:id="@+id/checkbox"
+        android:background="@android:color/transparent"/>
 
 </RelativeLayout>

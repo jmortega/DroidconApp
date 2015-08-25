@@ -59,16 +59,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:paddingTop">@dimen/padding_wedge</item>
-        <item name="android:paddingBottom">@dimen/padding_wedge</item>
-        <item name="android:layout_marginRight">@dimen/padding_large</item>
+        <item name="android:layout_marginRight">@dimen/padding_small</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">@dimen/text_xlarge</item>
     </style>
 
     <style name="track">
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:paddingLeft">@dimen/height_xlarge</item>
+        <item name="android:paddingLeft">@dimen/padding_xxlarge</item>
         <item name="android:textColor">@color/text_gray</item>
     </style>
     <style name="about_header">

@@ -195,7 +195,6 @@ public class MyActivity : AppCompatActivity(), FilterInterface, NfcAdapter.Creat
                 this,  drawerLayout, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close
         );
-        drawerLayout!!.setDrawerListener(drawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         drawerToggle.syncState();
