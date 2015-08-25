@@ -19,6 +19,7 @@
         android:layout_weight="1"
         android:textSize="@dimen/text_small"
         android:layout_gravity="center_vertical"
+        android:autoLink="web"
         android:layout_marginLeft="@dimen/padding_large"
         android:id="@+id/text" />
 

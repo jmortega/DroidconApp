@@ -37,3 +37,5 @@ gen/
 *.swp
 
 build
+
+release.jks

@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_small"
         android:layout_below="@id/name"
+        android:autoLink="web"
         android:layout_alignLeft="@id/name"
         android:id="@+id/bio" />
 

@@ -88,13 +88,21 @@
     <string name="about_app">
         The Droidcon NYC app has been coded in-house by Touch Lab\'s team.  Worked on by Liam, Izzy, Sam and Kevin.\n\n
         The code is open source, at: https://github.com/touchlab/DroidconApp\n\n
-        Its a bit of an experiment, written largely in Kotlin, and including a new ORM framework. Fun stuff.
+        Its a bit of an experiment, written largely in Kotlin, and including a new(ish) ORM framework. Fun stuff.
     </string>
     <string name="about_con_header">About Droidcon</string>
     <string name="about_con">The Droidcon conferences around the world support the Android Platform and create a global network for developers and companies. We offer best-in-class presentations from leaders in all parts of the Android ecosystem, including core development, embedded solutions, augmented reality, business solutions and games.\n\n
     http://droidcon.com/</string>
-    <string name="about_touch_header">About Touch Lab</string>
-    <string name="about_touch">Touch Lab is NY\'s premiere Android development shop.  Started in 2011, Touch Lab does one thing.  Android development.  We also run the big NY Android meetup http://www.meetup.com/android-developers-nyc/.\n\n
+    <string name="about_touch_header">About touchlab</string>
+    <string name="about_touch">touchlab is...\n\n
+        Developer Founded\n\n
+touchlab is a developer founded and run development shop focused on building amazing Android experiences.\n\n
+Android Pros\n\n
+We are a group of Android experts (and experts in training) who believe that Android can and must be better.\n\n
+Overachievers\n\n
+What we built yesterday was great, what we build with you tomorrow will be even better.\n\n
+Currently Hiring\n\n
+Wanna join a team where Android isn\'t "that other platform", where we care about pushing our favorite technology forward and where you can get a ton of exposure to the community at large? Get in touch.\n\n
     http://touchlab.co/</string>
     <string name="more">More</string>
     <string name="less">Less</string>

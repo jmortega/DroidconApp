@@ -21,7 +21,7 @@ public class DatabaseHelper extends SqueakyOpenHelper
 {
 
     private static final String DATABASE_FILE_NAME = "droidcon";
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
     private static DatabaseHelper instance;
 
     private DatabaseHelper(Context context)
