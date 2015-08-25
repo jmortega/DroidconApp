@@ -52,6 +52,7 @@
     <style name="TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/white</item>
         <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabTextColor">@color/grey_40</item>
     </style>
 
     <style name="track_checkbox">

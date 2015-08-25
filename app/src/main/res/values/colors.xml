@@ -56,4 +56,6 @@
     <color name="blue_grey">#607d8b</color>
     <color name="bg">#eceff1</color>
     <color name="divider_grey">#979797</color>
+
+    <color name="grey_40">#66FFFFFF</color>
 </resources>
