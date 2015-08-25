@@ -21,7 +21,7 @@ although some parts need to be Java.  Specifically anything that runs through an
 
 A fork of ORMLite that is Android specific and uses source generation instead of reflection.  Performance
 is significantly improved, and it supports immutable fields as well as views.  Note *quite* open source
-yet.  Need to clean things up a bit.  Was going to announce it at the conference, but time ran short.
+yet.  Need to clean things up a bit.  Was going to announce it at the conference, but time ran short.  You can't actually build the app as-is with this, but either wait till the source is up, or just swap out with ORMLite.  Its mostly compatible, after package renames (and some tweaking of a foreign collection).
 
 Also, name isn't final.  See how that goes.
 
