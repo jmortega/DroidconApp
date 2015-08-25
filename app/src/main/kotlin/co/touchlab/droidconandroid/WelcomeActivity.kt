@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.widget.TextView
+import android.widget.Button
 import co.touchlab.droidconandroid.data.AppPrefs
 import com.viewpagerindicator.CirclePageIndicator
 
@@ -41,7 +41,7 @@ public class WelcomeActivity : AppCompatActivity()
 
         val short = getIntent().getBooleanExtra("SHORT", false)
         var lastIndex = if(short){1}else{4}
-        val advanceTV = findViewById(R.id.advance)!! as TextView
+        val advanceButton = findViewById(R.id.advance)!! as Button
 
         val pager = findViewById(R.id.viewPager)!! as ViewPager
         pager.setAdapter(WelcomePagerAdapter(getSupportFragmentManager()!!, short))
@@ -63,22 +63,22 @@ public class WelcomeActivity : AppCompatActivity()
             override fun onPageSelected(position: Int) {
 
                 if(position >= lastIndex-1) {
-                    advanceTV.setTextColor(getResources().getColor(R.color.orange))
+                    advanceButton.setTextColor(getResources().getColor(R.color.orange))
                     indicator.setFillColor(getResources().getColor(R.color.orange))
                 } else {
-                    advanceTV.setTextColor(getResources().getColor(R.color.white))
+                    advanceButton.setTextColor(getResources().getColor(R.color.white))
                     indicator.setFillColor(getResources().getColor(R.color.white))
                 }
 
                 if(position == lastIndex) {
-                    advanceTV.setText(R.string.lets_go)
+                    advanceButton.setText(R.string.lets_go)
                 } else {
-                    advanceTV.setText(R.string.next)
+                    advanceButton.setText(R.string.next)
                 }
             }
         })
 
-        advanceTV.setOnClickListener { v ->
+        advanceButton.setOnClickListener { v ->
             val position = pager.getCurrentItem()
             when(position) {
                 lastIndex -> {

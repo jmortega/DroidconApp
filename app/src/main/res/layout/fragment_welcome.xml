@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:paddingTop="@dimen/status_bar_height"
-              android:paddingBottom="@dimen/height_small"
+              android:paddingBottom="@dimen/height_medium"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
@@ -11,6 +11,9 @@
         android:layout_height="fill_parent"
         android:layout_above="@+id/title"
         android:layout_centerHorizontal="true"
+        android:paddingLeft="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_medium"
+        android:paddingBottom="@dimen/padding_large"
         android:id="@+id/image"/>
 
     <TextView
@@ -20,20 +23,19 @@
         tools:text="Title"
         android:paddingLeft="@dimen/padding_xxlarge"
         android:paddingRight="@dimen/padding_xxlarge"
-        android:paddingBottom="@dimen/padding_small"
+        android:paddingBottom="@dimen/padding_welcomeText"
         android:id="@+id/title"
-        android:layout_above="@+id/description"
-        android:layout_centerHorizontal="true"/>
+        android:layout_above="@+id/description"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_large"
+        android:textSize="@dimen/text_small"
         android:paddingLeft="@dimen/padding_xxlarge"
         android:paddingRight="@dimen/padding_xxlarge"
         tools:text="Title"
         android:id="@+id/description"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_marginBottom="@dimen/height_medium"/>
 
 </RelativeLayout>

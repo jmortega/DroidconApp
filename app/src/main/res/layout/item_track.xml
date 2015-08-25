@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="@dimen/padding_xxlarge"
               android:background="?attr/selectableItemBackground"
-              android:theme="@style/drawerTheme"
+              android:theme="@style/highlightTheme"
     >
 
     <TextView

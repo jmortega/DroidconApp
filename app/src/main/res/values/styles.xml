@@ -14,7 +14,7 @@
         <!-- todo transparent status bar pre-lollipop-->
     </style>
 
-    <style name="drawerTheme" parent="AppTheme">
+    <style name="highlightTheme" parent="AppTheme">
         <item name="colorControlHighlight">@color/black_10</item>
     </style>
 
