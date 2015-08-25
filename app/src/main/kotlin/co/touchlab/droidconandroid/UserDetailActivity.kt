@@ -6,7 +6,6 @@ import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import java.nio.ByteBuffer
 
 /**
  * Created by kgalligan on 7/27/14.
@@ -64,14 +63,8 @@ class UserDetailActivity : AppCompatActivity(), UserDetailFragment.Companion.Fin
         var msg = rawMsgs[0] as NdefMessage
 
         var newIntent = Intent()
-        var buf = ByteBuffer.wrap(msg.getRecords()[0].getPayload())
-        val sb = StringBuilder()
-        while(buf.hasRemaining())
-        {
-            sb.append(buf.getChar())
-        }
 
-        newIntent.putExtra(USER_CODE, sb.toString())
+        newIntent.putExtra(USER_CODE, String(msg.getRecords()[0].getPayload()))
         setIntent(newIntent)
     }
 
